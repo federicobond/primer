@@ -4,6 +4,7 @@ import java_cup.runtime.*;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 import java.io.Reader;
 
+import static ar.edu.itba.lang.Symbols.*;
 
 %%
 /*-*
@@ -65,13 +66,13 @@ whitespace      = [ \n\t]
 /**
  * LEXICAL RULES:
  */
-"*"             { return symbol("*", Symbols.TIMES); }
-"+"             { return symbol("+", Symbols.PLUS); }
-"-"             { return symbol("-", Symbols.MINUS); }
-"/"             { return symbol("/", Symbols.DIVIDE); }
-"("             { return symbol("(", Symbols.LEFT_PAREN); }
-")"             { return symbol(")", Symbols.RIGHT_PAREN); }
-{integer}       { return symbol("int", Symbols.INT, new Integer(yytext())); }
-{real}          { return symbol("double", Symbols.REAL, new Double(yytext())); }
+"*"             { return symbol("*", TIMES); }
+"+"             { return symbol("+", PLUS); }
+"-"             { return symbol("-", MINUS); }
+"/"             { return symbol("/", DIVIDE); }
+"("             { return symbol("(", LEFT_PAREN); }
+")"             { return symbol(")", RIGHT_PAREN); }
+{integer}       { return symbol("int", INT, Integer.valueOf(yytext())); }
+{real}          { return symbol("double", REAL, Double.valueOf(yytext())); }
 {comment}       { /* Ignore comment. */ }
 {whitespace}    { /* Ignore whitespace. */ }

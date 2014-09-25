@@ -6,6 +6,8 @@ import java_cup.runtime.*;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 import java.io.Reader;
 
+import static ar.edu.itba.lang.Symbols.*;
+
 
 
 /**
@@ -636,7 +638,7 @@ protected void emit_error(String message) {
 
       switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
         case 1: 
-          { return symbol("int", Symbols.INT, new Integer(yytext()));
+          { return symbol("int", INT, Integer.valueOf(yytext()));
           }
         case 11: break;
         case 2: 
@@ -648,31 +650,31 @@ protected void emit_error(String message) {
           }
         case 13: break;
         case 4: 
-          { return symbol("*", Symbols.TIMES);
+          { return symbol("*", TIMES);
           }
         case 14: break;
         case 5: 
-          { return symbol("+", Symbols.PLUS);
+          { return symbol("+", PLUS);
           }
         case 15: break;
         case 6: 
-          { return symbol("-", Symbols.MINUS);
+          { return symbol("-", MINUS);
           }
         case 16: break;
         case 7: 
-          { return symbol("/", Symbols.DIVIDE);
+          { return symbol("/", DIVIDE);
           }
         case 17: break;
         case 8: 
-          { return symbol("(", Symbols.LEFT_PAREN);
+          { return symbol("(", LEFT_PAREN);
           }
         case 18: break;
         case 9: 
-          { return symbol(")", Symbols.RIGHT_PAREN);
+          { return symbol(")", RIGHT_PAREN);
           }
         case 19: break;
         case 10: 
-          { return symbol("double", Symbols.REAL, new Double(yytext()));
+          { return symbol("double", REAL, Double.valueOf(yytext()));
           }
         case 20: break;
         default: 
