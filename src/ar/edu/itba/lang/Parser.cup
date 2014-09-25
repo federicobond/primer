@@ -1,0 +1,32 @@
+package ar.edu.itba.lang;
+
+import java_cup.runtime.*;
+
+parser code {:
+  Lexer lexer;
+
+  public Parser(Lexer lex, ComplexSymbolFactory sf) {
+    super(lex,sf);
+    lexer = lex;
+  }
+:};
+
+terminal PLUS, TIMES, MINUS, UMINUS, DIVIDE, LEFT_PAREN, RIGHT_PAREN;
+terminal Integer INT;
+terminal Double REAL;
+
+non terminal Integer expr;
+
+precedence left PLUS, MINUS;
+precedence left TIMES, DIVIDE;
+precedence left UMINUS;
+
+expr     ::= expr:e1 PLUS  expr:e2               {: RESULT = e1 + e2;     :}
+             | expr:e1 MINUS expr:e2             {: RESULT = e1 - e2;     :}
+             | expr:e1 TIMES expr:e2             {: RESULT = e1 * e2;     :}
+             | expr:e1 DIVIDE expr:e2            {: RESULT = e1 / e2;     :}
+             | MINUS expr:e                     {: RESULT = -e;          :}
+  	         %prec UMINUS
+             | LEFT_PAREN expr:e RIGHT_PAREN	{: RESULT = e;           :}
+             | INT:n	                        {: RESULT = n;           :}
+             ;

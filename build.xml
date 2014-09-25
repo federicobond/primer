@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="lang" default="all">
+
+    <property name="basedir" value="."/>
+
+    <!-- Compiler options -->
+
+    <property name="compiler.debug" value="on"/>
+    <property name="compiler.generate.no.warnings" value="off"/>
+    <property name="compiler.args" value=""/>
+    <patternset id="ignored.files">
+        <exclude name="**/.DS_Store/**"/>
+        <exclude name="**/.git/**"/>
+    </patternset>
+
+    <!-- Project Libraries -->
+
+    <path id="library.asm.classpath">
+        <pathelement location="${basedir}/lib/asm-5.0.3.jar"/>
+    </path>
+
+    <path id="library.java-cup.classpath">
+        <pathelement location="${basedir}/lib/java-cup-11b.jar"/>
+    </path>
+
+    <path id="library.jflex.classpath">
+        <pathelement location="${basedir}/lib/jflex-1.6.0.jar"/>
+    </path>
+
+    <property name="output.dir" value="${basedir}/out/production"/>
+    <property name="testoutput.dir" value="${basedir}/out/test"/>
+
+    <property name="modules.lang.dir" value="${basedir}/src/ar/edu/itba/lang"/>
+
+    <path id="build.classpath">
+        <pathelement location="${output.dir}"/>
+        <path refid="library.asm.classpath"/>
+        <path refid="library.java-cup.classpath"/>
+        <path refid="library.jflex.classpath"/>
+    </path>
+
+    <target name="init" description="Build initialization">
+        <!-- Perform any build initialization in this target -->
+    </target>
+
+    <target name="clean" description="cleanup all">
+        <delete dir="${output.dir}"/>
+        <delete dir="${testoutput.dir}"/>
+    </target>
+
+    <taskdef classname="jflex.anttask.JFlexTask" name="jflex" classpathref="build.classpath"/>
+    <taskdef name="cup" classname="java_cup.anttask.CUPTask" classpathref="build.classpath"/>
+
+    <target name="build" depends="init, clean" description="build all modules">
+        <mkdir dir="${output.dir}"/>
+        <jflex file="${modules.lang.dir}/Scanner.flex" />
+        <cup srcfile="${modules.lang.dir}/Parser.cup" destdir="src" symbols="Symbols" parser="Parser" force="true"/>
+        <javac srcdir="src" destdir="${output.dir}" classpathref="build.classpath" debug="yes" includeantruntime="true"/>
+    </target>
+
+    <target name="all" depends="build" description="build all"/>
+</project>
