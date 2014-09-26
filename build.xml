@@ -54,7 +54,7 @@
     <target name="build" depends="init, clean" description="build all modules">
         <mkdir dir="${output.dir}"/>
         <jflex file="${modules.lang.dir}/Scanner.flex" />
-        <cup srcfile="${modules.lang.dir}/Parser.cup" destdir="src" symbols="Symbols" parser="Parser" force="true"/>
+        <cup srcfile="${modules.lang.dir}/Parser.cup" destdir="src" symbols="Symbols" parser="Parser"/>
         <javac srcdir="src" destdir="${output.dir}" classpathref="build.classpath" debug="yes" includeantruntime="true"/>
     </target>
 
