@@ -16,8 +16,13 @@ public class Main {
         String code = new String(Files.readAllBytes(path));
 
         ComplexSymbolFactory csf = new ComplexSymbolFactory();
-        Scanner lex = new ScannerBuffer(new Lexer(new StringReader(code), csf));
-        Parser parser = new Parser(lex, csf);
+
+        Lexer lexer = new Lexer(new StringReader(code), csf);
+        lexer.setFilename("expr.lang");
+
+        Scanner scanner = new ScannerBuffer(lexer);
+
+        Parser parser = new Parser(scanner, csf);
 
         Object ret = null;
         try {
