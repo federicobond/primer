@@ -27,6 +27,7 @@
         <pathelement location="${basedir}/lib/jflex-1.6.0.jar"/>
     </path>
 
+    <property name="gen.dir" value="${basedir}/src-gen"/>
     <property name="output.dir" value="${basedir}/out/production"/>
     <property name="testoutput.dir" value="${basedir}/out/test"/>
 
@@ -39,12 +40,18 @@
         <path refid="library.jflex.classpath"/>
     </path>
 
+    <path id="build.sourcepath">
+        <pathelement location="${gen.dir}"/>
+        <pathelement location="${basedir}"/>
+    </path>
+
     <target name="init" description="Build initialization">
         <!-- Perform any build initialization in this target -->
     </target>
 
     <target name="clean" description="cleanup all">
         <delete dir="${output.dir}"/>
+        <delete dir="${gen.dir}"/>
         <delete dir="${testoutput.dir}"/>
     </target>
 
@@ -53,9 +60,9 @@
 
     <target name="build" depends="init, clean" description="build all modules">
         <mkdir dir="${output.dir}"/>
-        <jflex file="${modules.lang.dir}/Scanner.flex" />
-        <cup srcfile="${modules.lang.dir}/Parser.cup" destdir="src" symbols="Symbols" parser="Parser"/>
-        <javac srcdir="src" destdir="${output.dir}" classpathref="build.classpath" debug="yes" includeantruntime="true"/>
+        <jflex file="${modules.lang.dir}/Scanner.flex" destdir="src-gen" />
+        <cup srcfile="${modules.lang.dir}/Parser.cup" destdir="src-gen" symbols="Symbols" parser="Parser"/>
+        <javac srcdir="src" destdir="${output.dir}" classpathref="build.classpath" sourcepathref="build.sourcepath" debug="yes" includeantruntime="true"/>
     </target>
 
     <target name="all" depends="build" description="build all"/>
