@@ -19,7 +19,6 @@ import static ar.edu.itba.lang.Symbols.*;
 %class Lexer
 
 %{
-private StringBuffer sb;
 private ComplexSymbolFactory symbolFactory;
 private int csline, cscolumn;
 
