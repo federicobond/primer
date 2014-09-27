@@ -23,6 +23,10 @@ public abstract class Node {
         return list;
     }
 
+    public String getNodeName() {
+        return getClass().getSimpleName();
+    }
+
     public String toString(boolean indent, int indentation) {
         StringBuilder sb = new StringBuilder();
 
@@ -30,7 +34,7 @@ public abstract class Node {
             indent(indentation, sb);
         }
 
-        sb.append(getClass().getSimpleName());
+        sb.append(getNodeName());
         sb.append('\n');
 
         for (Node node : childNodes()) {
