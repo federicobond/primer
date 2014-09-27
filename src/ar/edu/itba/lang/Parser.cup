@@ -1,6 +1,7 @@
 package ar.edu.itba.lang;
 
-import java_cup.runtime.*;
+import java_cup.runtime.ComplexSymbolFactory;
+import ar.edu.itba.lang.ast.*;
 
 parser code {:
   Lexer lexer;
@@ -11,22 +12,50 @@ parser code {:
   }
 :};
 
-terminal PLUS, TIMES, MINUS, UMINUS, DIVIDE, LEFT_PAREN, RIGHT_PAREN;
+terminal PLUS, TIMES, MINUS, UMINUS, DIVIDE;
+terminal LEFT_PAREN, RIGHT_PAREN;
+terminal WHILE, OPEN_BRACKET, CLOSE_BRACKET;
+terminal TRUE, FALSE;
+
+terminal T;
 terminal Integer INT;
 terminal Double REAL;
+terminal String STRING;
 
-non terminal Integer expr;
+non terminal ListNode StatementList;
+non terminal Node Statement;
+non terminal Node Expression;
+non terminal Node Literal;
+non terminal Node While;
 
 precedence left PLUS, MINUS;
 precedence left TIMES, DIVIDE;
 precedence left UMINUS;
 
-expr     ::= expr:e1 PLUS  expr:e2               {: RESULT = e1 + e2;     :}
-             | expr:e1 MINUS expr:e2             {: RESULT = e1 - e2;     :}
-             | expr:e1 TIMES expr:e2             {: RESULT = e1 * e2;     :}
-             | expr:e1 DIVIDE expr:e2            {: RESULT = e1 / e2;     :}
-             | MINUS expr:e                     {: RESULT = -e;          :}
-  	         %prec UMINUS
-             | LEFT_PAREN expr:e RIGHT_PAREN	{: RESULT = e;           :}
-             | INT:n	                        {: RESULT = n;           :}
-             ;
+
+StatementList ::= Statement:s StatementList:xs        {: RESULT = xs; xs.add(s); :}
+                |                                       {: RESULT = new BlockNode(); :}
+                ;
+
+Statement     ::= While:w                               {: RESULT = w; :}
+                ;
+
+Expression    ::= Expression:e1 PLUS  Expression:e2     {: RESULT = new AddNode(e1, e2); :}
+                | Expression:e1 MINUS Expression:e2     {: RESULT = new SubstractNode(e1, e2); :}
+                | Expression:e1 TIMES Expression:e2     {: RESULT = new MultiplyNode(e1, e2); :}
+                | Expression:e1 DIVIDE Expression:e2    {: RESULT = new DivideNode(e1, e2); :}
+                | MINUS Expression:e                    {: RESULT = new NegateNode(e); :}
+                  %prec UMINUS
+                | LEFT_PAREN Expression:e RIGHT_PAREN   {: RESULT = e; :}
+                | Literal:l                             {: RESULT = l; :}
+                ;
+
+While         ::= WHILE Expression:condition OPEN_BRACKET StatementList:body CLOSE_BRACKET
+                    {: RESULT = new WhileNode(condition, body); :};
+
+Literal       ::= INT:n                                 {: RESULT = new LiteralNode(n); :}
+                | REAL:d                                {: RESULT = new LiteralNode(d); :}
+                | STRING:s                              {: RESULT = new LiteralNode(s); :}
+                | TRUE                                  {: RESULT = new TrueNode(); :}
+                | FALSE                                 {: RESULT = new FalseNode(); :}
+                ;

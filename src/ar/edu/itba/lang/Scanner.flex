@@ -67,20 +67,32 @@ real            = {integer}\.{integer}
 char            = [^\r\n]*
 line_terminator = \r|\n|\r\n
 comment_body    = {char}*\n
-comment         = "#" {comment_body}* {line_terminator}?
+comment         = "#" {comment_body}*
 whitespace      = [ \n\t]
+
+/* TODO: Improve
+ * See https://code.google.com/p/jsyntaxpane/source/browse/branches/r095/jsyntaxpane/src/main/jflex/jsyntaxpane/lexers/python.flex?r=112 */
+string          = "\"" [^\"]* "\""
 
 %%
 /**
  * LEXICAL RULES:
  */
-"*"             { return symbol("*", TIMES); }
-"+"             { return symbol("+", PLUS); }
-"-"             { return symbol("-", MINUS); }
-"/"             { return symbol("/", DIVIDE); }
-"("             { return symbol("(", LEFT_PAREN); }
-")"             { return symbol(")", RIGHT_PAREN); }
-{integer}       { return symbol("int", INT, Integer.valueOf(yytext())); }
-{real}          { return symbol("double", REAL, Double.valueOf(yytext())); }
-{comment}       { /* Ignore comment. */ }
-{whitespace}    { /* Ignore whitespace. */ }
+"*"                 { return symbol("*", TIMES); }
+"+"                 { return symbol("+", PLUS); }
+"-"                 { return symbol("-", MINUS); }
+"/"                 { return symbol("/", DIVIDE); }
+"("                 { return symbol("(", LEFT_PAREN); }
+")"                 { return symbol(")", RIGHT_PAREN); }
+{integer}           { return symbol(Integer.valueOf(yytext()).toString(), INT, Integer.valueOf(yytext())); }
+{real}              { return symbol(Double.valueOf(yytext()).toString(), REAL, Double.valueOf(yytext())); }
+{comment}           { /* Ignore comment. */ }
+{whitespace}        { /* Ignore whitespace. */ }
+{line_terminator}   { return symbol("t", T); }
+{string}            { String s = yytext();
+                      return symbol("string", STRING, s.substring(1, s.length() - 1)); }
+"while"             { return symbol("while", WHILE); }
+"false"             { return symbol("false", FALSE); }
+"true"              { return symbol("true", TRUE); }
+"{"                 { return symbol("{", OPEN_BRACKET); }
+"}"                 { return symbol("}", CLOSE_BRACKET); }
