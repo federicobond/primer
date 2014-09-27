@@ -21,18 +21,27 @@ import static ar.edu.itba.lang.Symbols.*;
 %{
 private ComplexSymbolFactory symbolFactory;
 private int csline, cscolumn;
+private String filename = "unknown";
 
 public Lexer(Reader reader, ComplexSymbolFactory sf) {
     this(reader);
     symbolFactory = sf;
 }
 
+public void setFilename(String filename) {
+    this.filename = filename;
+}
+
 public Symbol symbol(String name, int code) {
-    return symbolFactory.newSymbol(name, code, new Location(yyline+1,yycolumn+1-yylength()), new Location(yyline+1,yycolumn+1));
+    Location left = new Location(filename, yyline + 1, yycolumn + 1 - yylength());
+    Location right = new Location(filename, yyline + 1, yycolumn + 1);
+    return symbolFactory.newSymbol(name, code, left, right);
 }
 
 public Symbol symbol(String name, int code, Object lexem) {
-    return symbolFactory.newSymbol(name, code, new Location(yyline+1, yycolumn +1), new Location(yyline+1,yycolumn+yylength()), lexem);
+    Location left = new Location(filename, yyline+1, yycolumn +1);
+    Location right = new Location(filename, yyline+1, yycolumn+yylength());
+    return symbolFactory.newSymbol(name, code, left, right, lexem);
 }
 
 protected void emit_warning(String message) {
