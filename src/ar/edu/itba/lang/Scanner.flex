@@ -44,11 +44,11 @@ public Symbol symbol(String name, int code, Object lexem) {
     return symbolFactory.newSymbol(name, code, left, right, lexem);
 }
 
-protected void emit_warning(String message) {
+protected void emitWarning(String message) {
     // ErrorManager.getManager().emit_warning("Scanner at " + (yyline+1) + "(" + (yycolumn+1) + "): " + message);
 }
 
-protected void emit_error(String message) {
+protected void emitError(String message) {
     // ErrorManager.getManager().emit_error("Scanner at " + (yyline+1) + "(" + (yycolumn+1) +  "): " + message);
 }
 
