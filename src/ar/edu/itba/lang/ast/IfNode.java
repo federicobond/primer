@@ -15,6 +15,9 @@ public class IfNode extends Node {
 
     @Override
     public List<Node> childNodes() {
+        if (elseBody == null) {
+            return Node.createList(condition, thenBody);
+        }
         return Node.createList(condition, thenBody, elseBody);
     }
 }

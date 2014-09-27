@@ -14,7 +14,7 @@ parser code {:
 
 terminal PLUS, TIMES, MINUS, UMINUS, DIVIDE;
 terminal LEFT_PAREN, RIGHT_PAREN;
-terminal WHILE, OPEN_BRACKET, CLOSE_BRACKET;
+terminal IF, ELSE, WHILE, OPEN_BRACKET, CLOSE_BRACKET;
 terminal TRUE, FALSE;
 
 terminal T;
@@ -26,6 +26,7 @@ non terminal ListNode StatementList;
 non terminal Node Statement;
 non terminal Node Expression;
 non terminal Node Literal;
+non terminal Node If;
 non terminal Node While;
 
 precedence left PLUS, MINUS;
@@ -33,11 +34,12 @@ precedence left TIMES, DIVIDE;
 precedence left UMINUS;
 
 
-StatementList ::= Statement:s StatementList:xs        {: RESULT = xs; xs.add(s); :}
+StatementList ::= Statement:s StatementList:xs          {: RESULT = xs; xs.add(s); :}
                 |                                       {: RESULT = new BlockNode(); :}
                 ;
 
-Statement     ::= While:w                               {: RESULT = w; :}
+Statement     ::= If:i                                  {: RESULT = i; :}
+                | While:w                               {: RESULT = w; :}
                 ;
 
 Expression    ::= Expression:e1 PLUS  Expression:e2     {: RESULT = new AddNode(e1, e2); :}
@@ -48,6 +50,13 @@ Expression    ::= Expression:e1 PLUS  Expression:e2     {: RESULT = new AddNode(
                   %prec UMINUS
                 | LEFT_PAREN Expression:e RIGHT_PAREN   {: RESULT = e; :}
                 | Literal:l                             {: RESULT = l; :}
+                ;
+
+If            ::= IF Expression:condition OPEN_BRACKET StatementList:thenBody CLOSE_BRACKET
+                    {: RESULT = new IfNode(condition, thenBody, null); :}
+                | IF Expression:condition OPEN_BRACKET StatementList:thenBody CLOSE_BRACKET
+                  ELSE OPEN_BRACKET StatementList:elseBody CLOSE_BRACKET
+                    {: RESULT = new IfNode(condition, thenBody, elseBody); :}
                 ;
 
 While         ::= WHILE Expression:condition OPEN_BRACKET StatementList:body CLOSE_BRACKET

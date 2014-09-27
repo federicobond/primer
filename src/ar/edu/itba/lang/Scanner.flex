@@ -92,6 +92,8 @@ string          = "\"" [^\"]* "\""
 {string}            { String s = yytext();
                       return symbol("string", STRING, s.substring(1, s.length() - 1)); }
 "while"             { return symbol("while", WHILE); }
+"if"                { return symbol("if", IF); }
+"else"              { return symbol("else", ELSE); }
 "false"             { return symbol("false", FALSE); }
 "true"              { return symbol("true", TRUE); }
 "{"                 { return symbol("{", OPEN_BRACKET); }
