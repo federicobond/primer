@@ -66,4 +66,6 @@
     </target>
 
     <target name="all" depends="build" description="build all"/>
+
+    <target name="test" depends="build" description="test project"/>
 </project>
