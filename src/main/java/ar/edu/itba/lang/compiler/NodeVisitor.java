@@ -7,6 +7,7 @@ public interface NodeVisitor {
     public void visitAddNode(AddNode node);
     public void visitAndNode(AndNode node);
     public void visitBlockNode(BlockNode node);
+    public void visitCallNode(CallNode node);
     public void visitDivideNode(DivideNode node);
     public void visitFalseNode(FalseNode node);
     public void visitIfNode(IfNode node);

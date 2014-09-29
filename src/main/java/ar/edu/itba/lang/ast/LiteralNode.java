@@ -18,11 +18,16 @@ public class LiteralNode extends Node {
 
     @Override
     public void accept(NodeVisitor visitor) {
-
+        visitor.visitLiteralNode(this);
     }
 
     @Override
     public List<Node> childNodes() {
         return EMPTY_LIST;
+    }
+
+    @Override
+    public String getNodeName() {
+        return super.getNodeName() + "{value=" + value +  "}";
     }
 }

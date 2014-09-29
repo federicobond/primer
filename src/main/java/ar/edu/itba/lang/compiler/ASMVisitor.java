@@ -60,7 +60,9 @@ public class ASMVisitor implements NodeVisitor, Opcodes {
 
     @Override
     public void visitAddNode(AddNode node) {
-
+        node.getFirstNode().accept(this);
+        node.getSecondNode().accept(this);
+        mv.visitInsn(IADD);
     }
 
     @Override
@@ -70,17 +72,37 @@ public class ASMVisitor implements NodeVisitor, Opcodes {
 
     @Override
     public void visitBlockNode(BlockNode node) {
+        for (Node children : node.childNodes()) {
+            children.accept(this);
+        }
+    }
 
+    @Override
+    public void visitCallNode(CallNode node) {
+        mv.visitFieldInsn(GETSTATIC,
+                "java/lang/System",
+                "out",
+                "Ljava/io/PrintStream;");
+
+        for (Node children : node.getArgs().childNodes()) {
+            children.accept(this);
+        }
+        mv.visitMethodInsn(INVOKEVIRTUAL,
+                "java/io/PrintStream",
+                "println",
+                "(Ljava/lang/String;)V");
     }
 
     @Override
     public void visitDivideNode(DivideNode node) {
-
+        node.getFirstNode().accept(this);
+        node.getSecondNode().accept(this);
+        mv.visitInsn(IDIV);
     }
 
     @Override
     public void visitFalseNode(FalseNode node) {
-        mv.visitIntInsn(ISTORE, 0);
+        mv.visitInsn(ICONST_0);
     }
 
     @Override
@@ -98,7 +120,8 @@ public class ASMVisitor implements NodeVisitor, Opcodes {
 
     @Override
     public void visitLiteralNode(LiteralNode node) {
-
+        Object value = node.getValue();
+        mv.visitLdcInsn(value);
     }
 
     @Override
@@ -113,12 +136,14 @@ public class ASMVisitor implements NodeVisitor, Opcodes {
 
     @Override
     public void visitSubstractNode(SubstractNode node) {
-
+        node.getFirstNode().accept(this);
+        node.getSecondNode().accept(this);
+        mv.visitInsn(ISUB);
     }
 
     @Override
     public void visitTrueNode(TrueNode node) {
-
+        mv.visitInsn(ICONST_1);
     }
 
     @Override

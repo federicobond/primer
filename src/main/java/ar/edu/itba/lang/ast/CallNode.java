@@ -7,21 +7,29 @@ import java.util.List;
 public class CallNode extends Node {
 
     private final String name;
-    private final Node args;
+    private final ListNode args;
 
-    public CallNode(String name, Node args) {
+    public CallNode(String name, ListNode args) {
         this.name = name;
         this.args = args;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public ListNode getArgs() {
+        return args;
+    }
+
     @Override
     public void accept(NodeVisitor visitor) {
-
+        visitor.visitCallNode(this);
     }
 
     @Override
     public List<Node> childNodes() {
-        return EMPTY_LIST;
+        return Node.createList(args);
     }
 
     @Override
