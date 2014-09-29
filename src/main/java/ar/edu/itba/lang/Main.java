@@ -1,5 +1,6 @@
 package ar.edu.itba.lang;
 
+import ar.edu.itba.lang.ast.Node;
 import ar.edu.itba.lang.compiler.ASMVisitor;
 import java_cup.runtime.ComplexSymbolFactory;
 import java_cup.runtime.Scanner;
@@ -13,8 +14,6 @@ import java.nio.file.Paths;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        Path p = Paths.get(".", "Main.class");
-        Files.write(p, new ASMVisitor().getByteArray());
 
         Path path = Paths.get("src/test/resources", "expr.lang");
         String code = new String(Files.readAllBytes(path));
@@ -37,5 +36,8 @@ public class Main {
         if (ret != null) {
             System.out.println(ret);
         }
+
+        Path p = Paths.get(".", "Main.class");
+        Files.write(p, new ASMVisitor((Node)ret).getByteArray());
     }
 }

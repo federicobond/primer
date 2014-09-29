@@ -1,15 +1,17 @@
 package ar.edu.itba.lang.compiler;
 
 import ar.edu.itba.lang.ast.*;
-import ar.edu.itba.lang.compiler.NodeVisitor;
-import org.objectweb.asm.*;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Label;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 
 public class ASMVisitor implements NodeVisitor, Opcodes {
 
     private final ClassWriter cw = new ClassWriter(0);
     private MethodVisitor mv;
 
-    public ASMVisitor() {
+    public ASMVisitor(Node root) {
         cw.visit(49,
                 ACC_PUBLIC + ACC_SUPER,
                 "Main",
@@ -36,17 +38,7 @@ public class ASMVisitor implements NodeVisitor, Opcodes {
                     "([Ljava/lang/String;)V",
                     null,
                     null);
-            mv.visitIntInsn(BIPUSH, 42);
-            mv.visitIntInsn(ISTORE, 2);
-            mv.visitFieldInsn(GETSTATIC,
-                    "java/lang/System",
-                    "out",
-                    "Ljava/io/PrintStream;");
-            mv.visitLdcInsn("hello");
-            mv.visitMethodInsn(INVOKEVIRTUAL,
-                    "java/io/PrintStream",
-                    "println",
-                    "(Ljava/lang/String;)V");
+            root.accept(this);
             mv.visitInsn(RETURN);
             mv.visitMaxs(2, 1);
             mv.visitEnd();
@@ -71,6 +63,13 @@ public class ASMVisitor implements NodeVisitor, Opcodes {
     }
 
     @Override
+    public void visitArgsNode(ArgsNode node) {
+         for (Node child : node.childNodes()) {
+             child.accept(this);
+         }
+    }
+
+    @Override
     public void visitBlockNode(BlockNode node) {
         for (Node children : node.childNodes()) {
             children.accept(this);
@@ -83,10 +82,7 @@ public class ASMVisitor implements NodeVisitor, Opcodes {
                 "java/lang/System",
                 "out",
                 "Ljava/io/PrintStream;");
-
-        for (Node children : node.getArgs().childNodes()) {
-            children.accept(this);
-        }
+        node.getArgs().accept(this);
         mv.visitMethodInsn(INVOKEVIRTUAL,
                 "java/io/PrintStream",
                 "println",
