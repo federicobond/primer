@@ -31,7 +31,7 @@
     <property name="output.dir" value="${basedir}/out/production"/>
     <property name="testoutput.dir" value="${basedir}/out/test"/>
 
-    <property name="modules.lang.dir" value="${basedir}/src/ar/edu/itba/lang"/>
+    <property name="modules.lang.dir" value="${basedir}/src/main/java/ar/edu/itba/lang"/>
 
     <path id="build.classpath">
         <pathelement location="${output.dir}"/>
@@ -58,7 +58,7 @@
     <taskdef classname="jflex.anttask.JFlexTask" name="jflex" classpathref="build.classpath"/>
     <taskdef name="cup" classname="java_cup.anttask.CUPTask" classpathref="build.classpath"/>
 
-    <target name="build" depends="init, clean" description="build all modules">
+    <target name="build" depends="init" description="build all modules">
         <mkdir dir="${output.dir}"/>
         <jflex file="${modules.lang.dir}/Scanner.flex" destdir="src-gen" />
         <cup srcfile="${modules.lang.dir}/Parser.cup" destdir="src-gen" symbols="Symbols" parser="Parser"/>
@@ -67,5 +67,7 @@
 
     <target name="all" depends="build" description="build all"/>
 
-    <target name="test" depends="build" description="test project"/>
+    <target name="test-build" depends="build" description="build tests">
+        <javac srcdir="src" destdir="${output.dir}" classpathref="build.classpath" sourcepathref="build.sourcepath" debug="yes" includeantruntime="true"/>
+    </target>
 </project>

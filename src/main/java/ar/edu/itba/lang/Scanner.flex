@@ -98,3 +98,5 @@ string          = "\"" [^\"]* "\""
 "true"              { return symbol("true", TRUE); }
 "{"                 { return symbol("{", OPEN_BRACKET); }
 "}"                 { return symbol("}", CLOSE_BRACKET); }
+","                 { return symbol(",", COMMA); }
+{identifier}        { return symbol(yytext(), IDENTIFIER, yytext()); }

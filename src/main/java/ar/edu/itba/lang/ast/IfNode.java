@@ -1,5 +1,7 @@
 package ar.edu.itba.lang.ast;
 
+import ar.edu.itba.lang.compiler.NodeVisitor;
+
 import java.util.List;
 
 public class IfNode extends Node {
@@ -11,6 +13,23 @@ public class IfNode extends Node {
         this.condition = condition;
         this.thenBody = thenBody;
         this.elseBody = elseBody;
+    }
+
+    public Node getCondition() {
+        return condition;
+    }
+
+    public Node getThenBody() {
+        return thenBody;
+    }
+
+    public Node getElseBody() {
+        return elseBody;
+    }
+
+    @Override
+    public void accept(NodeVisitor visitor) {
+
     }
 
     @Override

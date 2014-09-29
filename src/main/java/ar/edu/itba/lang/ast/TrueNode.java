@@ -1,13 +1,14 @@
 package ar.edu.itba.lang.ast;
 
+import ar.edu.itba.lang.compiler.NodeVisitor;
+
 import java.util.List;
 
-public class LiteralNode extends Node {
+public class TrueNode extends Node {
 
-    private final Object value;
+    @Override
+    public void accept(NodeVisitor visitor) {
 
-    public LiteralNode(Object value) {
-        this.value = value;
     }
 
     @Override

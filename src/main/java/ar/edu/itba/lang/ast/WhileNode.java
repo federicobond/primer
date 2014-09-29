@@ -1,5 +1,7 @@
 package ar.edu.itba.lang.ast;
 
+import ar.edu.itba.lang.compiler.NodeVisitor;
+
 import java.util.List;
 
 public class WhileNode extends Node {
@@ -10,6 +12,11 @@ public class WhileNode extends Node {
     public WhileNode(Node conditionNode, Node bodyNode) {
         this.conditionNode = conditionNode;
         this.bodyNode = bodyNode;
+    }
+
+    @Override
+    public void accept(NodeVisitor visitor) {
+
     }
 
     @Override

@@ -1,6 +1,7 @@
 package ar.edu.itba.lang;
 
 import java_cup.runtime.ComplexSymbolFactory;
+import java_cup.runtime.Symbol;
 import ar.edu.itba.lang.ast.*;
 
 parser code {:
@@ -15,6 +16,8 @@ parser code {:
 terminal PLUS, TIMES, MINUS, UMINUS, DIVIDE;
 terminal LEFT_PAREN, RIGHT_PAREN;
 terminal IF, ELSE, WHILE, OPEN_BRACKET, CLOSE_BRACKET;
+terminal IDENTIFIER;
+terminal COMMA;
 terminal TRUE, FALSE;
 
 terminal T;
@@ -26,6 +29,8 @@ non terminal ListNode StatementList;
 non terminal Node Statement;
 non terminal Node Expression;
 non terminal Node Literal;
+non terminal Node Call;
+non terminal ListNode Args;
 non terminal Node If;
 non terminal Node While;
 
@@ -40,6 +45,7 @@ StatementList ::= Statement:s StatementList:xs          {: RESULT = xs; xs.add(s
 
 Statement     ::= If:i                                  {: RESULT = i; :}
                 | While:w                               {: RESULT = w; :}
+                | Call:c                                {: RESULT = c; :}
                 ;
 
 Expression    ::= Expression:e1 PLUS  Expression:e2     {: RESULT = new AddNode(e1, e2); :}
@@ -61,6 +67,14 @@ If            ::= IF Expression:condition OPEN_BRACKET StatementList:thenBody CL
 
 While         ::= WHILE Expression:condition OPEN_BRACKET StatementList:body CLOSE_BRACKET
                     {: RESULT = new WhileNode(condition, body); :};
+
+Call          ::= IDENTIFIER:i LEFT_PAREN Args:a RIGHT_PAREN
+                    {: RESULT = new CallNode((String)i, a); :};
+
+Args          ::= Expression:e COMMA Args:l             {: RESULT = l; l.add(e); :}
+                | Expression:e                          {: RESULT = new ArgsNode(); RESULT.add(e); :}
+                |                                       {: RESULT = new ArgsNode(); :}
+                ;
 
 Literal       ::= INT:n                                 {: RESULT = new LiteralNode(n); :}
                 | REAL:d                                {: RESULT = new LiteralNode(d); :}

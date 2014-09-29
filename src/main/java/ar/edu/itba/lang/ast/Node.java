@@ -1,5 +1,7 @@
 package ar.edu.itba.lang.ast;
 
+import ar.edu.itba.lang.compiler.NodeVisitor;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,9 +9,7 @@ public abstract class Node {
 
     static final List<Node> EMPTY_LIST = new ArrayList<Node>(0);
 
-    public String toString() {
-        return toString(true, 0);
-    }
+    public abstract void accept(NodeVisitor visitor);
 
     public abstract List<Node> childNodes();
 
@@ -25,6 +25,10 @@ public abstract class Node {
 
     public String getNodeName() {
         return getClass().getSimpleName();
+    }
+
+    public String toString() {
+        return toString(true, 0);
     }
 
     public String toString(boolean indent, int indentation) {
