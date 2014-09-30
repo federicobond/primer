@@ -27,7 +27,8 @@ public class ASMVisitor implements NodeVisitor, Opcodes {
             mv.visitMethodInsn(INVOKESPECIAL,
                     "java/lang/Object",
                     "<init>",
-                    "()V");
+                    "()V",
+                    false);
             mv.visitInsn(RETURN);
             mv.visitMaxs(1, 1);
             mv.visitEnd();
@@ -88,7 +89,8 @@ public class ASMVisitor implements NodeVisitor, Opcodes {
         mv.visitMethodInsn(INVOKEVIRTUAL,
                 "java/io/PrintStream",
                 "println",
-                "(Ljava/lang/String;)V");
+                "(Ljava/lang/String;)V",
+                false);
     }
 
     @Override
