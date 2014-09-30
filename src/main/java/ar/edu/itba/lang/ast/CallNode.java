@@ -33,6 +33,11 @@ public class CallNode extends Node {
     }
 
     @Override
+    public NodeType getNodeType() {
+        return NodeType.CALLNODE;
+    }
+
+    @Override
     public String getNodeName() {
         return super.getNodeName() + String.format("{name=%s}", name);
     }

@@ -59,6 +59,8 @@ public class ASMVisitor implements NodeVisitor, Opcodes {
 
     @Override
     public void visitAndNode(AndNode node) {
+        node.getFirstNode().accept(this);
+        node.getSecondNode().accept(this);
         mv.visitInsn(IAND);
     }
 
@@ -103,14 +105,17 @@ public class ASMVisitor implements NodeVisitor, Opcodes {
 
     @Override
     public void visitIfNode(IfNode node) {
-        Label l = new Label();
+        Label l1 = new Label();
         Label l2 = new Label();
 
         node.getCondition().accept(this);
-        mv.visitIntInsn(BIPUSH, 1);
-        mv.visitJumpInsn(IF_ICMPNE, l);
+        mv.visitInsn(ICONST_0);
+        mv.visitJumpInsn(IF_ICMPEQ, l1);
         node.getThenBody().accept(this);
-        mv.visitLabel(l);
+        mv.visitJumpInsn(GOTO, l2);
+        mv.visitLabel(l1);
+        node.getElseBody().accept(this);
+        mv.visitLabel(l2);
         node.getElseBody();
     }
 
@@ -121,7 +126,15 @@ public class ASMVisitor implements NodeVisitor, Opcodes {
     }
 
     @Override
+    public void visitMultiplyNode(MultiplyNode node) {
+        node.getFirstNode().accept(this);
+        node.getSecondNode().accept(this);
+        mv.visitInsn(IMUL);
+    }
+
+    @Override
     public void visitNegateNode(NegateNode node) {
+        node.getNode().accept(this);
         mv.visitInsn(INEG);
     }
 
@@ -144,6 +157,6 @@ public class ASMVisitor implements NodeVisitor, Opcodes {
 
     @Override
     public void visitWhileNode(WhileNode node) {
-
+        throw new RuntimeException("while not implemented");
     }
 }

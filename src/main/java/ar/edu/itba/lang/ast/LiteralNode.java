@@ -27,6 +27,11 @@ public class LiteralNode extends Node {
     }
 
     @Override
+    public NodeType getNodeType() {
+        return NodeType.LITERALNODE;
+    }
+
+    @Override
     public String getNodeName() {
         return super.getNodeName() + "{value=" + value +  "}";
     }

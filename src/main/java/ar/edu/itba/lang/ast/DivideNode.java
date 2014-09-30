@@ -10,6 +10,11 @@ public class DivideNode extends BinaryOperationNode {
 
     @Override
     public void accept(NodeVisitor visitor) {
+        visitor.visitDivideNode(this);
+    }
 
+    @Override
+    public NodeType getNodeType() {
+        return NodeType.DIVIDENODE;
     }
 }

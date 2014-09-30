@@ -10,6 +10,11 @@ public class MultiplyNode extends BinaryOperationNode {
 
     @Override
     public void accept(NodeVisitor visitor) {
+        visitor.visitMultiplyNode(this);
+    }
 
+    @Override
+    public NodeType getNodeType() {
+        return NodeType.MULTIPLYNODE;
     }
 }

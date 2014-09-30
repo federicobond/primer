@@ -23,6 +23,8 @@ public abstract class Node {
         return list;
     }
 
+    public abstract NodeType getNodeType();
+
     public String getNodeName() {
         return getClass().getSimpleName();
     }

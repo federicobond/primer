@@ -10,6 +10,11 @@ public class AndNode extends BinaryOperationNode {
 
     @Override
     public void accept(NodeVisitor visitor) {
+        visitor.visitAndNode(this);
+    }
 
+    @Override
+    public NodeType getNodeType() {
+        return NodeType.ANDNODE;
     }
 }

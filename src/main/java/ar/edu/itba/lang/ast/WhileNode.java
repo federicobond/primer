@@ -16,11 +16,16 @@ public class WhileNode extends Node {
 
     @Override
     public void accept(NodeVisitor visitor) {
-
+        visitor.visitWhileNode(this);
     }
 
     @Override
     public List<Node> childNodes() {
         return Node.createList(conditionNode, bodyNode);
+    }
+
+    @Override
+    public NodeType getNodeType() {
+        return NodeType.WHILENODE;
     }
 }

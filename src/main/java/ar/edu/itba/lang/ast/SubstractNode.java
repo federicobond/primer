@@ -10,6 +10,11 @@ public class SubstractNode extends BinaryOperationNode {
 
     @Override
     public void accept(NodeVisitor visitor) {
+        visitor.visitSubstractNode(this);
+    }
 
+    @Override
+    public NodeType getNodeType() {
+        return NodeType.SUBSTRACTNODE;
     }
 }

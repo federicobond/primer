@@ -13,6 +13,7 @@ public interface NodeVisitor {
     public void visitFalseNode(FalseNode node);
     public void visitIfNode(IfNode node);
     public void visitLiteralNode(LiteralNode node);
+    public void visitMultiplyNode(MultiplyNode node);
     public void visitNegateNode(NegateNode node);
     public void visitOrNode(OrNode node);
     public void visitSubstractNode(SubstractNode node);

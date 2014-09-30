@@ -8,11 +8,16 @@ public class FalseNode extends Node {
 
     @Override
     public void accept(NodeVisitor visitor) {
-
+        visitor.visitFalseNode(this);
     }
 
     @Override
     public List<Node> childNodes() {
         return EMPTY_LIST;
+    }
+
+    @Override
+    public NodeType getNodeType() {
+        return NodeType.FALSENODE;
     }
 }

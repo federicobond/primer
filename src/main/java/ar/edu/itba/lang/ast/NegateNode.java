@@ -12,13 +12,22 @@ public class NegateNode extends Node {
         this.node = node;
     }
 
+    public Node getNode() {
+        return node;
+    }
+
     @Override
     public void accept(NodeVisitor visitor) {
-
+        visitor.visitNegateNode(this);
     }
 
     @Override
     public List<Node> childNodes() {
         return Node.createList(node);
+    }
+
+    @Override
+    public NodeType getNodeType() {
+        return NodeType.NEGATENODE;
     }
 }

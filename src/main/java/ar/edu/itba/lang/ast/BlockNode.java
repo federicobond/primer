@@ -8,4 +8,9 @@ public class BlockNode extends ListNode {
     public void accept(NodeVisitor visitor) {
         visitor.visitBlockNode(this);
     }
+
+    @Override
+    public NodeType getNodeType() {
+        return NodeType.BLOCKNODE;
+    }
 }

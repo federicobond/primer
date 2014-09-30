@@ -10,6 +10,11 @@ public class OrNode extends BinaryOperationNode {
 
     @Override
     public void accept(NodeVisitor visitor) {
+        visitor.visitOrNode(this);
+    }
 
+    @Override
+    public NodeType getNodeType() {
+        return NodeType.ORNODE;
     }
 }

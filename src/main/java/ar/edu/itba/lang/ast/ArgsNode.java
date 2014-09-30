@@ -8,4 +8,9 @@ public class ArgsNode extends ListNode {
     public void accept(NodeVisitor visitor) {
         visitor.visitArgsNode(this);
     }
+
+    @Override
+    public NodeType getNodeType() {
+        return NodeType.ARGSNODE;
+    }
 }

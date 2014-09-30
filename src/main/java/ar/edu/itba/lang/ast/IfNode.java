@@ -29,7 +29,7 @@ public class IfNode extends Node {
 
     @Override
     public void accept(NodeVisitor visitor) {
-
+        visitor.visitIfNode(this);
     }
 
     @Override
@@ -38,5 +38,10 @@ public class IfNode extends Node {
             return Node.createList(condition, thenBody);
         }
         return Node.createList(condition, thenBody, elseBody);
+    }
+
+    @Override
+    public NodeType getNodeType() {
+        return NodeType.IFNODE;
     }
 }
