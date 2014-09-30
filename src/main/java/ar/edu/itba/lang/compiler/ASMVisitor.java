@@ -140,6 +140,8 @@ public class ASMVisitor implements NodeVisitor, Opcodes {
 
     @Override
     public void visitOrNode(OrNode node) {
+        node.getFirstNode().accept(this);
+        node.getSecondNode().accept(this);
         mv.visitInsn(IOR);
     }
 
