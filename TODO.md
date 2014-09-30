@@ -1,10 +1,9 @@
+
 To Do
 =====
 
- * Implement while
-    while exp {
-      ...
-    }
+ * Add test framework
+ * Implement variable assignment
  * Implement for
     for elem in iterable {
       ...
@@ -22,6 +21,7 @@ Nice to haves
  * Add LINENUMBER bytecode instructions (useful for debugging)
  * Add support for printing the AST like this
     $ lang ast myscript.lang
+ * Add recursion (should be easy I guess, but depends on how method invocation is implemented)
  * Add support for defining methods
  * Implement loop forever
     loop {
@@ -45,3 +45,4 @@ Nice to haves
  * Add syntax for exception handling
  * Add support for floating point numbers and operations over them
  * Add support for custom data structures (structs or classes)
+ * Implement pattern matching (?)
