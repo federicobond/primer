@@ -4,13 +4,15 @@ import ar.edu.itba.lang.compiler.NodeVisitor;
 
 import java.util.List;
 
-public class IfNode extends Node {
+public class IfElseNode extends Node {
     private final Node condition;
     private final Node thenBody;
+    private final Node elseBody;
 
-    public IfNode(Node condition, Node thenBody) {
+    public IfElseNode(Node condition, Node thenBody, Node elseBody) {
         this.condition = condition;
         this.thenBody = thenBody;
+        this.elseBody = elseBody;
     }
 
     public Node getCondition() {
@@ -21,14 +23,18 @@ public class IfNode extends Node {
         return thenBody;
     }
 
+    public Node getElseBody() {
+        return elseBody;
+    }
+
     @Override
     public void accept(NodeVisitor visitor) {
-        visitor.visitIfNode(this);
+        visitor.visitIfElseNode(this);
     }
 
     @Override
     public List<Node> childNodes() {
-        return Node.createList(condition, thenBody);
+        return Node.createList(condition, thenBody, elseBody);
     }
 
     @Override

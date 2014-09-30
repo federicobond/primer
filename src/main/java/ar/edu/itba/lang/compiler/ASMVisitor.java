@@ -108,17 +108,25 @@ public class ASMVisitor implements NodeVisitor, Opcodes {
     @Override
     public void visitIfNode(IfNode node) {
         Label l1 = new Label();
+
+        node.getCondition().accept(this);
+        mv.visitJumpInsn(IFEQ, l1);
+        node.getThenBody().accept(this);
+        mv.visitLabel(l1);
+    }
+
+    @Override
+    public void visitIfElseNode(IfElseNode node) {
+        Label l1 = new Label();
         Label l2 = new Label();
 
         node.getCondition().accept(this);
-        mv.visitInsn(ICONST_0);
-        mv.visitJumpInsn(IF_ICMPEQ, l1);
+        mv.visitJumpInsn(IFEQ, l1);
         node.getThenBody().accept(this);
         mv.visitJumpInsn(GOTO, l2);
         mv.visitLabel(l1);
         node.getElseBody().accept(this);
         mv.visitLabel(l2);
-        node.getElseBody();
     }
 
     @Override

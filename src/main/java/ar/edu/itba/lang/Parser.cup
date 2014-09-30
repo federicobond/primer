@@ -59,10 +59,10 @@ Expression    ::= Expression:e1 PLUS  Expression:e2     {: RESULT = new AddNode(
                 ;
 
 If            ::= IF Expression:condition OPEN_BRACKET StatementList:thenBody CLOSE_BRACKET
-                    {: RESULT = new IfNode(condition, thenBody, null); :}
+                    {: RESULT = new IfNode(condition, thenBody); :}
                 | IF Expression:condition OPEN_BRACKET StatementList:thenBody CLOSE_BRACKET
                   ELSE OPEN_BRACKET StatementList:elseBody CLOSE_BRACKET
-                    {: RESULT = new IfNode(condition, thenBody, elseBody); :}
+                    {: RESULT = new IfElseNode(condition, thenBody, elseBody); :}
                 ;
 
 While         ::= WHILE Expression:condition OPEN_BRACKET StatementList:body CLOSE_BRACKET

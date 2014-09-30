@@ -12,6 +12,7 @@ public interface NodeVisitor {
     public void visitDivideNode(DivideNode node);
     public void visitFalseNode(FalseNode node);
     public void visitIfNode(IfNode node);
+    public void visitIfElseNode(IfElseNode ifElseNode);
     public void visitLiteralNode(LiteralNode node);
     public void visitMultiplyNode(MultiplyNode node);
     public void visitNegateNode(NegateNode node);

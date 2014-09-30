@@ -14,6 +14,14 @@ public class WhileNode extends Node {
         this.bodyNode = bodyNode;
     }
 
+    public Node getBodyNode() {
+        return bodyNode;
+    }
+
+    public Node getConditionNode() {
+        return conditionNode;
+    }
+
     @Override
     public void accept(NodeVisitor visitor) {
         visitor.visitWhileNode(this);
