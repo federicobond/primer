@@ -31,8 +31,6 @@
     <property name="output.dir" value="${basedir}/out/production"/>
     <property name="testoutput.dir" value="${basedir}/out/test"/>
 
-    <property name="modules.lang.dir" value="${basedir}/src/main/java/ar/edu/itba/lang"/>
-
     <path id="build.classpath">
         <pathelement location="${output.dir}"/>
         <path refid="library.asm.classpath"/>
@@ -61,7 +59,7 @@
     <target name="build" depends="init" description="build all modules">
         <mkdir dir="${output.dir}"/>
         <jflex file="${basedir}/src/main/jflex/ar/edu/itba/lang/Scanner.flex" destdir="src-gen" />
-        <cup srcfile="${modules.lang.dir}/Parser.cup" destdir="src-gen" symbols="Symbols" parser="Parser"/>
+        <cup srcfile="${basedir}/src/main/cup/ar/edu/itba/lang/Parser.cup" destdir="src-gen" symbols="Symbols" parser="Parser"/>
         <javac srcdir="src" destdir="${output.dir}" classpathref="build.classpath" sourcepathref="build.sourcepath" debug="yes" includeantruntime="true"/>
     </target>
 
