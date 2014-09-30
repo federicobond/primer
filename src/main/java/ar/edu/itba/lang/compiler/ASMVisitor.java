@@ -169,6 +169,14 @@ public class ASMVisitor implements NodeVisitor, Opcodes {
 
     @Override
     public void visitWhileNode(WhileNode node) {
-        throw new RuntimeException("while not implemented");
+        Label conditionLabel = new Label();
+        Label endLabel = new Label();
+
+        mv.visitLabel(conditionLabel);
+        node.getConditionNode().accept(this);
+        mv.visitJumpInsn(IFEQ, endLabel);
+        node.getBodyNode().accept(this);
+        mv.visitJumpInsn(GOTO, conditionLabel);
+        mv.visitLabel(endLabel);
     }
 }
