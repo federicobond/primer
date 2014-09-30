@@ -73,8 +73,8 @@ public class ASMVisitor implements NodeVisitor, Opcodes {
 
     @Override
     public void visitBlockNode(BlockNode node) {
-        for (Node children : node.childNodes()) {
-            children.accept(this);
+        for (Node child : node.childNodes()) {
+            child.accept(this);
         }
     }
 
