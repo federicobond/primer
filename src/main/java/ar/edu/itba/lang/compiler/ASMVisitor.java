@@ -16,7 +16,7 @@ public class ASMVisitor implements NodeVisitor, Opcodes {
                 ACC_PUBLIC + ACC_SUPER,
                 "Main",
                 null,
-                "java/lang/Object",
+                "ar/edu/itba/lang/compiler/Script",
                 null);
 
         cw.visitSource("Main.java", null);
@@ -25,7 +25,7 @@ public class ASMVisitor implements NodeVisitor, Opcodes {
             mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitMethodInsn(INVOKESPECIAL,
-                    "java/lang/Object",
+                    "ar/edu/itba/lang/compiler/Script",
                     "<init>",
                     "()V",
                     false);

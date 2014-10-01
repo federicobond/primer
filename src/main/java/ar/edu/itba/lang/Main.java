@@ -1,43 +1,38 @@
 package ar.edu.itba.lang;
 
-import ar.edu.itba.lang.ast.Node;
-import ar.edu.itba.lang.compiler.ASMVisitor;
-import java_cup.runtime.ComplexSymbolFactory;
-import java_cup.runtime.Scanner;
-import java_cup.runtime.ScannerBuffer;
+import ar.edu.itba.lang.compiler.Compiler;
 
-import java.io.StringReader;
+import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class Main {
 
+    public static void printUsage() {
+        System.err.println("usage: lang [run|ast] filename.lang");
+    }
+
     public static void main(String[] args) throws Exception {
-
-        Path path = Paths.get("src/test/resources", "expr.lang");
-        String code = new String(Files.readAllBytes(path));
-
-        ComplexSymbolFactory csf = new ComplexSymbolFactory();
-
-        Lexer lexer = new Lexer(new StringReader(code), csf);
-        lexer.setFilename(path.getFileName().toString());
-
-        Scanner scanner = new ScannerBuffer(lexer);
-        Parser parser = new Parser(scanner, csf);
-
-        Object ret = null;
-        try {
-            ret = parser.parse().value;
-        } catch (Throwable e) {
-            System.err.println(e.getMessage());
+        if (args.length < 2) {
+            printUsage();
+            System.exit(1);
         }
 
-        if (ret != null) {
-            System.out.println(ret);
+        String subcommand = args[0];
+        File file = new File(args[1]);
+
+        if (!file.isFile()) {
+            System.err.println("error: file does not exist");
+            System.exit(1);
         }
 
-        Path p = Paths.get(".", "Main.class");
-        Files.write(p, new ASMVisitor((Node)ret).getByteArray());
+        String code = new String(Files.readAllBytes(file.toPath()));
+
+        if (subcommand.equals("run")) {
+            new Compiler().compile(code, file.getName()).exec();
+        } else if (subcommand.equals("ast")) {
+            System.out.println(new Compiler().parse(code, file.getName()));
+        } else {
+            System.err.println("error: invalid command " + subcommand);
+        }
     }
 }

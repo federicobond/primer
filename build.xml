@@ -43,10 +43,6 @@
         <pathelement location="${basedir}"/>
     </path>
 
-    <target name="init" description="Build initialization">
-        <!-- Perform any build initialization in this target -->
-    </target>
-
     <target name="clean" description="cleanup all">
         <delete dir="${output.dir}"/>
         <delete dir="${gen.dir}"/>
@@ -56,16 +52,22 @@
     <taskdef classname="jflex.anttask.JFlexTask" name="jflex" classpathref="build.classpath"/>
     <taskdef name="cup" classname="java_cup.anttask.CUPTask" classpathref="build.classpath"/>
 
-    <target name="build" depends="init" description="build all modules">
+    <target name="compile" description="compile all modules">
         <mkdir dir="${output.dir}"/>
         <jflex file="${basedir}/src/main/jflex/ar/edu/itba/lang/Scanner.flex" destdir="src-gen" />
         <cup srcfile="${basedir}/src/main/cup/ar/edu/itba/lang/Parser.cup" destdir="src-gen" symbols="Symbols" parser="Parser"/>
         <javac srcdir="src" destdir="${output.dir}" classpathref="build.classpath" sourcepathref="build.sourcepath" debug="yes" includeantruntime="true"/>
     </target>
 
-    <target name="all" depends="build" description="build all"/>
-
-    <target name="test-build" depends="build" description="build tests">
-        <javac srcdir="src" destdir="${output.dir}" classpathref="build.classpath" sourcepathref="build.sourcepath" debug="yes" includeantruntime="true"/>
+    <target name="jar" depends="compile" description="package into jar">
+        <jar destfile="bin/lang.jar" basedir="out/production/">
+            <fileset dir="${basedir}/out/production" includes="**/*.class" />
+            <zipgroupfileset dir="${basedir}/lib" includes="**/*.jar" />
+            <manifest>
+                <attribute name="Main-Class" value="ar.edu.itba.lang.Main"/>
+            </manifest>
+        </jar>
     </target>
+
+    <target name="all" depends="compile" description="build all"/>
 </project>

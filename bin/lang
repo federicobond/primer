@@ -1,0 +1,1 @@
+exec java -jar $(dirname "$0")/lang.jar $*

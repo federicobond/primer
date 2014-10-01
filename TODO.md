@@ -12,15 +12,11 @@ To Do
  * Finish support for integer operations
  * Replace dummy implementation of method invocation
  * Make sure that Kernel methods are usable for basic input/output
- * Add support for executing code like this:
-    $ lang run myscript.lang
 
 Nice to haves
 =============
 
  * Add LINENUMBER bytecode instructions (useful for debugging)
- * Add support for printing the AST like this
-    $ lang ast myscript.lang
  * Add recursion (should be easy I guess, but depends on how method invocation is implemented)
  * Add support for defining methods
  * Implement loop forever

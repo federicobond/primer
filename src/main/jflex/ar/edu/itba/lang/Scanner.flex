@@ -16,6 +16,7 @@ import static ar.edu.itba.lang.Symbols.*;
 %line
 %column
 %unicode
+%public
 %class Lexer
 
 %{
