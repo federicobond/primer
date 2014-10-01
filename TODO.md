@@ -2,13 +2,7 @@
 To Do
 =====
 
- * Add test framework
- * Implement variable assignment
- * Implement for
-    for elem in iterable {
-      ...
-    }
- * Finish support for boolean operations
+ * Implement variable assignment (Kevin)
  * Finish support for integer operations
  * Replace dummy implementation of method invocation
  * Make sure that Kernel methods are usable for basic input/output
@@ -16,6 +10,13 @@ To Do
 Nice to haves
 =============
 
+ * Implement for
+    for elem in iterable {
+      ...
+    }
+ * Use CheckClassAdapter to check that ASMVisitor is using ClassWriter properly
+ * Add command to print human readable bytecode
+    $ bin/lang bytecode myscript.lang
  * Add LINENUMBER bytecode instructions (useful for debugging)
  * Add recursion (should be easy I guess, but depends on how method invocation is implemented)
  * Add support for defining methods
@@ -25,7 +26,6 @@ Nice to haves
     }
  * Implement `break` and `continue` instructions
  * Add support for const blocks similar to Go
- * Optimize constant expressions (ones that always evaluate to same value)
  * Add support for mutable and inmutable references
     `let|val|const x = 10` vs `var x = 10` or just `x = 10`
  * Add Java interoperability
@@ -37,8 +37,7 @@ Nice to haves
       /(foo)?/
  * Add support for lambda expressions
       (x) => x + 2
- * Add support for some cool concurrency pattern (actors?)
+ * Add support for some cool concurrency pattern (channels? actors?)
  * Add syntax for exception handling
  * Add support for floating point numbers and operations over them
- * Add support for custom data structures (structs or classes)
  * Implement pattern matching (?)
