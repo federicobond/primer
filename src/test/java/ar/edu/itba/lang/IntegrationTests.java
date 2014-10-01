@@ -2,6 +2,7 @@ package ar.edu.itba.lang;
 
 import ar.edu.itba.lang.compiler.Compiler;
 import junit.framework.TestCase;
+import org.junit.BeforeClass;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
@@ -13,35 +14,60 @@ import static org.junit.Assert.assertThat;
 
 public class IntegrationTests extends TestCase {
 
-    private OutputStream out;
+    @BeforeClass
+    public static void configure() {
+        Compiler.enableOptimizations = false;
+    }
 
-    public void setUp() {
-        out = new ByteArrayOutputStream();
+    private String run(String code) {
+        PrintStream stdout = System.out;
+        OutputStream out = new ByteArrayOutputStream();
         System.setOut(new PrintStream(out));
+
+        try {
+            new Compiler().compile(code).exec();
+        } catch (Compiler.CompilerException e) {
+            fail(e.getMessage());
+        }
+
+        String output = out.toString();
+        System.setOut(stdout);
+
+        return output;
     }
 
     public void testIfTrue() {
-        new Compiler().compile("if true { println(\"hello\") }").exec();
-        assertThat(out.toString(), equalTo("hello\n"));
+        String output = run("if true { println(\"hello\") }");
+        assertThat(output, equalTo("hello\n"));
     }
 
     public void testIfFalse() {
-        new Compiler().compile("if false { println(\"hello\") }").exec();
-        assertThat(out.toString(), isEmptyString());
+        String output = run("if false { println(\"hello\") }");
+        assertThat(output, isEmptyString());
     }
 
     public void testIfTrueElse() {
-        new Compiler().compile("if true { println(\"hello\") } else { println(\"world\") }").exec();
-        assertThat(out.toString(), equalTo("hello\n"));
+        String output = run("if true { println(\"hello\") } else { println(\"world\") }");
+        assertThat(output, equalTo("hello\n"));
     }
 
     public void testIfFalseElse() {
-        new Compiler().compile("if false { println(\"hello\") } else { println(\"world\") }").exec();
-        assertThat(out.toString(), equalTo("world\n"));
+        String output = run("if false { println(\"hello\") } else { println(\"world\") }");
+        assertThat(output, equalTo("world\n"));
     }
 
     public void testWhileFalse() {
-        new Compiler().compile("while false { println(\"hello\") }").exec();
-        assertThat(out.toString(), isEmptyString());
+        String output = run("while false { println(\"hello\") }");
+        assertThat(output, isEmptyString());
+    }
+
+    public void testIfAndExpression() {
+        String output = run("if true && true { println(\"hello\") }");
+        assertThat(output, equalTo("hello\n"));
+    }
+
+    public void testIfOrExpression() {
+        String output = run("if true || false { println(\"hello\") }");
+        assertThat(output, equalTo("hello\n"));
     }
 }

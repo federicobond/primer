@@ -15,9 +15,11 @@ import java.net.URLClassLoader;
 
 public class Compiler {
 
+    public static boolean enableOptimizations = false;
+
     private Class<?> script;
 
-    static class CompilerException extends RuntimeException {
+    public static class CompilerException extends Exception {
 
         public CompilerException(String message) {
             super(message);
@@ -38,15 +40,21 @@ public class Compiler {
         }
     }
 
-    public Compiler() {
-    }
+    public Compiler() { }
 
-    public Node parse(String code, String fileName) {
+    public Node parse(String code, String fileName) throws CompilerException {
         Parser parser = getParser(code, fileName);
-        return getRootNode(parser);
+        Node root = getRootNode(parser);
+
+        if (enableOptimizations) {
+            root = root.accept(new ConstantOptimizerVisitor())
+                       .accept(new FlattenBlocksOptimizerVisitor());
+        }
+
+        return root;
     }
 
-    public Compiler compile(String code, String fileName) {
+    public Compiler compile(String code, String fileName) throws CompilerException {
         Node root = parse(code, fileName);
 
         byte[] classBytes = new ASMVisitor(root).getByteArray();
@@ -81,7 +89,7 @@ public class Compiler {
         return this;
     }
 
-    public Compiler compile(String code) {
+    public Compiler compile(String code) throws CompilerException {
         return compile(code, null);
     }
 
@@ -97,7 +105,7 @@ public class Compiler {
         return new Parser(scanner, csf);
     }
 
-    private Node getRootNode(Parser parser) {
+    private Node getRootNode(Parser parser) throws CompilerException {
         Node root = null;
         try {
             root = (Node)parser.parse().value;
