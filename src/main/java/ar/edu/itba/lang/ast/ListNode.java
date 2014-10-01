@@ -7,7 +7,15 @@ import java.util.List;
 
 public abstract class ListNode extends Node {
 
-    private List<Node> list = new ArrayList<Node>();
+    private final List<Node> list;
+
+    public ListNode() {
+        list = new ArrayList<Node>();
+    }
+
+    public ListNode(List<Node> list) {
+        this.list = list;
+    }
 
     public void add(Node node) {
         list.add(node);

@@ -9,8 +9,8 @@ public class AddNode extends BinaryOperationNode {
     }
 
     @Override
-    public void accept(NodeVisitor visitor) {
-        visitor.visitAddNode(this);
+    public <T> T accept(NodeVisitor<T> visitor) {
+        return visitor.visitAddNode(this);
     }
 
     @Override

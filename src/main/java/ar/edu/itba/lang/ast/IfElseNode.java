@@ -28,8 +28,8 @@ public class IfElseNode extends Node {
     }
 
     @Override
-    public void accept(NodeVisitor visitor) {
-        visitor.visitIfElseNode(this);
+    public <T> T accept(NodeVisitor<T> visitor) {
+        return visitor.visitIfElseNode(this);
     }
 
     @Override

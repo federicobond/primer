@@ -9,7 +9,7 @@ public abstract class Node {
 
     static final List<Node> EMPTY_LIST = new ArrayList<Node>(0);
 
-    public abstract void accept(NodeVisitor visitor);
+    public abstract <T> T accept(NodeVisitor<T> visitor);
 
     public abstract List<Node> childNodes();
 

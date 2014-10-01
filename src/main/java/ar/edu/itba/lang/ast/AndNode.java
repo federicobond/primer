@@ -9,8 +9,8 @@ public class AndNode extends BinaryOperationNode {
     }
 
     @Override
-    public void accept(NodeVisitor visitor) {
-        visitor.visitAndNode(this);
+    public <T> T accept(NodeVisitor<T> visitor) {
+        return visitor.visitAndNode(this);
     }
 
     @Override

@@ -9,8 +9,8 @@ public class MultiplyNode extends BinaryOperationNode {
     }
 
     @Override
-    public void accept(NodeVisitor visitor) {
-        visitor.visitMultiplyNode(this);
+    public <T> T accept(NodeVisitor<T> visitor) {
+        return visitor.visitMultiplyNode(this);
     }
 
     @Override

@@ -7,8 +7,8 @@ import java.util.List;
 public class FalseNode extends Node {
 
     @Override
-    public void accept(NodeVisitor visitor) {
-        visitor.visitFalseNode(this);
+    public <T> T accept(NodeVisitor<T> visitor) {
+        return visitor.visitFalseNode(this);
     }
 
     @Override

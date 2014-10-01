@@ -17,8 +17,8 @@ public class LiteralNode extends Node {
     }
 
     @Override
-    public void accept(NodeVisitor visitor) {
-        visitor.visitLiteralNode(this);
+    public <T> T accept(NodeVisitor<T> visitor) {
+        return visitor.visitLiteralNode(this);
     }
 
     @Override

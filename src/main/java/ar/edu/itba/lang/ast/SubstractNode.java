@@ -9,8 +9,8 @@ public class SubstractNode extends BinaryOperationNode {
     }
 
     @Override
-    public void accept(NodeVisitor visitor) {
-        visitor.visitSubstractNode(this);
+    public <T> T accept(NodeVisitor<T> visitor) {
+        return visitor.visitSubstractNode(this);
     }
 
     @Override

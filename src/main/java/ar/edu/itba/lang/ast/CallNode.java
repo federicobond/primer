@@ -23,8 +23,8 @@ public class CallNode extends Node {
     }
 
     @Override
-    public void accept(NodeVisitor visitor) {
-        visitor.visitCallNode(this);
+    public <T> T accept(NodeVisitor<T> visitor) {
+        return visitor.visitCallNode(this);
     }
 
     @Override

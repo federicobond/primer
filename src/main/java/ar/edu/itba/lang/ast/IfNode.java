@@ -22,8 +22,8 @@ public class IfNode extends Node {
     }
 
     @Override
-    public void accept(NodeVisitor visitor) {
-        visitor.visitIfNode(this);
+    public <T> T accept(NodeVisitor<T> visitor) {
+        return visitor.visitIfNode(this);
     }
 
     @Override

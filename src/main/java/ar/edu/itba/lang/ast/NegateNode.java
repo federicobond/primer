@@ -17,8 +17,8 @@ public class NegateNode extends Node {
     }
 
     @Override
-    public void accept(NodeVisitor visitor) {
-        visitor.visitNegateNode(this);
+    public <T> T accept(NodeVisitor<T> visitor) {
+        return visitor.visitNegateNode(this);
     }
 
     @Override
