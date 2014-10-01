@@ -19,6 +19,7 @@ terminal IF, ELSE, WHILE, OPEN_BRACKET, CLOSE_BRACKET;
 terminal IDENTIFIER;
 terminal COMMA;
 terminal TRUE, FALSE;
+terminal AND, OR;
 
 terminal T;
 terminal Integer INT;
@@ -34,6 +35,7 @@ non terminal ListNode Args;
 non terminal Node If;
 non terminal Node While;
 
+precedence left AND, OR;
 precedence left PLUS, MINUS;
 precedence left TIMES, DIVIDE;
 precedence left UMINUS;
@@ -52,6 +54,8 @@ Expression    ::= Expression:e1 PLUS  Expression:e2     {: RESULT = new AddNode(
                 | Expression:e1 MINUS Expression:e2     {: RESULT = new SubstractNode(e1, e2); :}
                 | Expression:e1 TIMES Expression:e2     {: RESULT = new MultiplyNode(e1, e2); :}
                 | Expression:e1 DIVIDE Expression:e2    {: RESULT = new DivideNode(e1, e2); :}
+                | Expression:e1 AND Expression:e2       {: RESULT = new AndNode(e1, e2); :}
+                | Expression:e1 OR Expression:e2        {: RESULT = new OrNode(e1, e2); :}
                 | MINUS Expression:e                    {: RESULT = new NegateNode(e); :}
                   %prec UMINUS
                 | LEFT_PAREN Expression:e RIGHT_PAREN   {: RESULT = e; :}

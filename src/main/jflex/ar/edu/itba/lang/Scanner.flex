@@ -100,4 +100,6 @@ string          = "\"" [^\"]* "\""
 "{"                 { return symbol("{", OPEN_BRACKET); }
 "}"                 { return symbol("}", CLOSE_BRACKET); }
 ","                 { return symbol(",", COMMA); }
+"&&"                { return symbol("&&", AND); }
+"||"                { return symbol("||", OR); }
 {identifier}        { return symbol(yytext(), IDENTIFIER, yytext()); }
