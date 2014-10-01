@@ -2,22 +2,22 @@ package ar.edu.itba.lang.compiler;
 
 import ar.edu.itba.lang.ast.*;
 
-public interface NodeVisitor {
+public interface NodeVisitor<T> {
 
-    public void visitAddNode(AddNode node);
-    public void visitAndNode(AndNode node);
-    public void visitArgsNode(ArgsNode argsNode);
-    public void visitBlockNode(BlockNode node);
-    public void visitCallNode(CallNode node);
-    public void visitDivideNode(DivideNode node);
-    public void visitFalseNode(FalseNode node);
-    public void visitIfNode(IfNode node);
-    public void visitIfElseNode(IfElseNode ifElseNode);
-    public void visitLiteralNode(LiteralNode node);
-    public void visitMultiplyNode(MultiplyNode node);
-    public void visitNegateNode(NegateNode node);
-    public void visitOrNode(OrNode node);
-    public void visitSubstractNode(SubstractNode node);
-    public void visitTrueNode(TrueNode node);
-    public void visitWhileNode(WhileNode node);
+    public T visitAddNode(AddNode node);
+    public T visitAndNode(AndNode node);
+    public T visitArgsNode(ArgsNode argsNode);
+    public T visitBlockNode(BlockNode node);
+    public T visitCallNode(CallNode node);
+    public T visitDivideNode(DivideNode node);
+    public T visitFalseNode(FalseNode node);
+    public T visitIfNode(IfNode node);
+    public T visitIfElseNode(IfElseNode ifElseNode);
+    public T visitLiteralNode(LiteralNode node);
+    public T visitMultiplyNode(MultiplyNode node);
+    public T visitNegateNode(NegateNode node);
+    public T visitOrNode(OrNode node);
+    public T visitSubstractNode(SubstractNode node);
+    public T visitTrueNode(TrueNode node);
+    public T visitWhileNode(WhileNode node);
 }
