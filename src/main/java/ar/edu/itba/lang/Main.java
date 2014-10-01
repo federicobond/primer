@@ -2,7 +2,7 @@ package ar.edu.itba.lang;
 
 import ar.edu.itba.lang.compiler.Compiler;
 
-import java.io.*;
+import java.io.File;
 import java.nio.file.Files;
 
 public class Main {

@@ -15,7 +15,7 @@ import java.net.URLClassLoader;
 
 public class Compiler {
 
-    private Class<Script> script;
+    private Class<?> script;
 
     static class CompilerException extends RuntimeException {
 
@@ -52,7 +52,7 @@ public class Compiler {
         byte[] classBytes = new ASMVisitor(root).getByteArray();
         URLClassLoader cl = new ByteClassLoader(new URL[0], ClassLoader.getSystemClassLoader(), classBytes);
         try {
-            script = (Class<Script>)cl.loadClass("Main");
+            script = cl.loadClass("Main");
         } catch (ClassNotFoundException e) {
             /* ignore */
         }
