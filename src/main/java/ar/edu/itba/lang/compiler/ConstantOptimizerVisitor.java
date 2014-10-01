@@ -6,24 +6,38 @@ public class ConstantOptimizerVisitor extends NodeVisitorAdapter {
 
     @Override
     public Node visitAndNode(AndNode node) {
-        if (node.getFirstNode().getNodeType().isAlwaysFalse()
-            || node.getSecondNode().getNodeType().isAlwaysFalse()) {
+        boolean firstTrue = node.getFirstNode().getNodeType().isAlwaysTrue();
+        boolean firstFalse = node.getFirstNode().getNodeType().isAlwaysFalse();
+        boolean secondTrue = node.getSecondNode().getNodeType().isAlwaysTrue();
+        boolean secondFalse = node.getSecondNode().getNodeType().isAlwaysFalse();
+
+        if (firstFalse || secondFalse) {
             return new FalseNode();
-        } else if (node.getFirstNode().getNodeType().isAlwaysTrue()
-                && node.getSecondNode().getNodeType().isAlwaysTrue()) {
+        } else if (firstTrue && secondTrue) {
             return new TrueNode();
+        } else if (firstTrue) {
+            return node.getSecondNode().accept(this);
+        } else if (secondTrue) {
+            return node.getFirstNode().accept(this);
         }
         return super.visitAndNode(node);
     }
 
     @Override
     public Node visitOrNode(OrNode node) {
-        if (node.getFirstNode().getNodeType().isAlwaysTrue()
-                || node.getSecondNode().getNodeType().isAlwaysTrue()) {
-            return new TrueNode();
-        } else if (node.getFirstNode().getNodeType().isAlwaysFalse()
-                && node.getSecondNode().getNodeType().isAlwaysFalse()) {
+        boolean firstTrue = node.getFirstNode().getNodeType().isAlwaysTrue();
+        boolean firstFalse = node.getFirstNode().getNodeType().isAlwaysFalse();
+        boolean secondTrue = node.getSecondNode().getNodeType().isAlwaysTrue();
+        boolean secondFalse = node.getSecondNode().getNodeType().isAlwaysFalse();
+
+        if (firstFalse && secondFalse) {
             return new FalseNode();
+        } else if (firstTrue || secondTrue) {
+            return new TrueNode();
+        } else if (firstFalse) {
+            return node.getSecondNode().accept(this);
+        } else if (secondFalse) {
+            return node.getFirstNode().accept(this);
         }
         return super.visitOrNode(node);
     }
