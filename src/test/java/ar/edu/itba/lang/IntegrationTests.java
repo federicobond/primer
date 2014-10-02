@@ -1,12 +1,10 @@
 package ar.edu.itba.lang;
 
-import ar.edu.itba.lang.compiler.Compiler;
+import ar.edu.itba.lang.compiler.Script;
 import junit.framework.TestCase;
 import org.junit.BeforeClass;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.*;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.text.IsEmptyString.isEmptyString;
@@ -16,17 +14,21 @@ public class IntegrationTests extends TestCase {
 
     @BeforeClass
     public static void configure() {
-        Compiler.enableOptimizations = false;
+        Script.enableOptimizations = false;
     }
 
     private String run(String code) {
         PrintStream stdout = System.out;
         OutputStream out = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(out));
+        try {
+            System.setOut(new PrintStream(out, true, "UTF-8"));
+        } catch (UnsupportedEncodingException ignore) { }
 
         try {
-            new Compiler().compile(code).exec();
-        } catch (Compiler.CompilerException e) {
+            Script.fromString(code).exec(new String[0]);
+        } catch (Script.ScriptException e) {
+            fail(e.getMessage());
+        } catch (IOException e) {
             fail(e.getMessage());
         }
 

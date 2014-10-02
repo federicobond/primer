@@ -1,10 +1,10 @@
 package ar.edu.itba.lang;
 
 import ar.edu.itba.lang.ast.Node;
-import ar.edu.itba.lang.compiler.Compiler;
+import ar.edu.itba.lang.compiler.Script;
 
 import java.io.File;
-import java.nio.file.Files;
+import java.util.Arrays;
 
 public class Main {
 
@@ -20,25 +20,23 @@ public class Main {
 
         String subCommand = args[0];
         File file = new File(args[1]);
-        String fileName = file.getName();
 
         if (!file.isFile()) {
             System.err.println("error: file does not exist");
             System.exit(1);
         }
 
-        String code = new String(Files.readAllBytes(file.toPath()));
-
         switch (subCommand) {
             case "run":
-                new Compiler().compile(code, fileName).exec();
+                String[] argv = Arrays.copyOfRange(args, 2, args.length);
+                Script.fromFile(file).exec(argv);
                 break;
             case "ast":
-                Node root = new Compiler().parse(code, fileName);
+                Node root = Script.fromFile(file).parse();
                 System.out.println(root);
                 break;
             case "bytecode":
-                String byteCode = new Compiler().trace(code, fileName);
+                String byteCode = Script.fromFile(file).trace();
                 System.out.println(byteCode);
                 break;
             default:
