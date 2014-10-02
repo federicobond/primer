@@ -87,4 +87,24 @@ public class IntegrationTests extends TestCase {
         String output = run("if 1 == 1 { println(\"hello\") }");
         assertThat(output, equalTo("hello\n"));
     }
+
+    public void testIfAddEqualExpression() {
+        String output = run("if 1 + 1 == 2 { println(\"hello\") }");
+        assertThat(output, equalTo("hello\n"));
+    }
+
+    public void testIfSubstractEqualExpression() {
+        String output = run("if 1 - 1 == 0 { println(\"hello\") }");
+        assertThat(output, equalTo("hello\n"));
+    }
+
+    public void testIfMultiplyEqualExpression() {
+        String output = run("if 2 * 5 == 10 { println(\"hello\") }");
+        assertThat(output, equalTo("hello\n"));
+    }
+
+    public void testIfDivideEqualExpression() {
+        String output = run("if 10 / 3 == 3 { println(\"hello\") }");
+        assertThat(output, equalTo("hello\n"));
+    }
 }
