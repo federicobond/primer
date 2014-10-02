@@ -1,5 +1,6 @@
 package ar.edu.itba.lang;
 
+import ar.edu.itba.lang.ast.Node;
 import ar.edu.itba.lang.compiler.Compiler;
 
 import java.io.File;
@@ -17,8 +18,9 @@ public class Main {
             System.exit(1);
         }
 
-        String subcommand = args[0];
+        String subCommand = args[0];
         File file = new File(args[1]);
+        String fileName = file.getName();
 
         if (!file.isFile()) {
             System.err.println("error: file does not exist");
@@ -27,14 +29,20 @@ public class Main {
 
         String code = new String(Files.readAllBytes(file.toPath()));
 
-        if (subcommand.equals("run")) {
-            new Compiler().compile(code, file.getName()).exec();
-        } else if (subcommand.equals("ast")) {
-            System.out.println(new Compiler().parse(code, file.getName()));
-        } else if (subcommand.equals("bytecode")) {
-            System.out.println(new Compiler().trace(code, file.getName()));
-        } else {
-            System.err.println("error: invalid command " + subcommand);
+        switch (subCommand) {
+            case "run":
+                new Compiler().compile(code, fileName).exec();
+                break;
+            case "ast":
+                Node root = new Compiler().parse(code, fileName);
+                System.out.println(root);
+                break;
+            case "bytecode":
+                String byteCode = new Compiler().trace(code, fileName);
+                System.out.println(byteCode);
+                break;
+            default:
+                System.err.println("error: invalid command " + subCommand);
         }
     }
 }
