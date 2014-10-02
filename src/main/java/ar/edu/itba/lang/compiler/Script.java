@@ -109,7 +109,12 @@ public class Script {
 
     private Parser getParser() {
         ComplexSymbolFactory csf = new ComplexSymbolFactory();
-        Lexer lexer = new Lexer(new InputStreamReader(new ByteArrayInputStream(code)), csf);
+        Lexer lexer = null;
+        try {
+            Reader reader = new InputStreamReader(
+                    new ByteArrayInputStream(code), "UTF-8");
+            lexer = new Lexer(reader, csf);
+        } catch (UnsupportedEncodingException ignore) { }
 
         if (fileName != null) {
             lexer.setFilename(fileName);
