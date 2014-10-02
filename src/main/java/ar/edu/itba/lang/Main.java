@@ -9,7 +9,7 @@ import java.util.Arrays;
 public class Main {
 
     public static void printUsage() {
-        System.err.println("usage: lang [run|ast] filename.lang");
+        System.err.println("usage: lang [run|ast|bytecode] filename.lang");
     }
 
     public static void main(String[] args) throws Exception {
