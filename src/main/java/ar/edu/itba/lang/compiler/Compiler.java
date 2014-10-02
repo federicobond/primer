@@ -6,8 +6,13 @@ import ar.edu.itba.lang.ast.Node;
 import java_cup.runtime.ComplexSymbolFactory;
 import java_cup.runtime.Scanner;
 import java_cup.runtime.ScannerBuffer;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.util.Textifier;
+import org.objectweb.asm.util.TraceClassVisitor;
 
+import java.io.PrintWriter;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -57,7 +62,7 @@ public class Compiler {
     public Compiler compile(String code, String fileName) throws CompilerException {
         Node root = parse(code, fileName);
 
-        byte[] classBytes = new ASMVisitor(root).getByteArray();
+        byte[] classBytes = new ASMVisitor(root, new ClassWriter(0)).getByteArray();
         URLClassLoader cl = new ByteClassLoader(new URL[0], ClassLoader.getSystemClassLoader(), classBytes);
         try {
             script = cl.loadClass("Main");
@@ -66,6 +71,16 @@ public class Compiler {
         }
 
         return this;
+    }
+
+    public String trace(String code, String fileName) throws CompilerException {
+        Node root = parse(code, fileName);
+
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        new ASMVisitor(root, new TraceClassVisitor(null, new Textifier(), pw));
+
+        return sw.toString();
     }
 
     public Compiler exec() {

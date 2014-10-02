@@ -31,6 +31,8 @@ public class Main {
             new Compiler().compile(code, file.getName()).exec();
         } else if (subcommand.equals("ast")) {
             System.out.println(new Compiler().parse(code, file.getName()));
+        } else if (subcommand.equals("bytecode")) {
+            System.out.println(new Compiler().trace(code, file.getName()));
         } else {
             System.err.println("error: invalid command " + subcommand);
         }

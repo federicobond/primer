@@ -1,17 +1,16 @@
 package ar.edu.itba.lang.compiler;
 
 import ar.edu.itba.lang.ast.*;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Label;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.*;
 
 public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
-    private final ClassWriter cw = new ClassWriter(0);
+    private ClassVisitor cw;
     private MethodVisitor mv;
 
-    public ASMVisitor(Node root) {
+    public ASMVisitor(Node root, ClassVisitor cw) {
+        this.cw = cw;
+
         cw.visit(49,
                 ACC_PUBLIC + ACC_SUPER,
                 "Main",
@@ -36,7 +35,10 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
     }
 
     public byte[] getByteArray() {
-        return cw.toByteArray();
+        if (cw instanceof ClassWriter) {
+            return ((ClassWriter)cw).toByteArray();
+        }
+        throw new IllegalArgumentException();
     }
 
     @Override

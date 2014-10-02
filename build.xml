@@ -19,6 +19,10 @@
         <pathelement location="${basedir}/lib/asm-5.0.3.jar"/>
     </path>
 
+    <path id="library.asm-util.classpath">
+      <pathelement location="${basedir}/lib/asm-util-5.0.3.jar"/>
+    </path>
+
     <path id="library.java-cup.classpath">
         <pathelement location="${basedir}/lib/java-cup-11b.jar"/>
     </path>
@@ -42,6 +46,7 @@
     <path id="build.classpath">
         <pathelement location="${output.dir}"/>
         <path refid="library.asm.classpath"/>
+        <path refid="library.asm-util.classpath"/>
         <path refid="library.java-cup.classpath"/>
         <path refid="library.jflex.classpath"/>
         <path refid="library.junit.classpath"/>
