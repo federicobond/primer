@@ -3,7 +3,7 @@ To Do
 =====
 
  * Implement variable assignment (Kevin)
- * Finish support for integer operations
+ * Implement `LESS_OR_EQUAL_THAN`, `GREATER_OR_EQUAL_THAN`, `NOT_EQUAL`
  * Replace dummy implementation of method invocation
  * Make sure that Kernel methods are usable for basic input/output
 
@@ -15,8 +15,6 @@ Nice to haves
       ...
     }
  * Use CheckClassAdapter to check that ASMVisitor is using ClassWriter properly
- * Add command to print human readable bytecode
-    $ bin/lang bytecode myscript.lang
  * Add LINENUMBER bytecode instructions (useful for debugging)
  * Add recursion (should be easy I guess, but depends on how method invocation is implemented)
  * Add support for defining methods
