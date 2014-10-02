@@ -72,4 +72,19 @@ public class IntegrationTests extends TestCase {
         String output = run("if true || false { println(\"hello\") }");
         assertThat(output, equalTo("hello\n"));
     }
+
+    public void testIfLessThanExpression() {
+        String output = run("if 1 < 2 { println(\"hello\") }");
+        assertThat(output, equalTo("hello\n"));
+    }
+
+    public void testIfGreaterThanExpression() {
+        String output = run("if 2 > 1 { println(\"hello\") }");
+        assertThat(output, equalTo("hello\n"));
+    }
+
+    public void testIfEqualExpression() {
+        String output = run("if 1 == 1 { println(\"hello\") }");
+        assertThat(output, equalTo("hello\n"));
+    }
 }

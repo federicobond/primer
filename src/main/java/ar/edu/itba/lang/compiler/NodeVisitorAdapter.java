@@ -49,8 +49,20 @@ public class NodeVisitorAdapter implements NodeVisitor<Node> {
     }
 
     @Override
+    public Node visitEqualNode(EqualNode node) {
+        return new EqualNode(node.getFirstNode().accept(this),
+                             node.getSecondNode().accept(this));
+    }
+
+    @Override
     public Node visitFalseNode(FalseNode node) {
         return node;
+    }
+
+    @Override
+    public Node visitGreaterThanNode(GreaterThanNode node) {
+        return new GreaterThanNode(node.getFirstNode().accept(this),
+                                   node.getSecondNode().accept(this));
     }
 
     @Override
@@ -64,6 +76,12 @@ public class NodeVisitorAdapter implements NodeVisitor<Node> {
         return new IfElseNode(node.getCondition().accept(this),
                               node.getThenBody().accept(this),
                               node.getElseBody().accept(this));
+    }
+
+    @Override
+    public Node visitLessThanNode(LessThanNode node) {
+        return new LessThanNode(node.getFirstNode().accept(this),
+                                node.getSecondNode().accept(this));
     }
 
     @Override

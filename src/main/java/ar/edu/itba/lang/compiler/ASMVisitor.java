@@ -101,8 +101,42 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
     }
 
     @Override
+    public Void visitEqualNode(EqualNode node) {
+        Label l1 = new Label();
+        Label l2 = new Label();
+
+        node.getFirstNode().accept(this);
+        node.getSecondNode().accept(this);
+        mv.visitJumpInsn(IF_ICMPNE, l1);
+        mv.visitInsn(ICONST_1);
+        mv.visitJumpInsn(GOTO, l2);
+        mv.visitLabel(l1);
+        mv.visitInsn(ICONST_0);
+        mv.visitLabel(l2);
+
+        return null;
+    }
+
+    @Override
     public Void visitFalseNode(FalseNode node) {
         mv.visitInsn(ICONST_0);
+
+        return null;
+    }
+
+    @Override
+    public Void visitGreaterThanNode(GreaterThanNode node) {
+        Label l1 = new Label();
+        Label l2 = new Label();
+
+        node.getFirstNode().accept(this);
+        node.getSecondNode().accept(this);
+        mv.visitJumpInsn(IF_ICMPLE, l1);
+        mv.visitInsn(ICONST_1);
+        mv.visitJumpInsn(GOTO, l2);
+        mv.visitLabel(l1);
+        mv.visitInsn(ICONST_0);
+        mv.visitLabel(l2);
 
         return null;
     }
@@ -130,6 +164,23 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         mv.visitJumpInsn(GOTO, l2);
         mv.visitLabel(l1);
         node.getElseBody().accept(this);
+        mv.visitLabel(l2);
+
+        return null;
+    }
+
+    @Override
+    public Void visitLessThanNode(LessThanNode node) {
+        Label l1 = new Label();
+        Label l2 = new Label();
+
+        node.getFirstNode().accept(this);
+        node.getSecondNode().accept(this);
+        mv.visitJumpInsn(IF_ICMPGE, l1);
+        mv.visitInsn(ICONST_1);
+        mv.visitJumpInsn(GOTO, l2);
+        mv.visitLabel(l1);
+        mv.visitInsn(ICONST_0);
         mv.visitLabel(l2);
 
         return null;

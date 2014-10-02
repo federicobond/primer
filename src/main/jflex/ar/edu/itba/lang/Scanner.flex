@@ -103,3 +103,6 @@ string          = "\"" [^\"]* "\""
 "&&"                { return symbol("&&", AND); }
 "||"                { return symbol("||", OR); }
 {identifier}        { return symbol(yytext(), IDENTIFIER, yytext()); }
+"<"                 { return symbol("<", LESS_THAN); }
+">"                 { return symbol(">", GREATER_THAN); }
+"=="                { return symbol("==", EQUAL); }

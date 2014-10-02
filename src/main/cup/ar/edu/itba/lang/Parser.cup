@@ -16,6 +16,7 @@ parser code {:
 terminal PLUS, TIMES, MINUS, UMINUS, DIVIDE;
 terminal LEFT_PAREN, RIGHT_PAREN;
 terminal IF, ELSE, WHILE, OPEN_BRACKET, CLOSE_BRACKET;
+terminal LESS_THAN, EQUAL, GREATER_THAN;
 terminal IDENTIFIER;
 terminal COMMA;
 terminal TRUE, FALSE;
@@ -36,6 +37,7 @@ non terminal Node If;
 non terminal Node While;
 
 precedence left AND, OR;
+precedence left LESS_THAN, GREATER_THAN, EQUAL;
 precedence left PLUS, MINUS;
 precedence left TIMES, DIVIDE;
 precedence left UMINUS;
@@ -56,6 +58,9 @@ Expression    ::= Expression:e1 PLUS  Expression:e2     {: RESULT = new AddNode(
                 | Expression:e1 DIVIDE Expression:e2    {: RESULT = new DivideNode(e1, e2); :}
                 | Expression:e1 AND Expression:e2       {: RESULT = new AndNode(e1, e2); :}
                 | Expression:e1 OR Expression:e2        {: RESULT = new OrNode(e1, e2); :}
+                | Expression:e1 LESS_THAN Expression:e2       {: RESULT = new LessThanNode(e1, e2); :}
+                | Expression:e1 GREATER_THAN Expression:e2        {: RESULT = new GreaterThanNode(e1, e2); :}
+                | Expression:e1 EQUAL Expression:e2        {: RESULT = new EqualNode(e1, e2); :}
                 | MINUS Expression:e                    {: RESULT = new NegateNode(e); :}
                   %prec UMINUS
                 | LEFT_PAREN Expression:e RIGHT_PAREN   {: RESULT = e; :}

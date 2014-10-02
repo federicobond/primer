@@ -10,9 +10,12 @@ public interface NodeVisitor<T> {
     public T visitBlockNode(BlockNode node);
     public T visitCallNode(CallNode node);
     public T visitDivideNode(DivideNode node);
+    public T visitEqualNode(EqualNode node);
     public T visitFalseNode(FalseNode node);
+    public T visitGreaterThanNode(GreaterThanNode node);
     public T visitIfNode(IfNode node);
     public T visitIfElseNode(IfElseNode node);
+    public T visitLessThanNode(LessThanNode node);
     public T visitLiteralNode(LiteralNode node);
     public T visitMultiplyNode(MultiplyNode node);
     public T visitNegateNode(NegateNode node);
