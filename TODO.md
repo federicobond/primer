@@ -3,7 +3,7 @@ To Do
 =====
 
  * Implement variable assignment (Kevin)
- * Implement `LESS_OR_EQUAL_THAN`, `GREATER_OR_EQUAL_THAN`, `NOT_EQUAL`
+ * Implement `LESS_OR_EQUAL_THAN`, `GREATER_OR_EQUAL_THAN`, `NOT_EQUAL` (Fer)
  * Replace dummy implementation of method invocation
  * Make sure that Kernel methods are usable for basic input/output
 
