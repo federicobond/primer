@@ -1,6 +1,8 @@
 package ar.edu.itba.lang.compiler;
 
-import ar.edu.itba.lang.ast.*;
+import ar.edu.itba.lang.ast.BlockNode;
+import ar.edu.itba.lang.ast.Node;
+import ar.edu.itba.lang.ast.NodeType;
 
 import java.util.ArrayList;
 import java.util.List;

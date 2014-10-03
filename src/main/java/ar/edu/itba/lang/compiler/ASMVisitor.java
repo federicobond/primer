@@ -3,7 +3,6 @@ package ar.edu.itba.lang.compiler;
 import ar.edu.itba.lang.Kernel;
 import ar.edu.itba.lang.ast.*;
 import org.objectweb.asm.*;
-import org.objectweb.asm.signature.SignatureReader;
 import org.objectweb.asm.signature.SignatureWriter;
 
 import java.lang.reflect.Method;
