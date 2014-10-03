@@ -39,7 +39,7 @@ public class Script {
         return new Script(code.getBytes("UTF-8"), "unnamed");
     }
 
-    public static class ScriptException extends Exception {
+    public static class ScriptException extends RuntimeException {
         public ScriptException(String message) {
             super(message);
         }

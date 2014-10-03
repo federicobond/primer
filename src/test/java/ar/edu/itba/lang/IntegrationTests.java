@@ -26,9 +26,7 @@ public class IntegrationTests extends TestCase {
 
         try {
             Script.fromString(code).exec(new String[0]);
-        } catch (Script.ScriptException e) {
-            fail(e.getMessage());
-        } catch (IOException e) {
+        } catch (Script.ScriptException | IOException e) {
             fail(e.getMessage());
         }
 

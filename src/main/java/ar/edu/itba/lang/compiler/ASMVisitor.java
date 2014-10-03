@@ -1,7 +1,12 @@
 package ar.edu.itba.lang.compiler;
 
+import ar.edu.itba.lang.Kernel;
 import ar.edu.itba.lang.ast.*;
 import org.objectweb.asm.*;
+import org.objectweb.asm.signature.SignatureReader;
+import org.objectweb.asm.signature.SignatureWriter;
+
+import java.lang.reflect.Method;
 
 public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
@@ -77,16 +82,43 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     @Override
     public Void visitCallNode(CallNode node) {
-        mv.visitFieldInsn(GETSTATIC,
-                "java/lang/System",
-                "out",
-                "Ljava/io/PrintStream;");
+        SignatureWriter signatureWriter = new SignatureWriter();
+
+        int numArgs = node.getArgs().childNodes().size();
+        signatureWriter.visitParameterType();
+        for (int i = 0; i < numArgs; i++) {
+            signatureWriter.visitClassType("java/lang/Object");
+        }
+        signatureWriter.visitEnd();
+        signatureWriter.visitReturnType();
+        signatureWriter.visitClassType("java/lang/Object");
+        signatureWriter.visitEnd();
+
+
+        Method method = null;
+        Method[] methods = Kernel.class.getMethods();
+
+        for (Method m : methods) {
+            if (m.getName().equals(node.getName())) {
+                method = m;
+            }
+        }
+
+        if (method == null) {
+            throw new Script.ScriptException("Undefined method: " + node.getName());
+        }
+
         node.getArgs().accept(this);
-        mv.visitMethodInsn(INVOKEVIRTUAL,
-                "java/io/PrintStream",
-                "println",
-                "(Ljava/lang/String;)V",
+        mv.visitMethodInsn(INVOKESTATIC,
+                Type.getInternalName(Kernel.class),
+                node.getName(),
+                Type.getMethodDescriptor(method),
                 false);
+
+        if (method.getReturnType() != Void.TYPE) {
+            // Discard result for now
+            mv.visitInsn(POP);
+        }
 
         return null;
     }

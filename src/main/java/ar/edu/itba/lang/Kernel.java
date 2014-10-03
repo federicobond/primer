@@ -7,11 +7,11 @@ import java.io.UnsupportedEncodingException;
 
 public class Kernel {
 
-    public void println(String str) {
+    public static void println(String str) {
         System.out.println(str);
     }
 
-    public String readln(String str) {
+    public static Object readln() {
         BufferedReader r = null;
         try {
             r = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
