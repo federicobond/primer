@@ -1,7 +1,9 @@
 package ar.edu.itba.lang.ast;
 
+import ar.edu.itba.lang.Kernel;
 import ar.edu.itba.lang.compiler.NodeVisitor;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 public class CallNode extends Node {
@@ -20,6 +22,18 @@ public class CallNode extends Node {
 
     public ListNode getArgs() {
         return args;
+    }
+
+    public Method getMethod() {
+        Method[] methods = Kernel.class.getMethods();
+
+        for (Method m : methods) {
+            if (m.getName().equals(name)) {
+                return m;
+            }
+        }
+
+        return null;
     }
 
     @Override

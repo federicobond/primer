@@ -11,6 +11,10 @@ public class Kernel {
         System.out.println(str);
     }
 
+    public static String getenv(String str) {
+        return System.getenv(str);
+    }
+
     public static Object readln() {
         BufferedReader r = null;
         try {
