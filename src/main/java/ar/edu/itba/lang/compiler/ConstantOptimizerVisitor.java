@@ -6,38 +6,44 @@ public class ConstantOptimizerVisitor extends NodeVisitorAdapter {
 
     @Override
     public Node visitAndNode(AndNode node) {
-        boolean firstTrue = node.getFirstNode().getNodeType().isAlwaysTrue();
-        boolean firstFalse = node.getFirstNode().getNodeType().isAlwaysFalse();
-        boolean secondTrue = node.getSecondNode().getNodeType().isAlwaysTrue();
-        boolean secondFalse = node.getSecondNode().getNodeType().isAlwaysFalse();
+        Node firstNode = node.getFirstNode().accept(this);
+        Node secondNode = node.getSecondNode().accept(this);
+
+        boolean firstTrue = firstNode.getNodeType().isAlwaysTrue();
+        boolean firstFalse = firstNode.getNodeType().isAlwaysFalse();
+        boolean secondTrue = secondNode.getNodeType().isAlwaysTrue();
+        boolean secondFalse = secondNode.getNodeType().isAlwaysFalse();
 
         if (firstFalse || secondFalse) {
             return new FalseNode();
         } else if (firstTrue && secondTrue) {
             return new TrueNode();
         } else if (firstTrue) {
-            return node.getSecondNode().accept(this);
+            return secondNode;
         } else if (secondTrue) {
-            return node.getFirstNode().accept(this);
+            return firstNode;
         }
         return super.visitAndNode(node);
     }
 
     @Override
     public Node visitOrNode(OrNode node) {
-        boolean firstTrue = node.getFirstNode().getNodeType().isAlwaysTrue();
-        boolean firstFalse = node.getFirstNode().getNodeType().isAlwaysFalse();
-        boolean secondTrue = node.getSecondNode().getNodeType().isAlwaysTrue();
-        boolean secondFalse = node.getSecondNode().getNodeType().isAlwaysFalse();
+        Node firstNode = node.getFirstNode().accept(this);
+        Node secondNode = node.getSecondNode().accept(this);
+
+        boolean firstTrue = firstNode.getNodeType().isAlwaysTrue();
+        boolean firstFalse = firstNode.getNodeType().isAlwaysFalse();
+        boolean secondTrue = secondNode.getNodeType().isAlwaysTrue();
+        boolean secondFalse = secondNode.getNodeType().isAlwaysFalse();
 
         if (firstFalse && secondFalse) {
             return new FalseNode();
         } else if (firstTrue || secondTrue) {
             return new TrueNode();
         } else if (firstFalse) {
-            return node.getSecondNode().accept(this);
+            return secondNode;
         } else if (secondFalse) {
-            return node.getFirstNode().accept(this);
+            return firstNode;
         }
         return super.visitOrNode(node);
     }
