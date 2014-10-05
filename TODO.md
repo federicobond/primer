@@ -3,17 +3,24 @@ To Do
 =====
 
  * Implement variable assignment (Kevin)
+ * Implement bin/lang compile myscript.lang
+ * Finish Negate implementation (using NegateNode)
  * Implement `LESS_OR_EQUAL_THAN`, `GREATER_OR_EQUAL_THAN`, `NOT_EQUAL` (Fer)
+ * Implement modulo operator `%`
  * Replace dummy implementation of method invocation
  * Make sure that Kernel methods are usable for basic input/output
 
 Nice to haves
 =============
 
+ * Emit warnings for unused variables and functions
  * Implement for
     for elem in iterable {
       ...
     }
+ * Add support for string interpolation
+    "Your result is: ${2 + 2}"
+ * Simplify code generation with GeneratorAdapter
  * Use CheckClassAdapter to check that ASMVisitor is using ClassWriter properly
  * Add LINENUMBER bytecode instructions (useful for debugging)
  * Add recursion (should be easy I guess, but depends on how method invocation is implemented)
