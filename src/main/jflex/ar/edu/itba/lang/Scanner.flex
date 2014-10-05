@@ -92,17 +92,20 @@ string          = "\"" [^\"]* "\""
 {line_terminator}   { return symbol("t", T); }
 {string}            { String s = yytext();
                       return symbol("string", STRING, s.substring(1, s.length() - 1)); }
+"def"               { return symbol("def", DEF); }
 "while"             { return symbol("while", WHILE); }
 "if"                { return symbol("if", IF); }
 "else"              { return symbol("else", ELSE); }
 "false"             { return symbol("false", FALSE); }
 "true"              { return symbol("true", TRUE); }
+"return"            { return symbol("return", RETURN); }
+"nil"               { return symbol("nil", NIL); }
 "{"                 { return symbol("{", OPEN_BRACKET); }
 "}"                 { return symbol("}", CLOSE_BRACKET); }
 ","                 { return symbol(",", COMMA); }
 "&&"                { return symbol("&&", AND); }
 "||"                { return symbol("||", OR); }
-{identifier}        { return symbol(yytext(), IDENTIFIER, yytext()); }
 "<"                 { return symbol("<", LESS_THAN); }
 ">"                 { return symbol(">", GREATER_THAN); }
 "=="                { return symbol("==", EQUAL); }
+{identifier}        { return symbol(yytext(), IDENTIFIER, yytext()); }

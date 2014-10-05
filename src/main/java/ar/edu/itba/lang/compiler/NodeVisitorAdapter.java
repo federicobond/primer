@@ -60,6 +60,18 @@ public class NodeVisitorAdapter implements NodeVisitor<Node> {
     }
 
     @Override
+    public Node visitFunctionNode(FunctionNode node) {
+        return new FunctionNode(node.getName(),
+                node.getArgs().accept(this),
+                node.getBody().accept(this));
+    }
+
+    @Override
+    public Node visitFunctionArgsNode(FunctionArgsNode node) {
+        return node;
+    }
+
+    @Override
     public Node visitGreaterThanNode(GreaterThanNode node) {
         return new GreaterThanNode(node.getFirstNode().accept(this),
                                    node.getSecondNode().accept(this));
@@ -101,9 +113,19 @@ public class NodeVisitorAdapter implements NodeVisitor<Node> {
     }
 
     @Override
+    public Node visitNilNode(NilNode node) {
+        return node;
+    }
+
+    @Override
     public Node visitOrNode(OrNode node) {
         return new OrNode(node.getFirstNode().accept(this),
                           node.getSecondNode().accept(this));
+    }
+
+    @Override
+    public Node visitReturnNode(ReturnNode node) {
+        return new ReturnNode(node.getValue().accept(this));
     }
 
     @Override

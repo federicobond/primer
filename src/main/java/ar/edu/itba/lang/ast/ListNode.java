@@ -18,7 +18,7 @@ public abstract class ListNode extends Node {
     }
 
     public void add(Node node) {
-        list.add(node);
+        list.add(0, node);
     }
 
     public List<Node> childNodes() {

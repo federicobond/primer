@@ -7,12 +7,24 @@ import java.io.UnsupportedEncodingException;
 
 public class Kernel {
 
-    public static void println(String str) {
-        System.out.println(str);
+    public static final String NIL_STRING = "nil";
+
+    public static void print(Object o) {
+        if (o == null) {
+            o = NIL_STRING;
+        }
+        System.out.print(o);
     }
 
-    public static String getenv(String str) {
-        return System.getenv(str);
+    public static void println(Object o) {
+        if (o == null) {
+            o = NIL_STRING;
+        }
+        System.out.println(o);
+    }
+
+    public static Object getenv(Object o) {
+        return System.getenv((String)o);
     }
 
     public static Object readln() {

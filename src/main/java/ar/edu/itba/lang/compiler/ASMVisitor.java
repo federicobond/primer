@@ -6,23 +6,30 @@ import org.objectweb.asm.*;
 import org.objectweb.asm.signature.SignatureWriter;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
+    private static final String MAIN_CLASS = "Main";
+
     private ClassVisitor cw;
     private MethodVisitor mv;
+    private Map<String, Symbol> symbols = new HashMap<String, Symbol>();
 
     public ASMVisitor(Node root, ClassVisitor cw) {
         this.cw = cw;
 
+        initializeSymbols();
+
         cw.visit(49,
                 ACC_PUBLIC + ACC_SUPER,
-                "Main",
+                MAIN_CLASS,
                 null,
                 "java/lang/Object",
                 null);
 
-        cw.visitSource("Main.java", null);
+        cw.visitSource(MAIN_CLASS + ".java", null);
 
         {
             mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC,
@@ -36,6 +43,13 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
             mv.visitEnd();
         }
         cw.visitEnd();
+    }
+
+    private void initializeSymbols() {
+        Method[] methods = Kernel.class.getMethods();
+        for (Method m : methods) {
+            symbols.put(m.getName(), new Symbol(Type.getType(m), Type.getInternalName(Kernel.class)));
+        }
     }
 
     public byte[] getByteArray() {
@@ -76,8 +90,8 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         for (Node child : node.childNodes()) {
             child.accept(this);
             if (child instanceof CallNode) {
-                Method m = ((CallNode)child).getMethod();
-                if (m.getReturnType() != Void.TYPE) {
+                Type type = getCalledMethod((CallNode)child).getType();
+                if (!type.getReturnType().equals(Type.getType(Void.TYPE))) {
                     // Discard result
                     mv.visitInsn(POP);
                 }
@@ -89,13 +103,23 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
     @Override
     public Void visitCallNode(CallNode node) {
         node.getArgs().accept(this);
+
+        Symbol sym = getCalledMethod(node);
+
         mv.visitMethodInsn(INVOKESTATIC,
-                Type.getInternalName(Kernel.class),
+                sym.getContainer(),
                 node.getName(),
-                Type.getMethodDescriptor(node.getMethod()),
+                sym.getType().getDescriptor(),
                 false);
 
         return null;
+    }
+
+    private Symbol getCalledMethod(CallNode node) {
+        if (!symbols.containsKey(node.getName())) {
+            throw new Script.ScriptException("undefined method " + node.getName());
+        }
+        return symbols.get(node.getName());
     }
 
     @Override
@@ -121,6 +145,49 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         mv.visitInsn(ICONST_0);
         mv.visitLabel(l2);
 
+        return null;
+    }
+
+    @Override
+    public Void visitFunctionNode(FunctionNode node) {
+        MethodVisitor old = mv;
+
+        Type[] args = new Type[node.getArgs().getList().size()];
+        for (int i = 0; i < args.length; i++) {
+            args[i] = Type.getType(Object.class);
+        }
+
+        String name = node.getName();
+        Type type = Type.getMethodType(Type.getType(Object.class), args);
+
+        if (symbols.containsKey(name)) {
+            throw new Script.ScriptException("symbol " + name + " already defined");
+        }
+        symbols.put(name, new Symbol(type, MAIN_CLASS));
+
+        mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, name, type.getDescriptor(), null, null);
+
+        Node body = node.getBody();
+        Node lastInstruction = body.childNodes().get(body.childNodes().size() - 1);
+
+        body.accept(this);
+
+        if (!(lastInstruction instanceof ReturnNode)) {
+            mv.visitInsn(ACONST_NULL);
+            mv.visitInsn(ARETURN);
+        }
+
+        mv.visitMaxs(2, 1);
+
+        mv.visitEnd();
+
+        mv = old;
+
+        return null;
+    }
+
+    @Override
+    public Void visitFunctionArgsNode(FunctionArgsNode node) {
         return null;
     }
 
@@ -219,10 +286,31 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
     }
 
     @Override
+    public Void visitNilNode(NilNode node) {
+        mv.visitInsn(ACONST_NULL);
+
+        return null;
+    }
+
+    @Override
     public Void visitOrNode(OrNode node) {
         node.getFirstNode().accept(this);
         node.getSecondNode().accept(this);
         mv.visitInsn(IOR);
+
+        return null;
+    }
+
+    @Override
+    public Void visitReturnNode(ReturnNode node) {
+        Node value = node.getValue();
+
+        if (value == null) {
+            mv.visitInsn(ACONST_NULL);
+        } else {
+            value.accept(this);
+        }
+        mv.visitInsn(ARETURN);
 
         return null;
     }
@@ -256,5 +344,24 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         mv.visitLabel(endLabel);
 
         return null;
+    }
+
+    private static class Symbol {
+
+        private final Type type;
+        private final String container;
+
+        Symbol(Type type, String container) {
+            this.type = type;
+            this.container = container;
+        }
+
+        public Type getType() {
+            return type;
+        }
+
+        public String getContainer() {
+            return container;
+        }
     }
 }

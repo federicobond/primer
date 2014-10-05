@@ -17,15 +17,18 @@ terminal PLUS, TIMES, MINUS, UMINUS, DIVIDE;
 terminal LEFT_PAREN, RIGHT_PAREN;
 terminal IF, ELSE, WHILE, OPEN_BRACKET, CLOSE_BRACKET;
 terminal LESS_THAN, EQUAL, GREATER_THAN;
-terminal IDENTIFIER;
 terminal COMMA;
 terminal TRUE, FALSE;
 terminal AND, OR;
+terminal DEF;
+terminal RETURN;
+terminal NIL;
 
 terminal T;
 terminal Integer INT;
 terminal Double REAL;
 terminal String STRING;
+terminal String IDENTIFIER;
 
 non terminal ListNode StatementList;
 non terminal Node Statement;
@@ -33,9 +36,13 @@ non terminal Node Expression;
 non terminal Node Literal;
 non terminal Node Call;
 non terminal ListNode Args;
+non terminal Node Function;
+non terminal FunctionArgsNode FunctionArgs;
 non terminal Node If;
 non terminal Node While;
+non terminal Node Return;
 
+precedence left RETURN;
 precedence left AND, OR;
 precedence left LESS_THAN, GREATER_THAN, EQUAL;
 precedence left PLUS, MINUS;
@@ -50,6 +57,8 @@ StatementList ::= Statement:s StatementList:xs          {: RESULT = xs; xs.add(s
 Statement     ::= If:i                                  {: RESULT = i; :}
                 | While:w                               {: RESULT = w; :}
                 | Call:c                                {: RESULT = c; :}
+                | Function:f                            {: RESULT = f; :}
+                | Return:r                              {: RESULT = r; :}
                 ;
 
 Expression    ::= Expression:e1 PLUS  Expression:e2     {: RESULT = new AddNode(e1, e2); :}
@@ -64,6 +73,7 @@ Expression    ::= Expression:e1 PLUS  Expression:e2     {: RESULT = new AddNode(
                 | MINUS Expression:e                    {: RESULT = new NegateNode(e); :}
                   %prec UMINUS
                 | LEFT_PAREN Expression:e RIGHT_PAREN   {: RESULT = e; :}
+                | Call:c                                {: RESULT = c; :}
                 | Literal:l                             {: RESULT = l; :}
                 ;
 
@@ -90,4 +100,18 @@ Literal       ::= INT:n                                 {: RESULT = new LiteralN
                 | STRING:s                              {: RESULT = new LiteralNode(s); :}
                 | TRUE                                  {: RESULT = new TrueNode(); :}
                 | FALSE                                 {: RESULT = new FalseNode(); :}
+                | NIL                                   {: RESULT = new NilNode(); :}
                 ;
+
+Function     ::= DEF IDENTIFIER:name LEFT_PAREN FunctionArgs:args RIGHT_PAREN OPEN_BRACKET StatementList:body CLOSE_BRACKET
+                   {: RESULT = new FunctionNode((String)name, args, body); :};
+
+FunctionArgs ::= IDENTIFIER:i COMMA FunctionArgs:l      {: RESULT = l; l.add((String)i); :}
+               | IDENTIFIER:i                          {: RESULT = new FunctionArgsNode(); RESULT.add((String)i); :}
+               |                                       {: RESULT = new FunctionArgsNode(); :}
+               ;
+
+Return       ::= RETURN Expression:e                    {: RESULT = new ReturnNode(e); :}
+               | RETURN                                 {: RESULT = new ReturnNode(null); :}
+               ;
+
