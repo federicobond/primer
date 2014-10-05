@@ -71,7 +71,7 @@
         <mkdir dir="${output.dir}"/>
         <jflex file="${basedir}/src/main/jflex/ar/edu/itba/lang/Scanner.flex" destdir="src-gen" />
         <cup srcfile="${basedir}/src/main/cup/ar/edu/itba/lang/Parser.cup" destdir="src-gen" symbols="Symbols" parser="Parser"/>
-        <javac srcdir="src" target="1.7" destdir="${output.dir}" classpathref="build.classpath" sourcepathref="build.sourcepath" debug="yes" includeantruntime="true"/>
+        <javac srcdir="src" target="1.7" source="1.7" destdir="${output.dir}" classpathref="build.classpath" sourcepathref="build.sourcepath" debug="yes" includeantruntime="true"/>
     </target>
 
     <target name="jar" depends="compile" description="package into jar">
