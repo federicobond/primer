@@ -81,7 +81,7 @@ public class Script {
     }
 
     public void exec(String[] argv) throws ScriptException {
-        Class<?> klass = compile();
+        Class<?> klass = loadClass(compile());
 
         try {
             Method m = klass.getMethod("main", String[].class);
@@ -91,10 +91,13 @@ public class Script {
                 | IllegalAccessException ignored) { }
     }
 
-    private Class<?> compile() throws ScriptException {
+    public byte[] compile() throws ScriptException {
         Node root = parse();
 
-        byte[] classBytes = new ASMVisitor(root, new ClassWriter(0)).getByteArray();
+        return new ASMVisitor(root, new ClassWriter(0)).getByteArray();
+    }
+
+    private Class<?> loadClass(byte[] classBytes) throws ScriptException {
         URLClassLoader cl = new ByteClassLoader(new URL[0], ClassLoader.getSystemClassLoader(), classBytes);
 
         Class<?> klass = null;
