@@ -108,6 +108,9 @@ string          = "\"" [^\"]* "\""
 "&&"                { return symbol("&&", AND); }
 "||"                { return symbol("||", OR); }
 "<"                 { return symbol("<", LESS_THAN); }
+"<="                { return symbol("<=", LESS_EQUAL_THAN); }
 ">"                 { return symbol(">", GREATER_THAN); }
+">="                { return symbol(">=", GREATER_EQUAL_THAN); }
 "=="                { return symbol("==", EQUAL); }
+"!="                { return symbol("!=", NOT_EQUAL); }
 {identifier}        { return symbol(yytext(), IDENTIFIER, yytext()); }

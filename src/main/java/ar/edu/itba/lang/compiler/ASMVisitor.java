@@ -169,6 +169,22 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
         return null;
     }
+    @Override
+    public Void visitNotEqualNode(NotEqualNode node) {
+        Label l1 = new Label();
+        Label l2 = new Label();
+
+        node.getFirstNode().accept(this);
+        node.getSecondNode().accept(this);
+        mv.visitJumpInsn(IFEQ, l1);
+        mv.visitInsn(ICONST_1);
+        mv.visitJumpInsn(GOTO, l2);
+        mv.visitLabel(l1);
+        mv.visitInsn(ICONST_0);
+        mv.visitLabel(l2);
+
+        return null;
+    }
 
     @Override
     public Void visitFunctionNode(FunctionNode node) {
@@ -208,6 +224,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         return null;
     }
 
+
     @Override
     public Void visitFunctionArgsNode(FunctionArgsNode node) {
         return null;
@@ -216,6 +233,23 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
     @Override
     public Void visitFalseNode(FalseNode node) {
         mv.visitInsn(ICONST_0);
+
+        return null;
+    }
+
+    @Override
+    public Void visitGreaterEqualThanNode(GreaterEqualThanNode node) {
+        Label l1 = new Label();
+        Label l2 = new Label();
+
+        node.getFirstNode().accept(this);
+        node.getSecondNode().accept(this);
+        mv.visitJumpInsn(IF_ICMPLT, l1);
+        mv.visitInsn(ICONST_1);
+        mv.visitJumpInsn(GOTO, l2);
+        mv.visitLabel(l1);
+        mv.visitInsn(ICONST_0);
+        mv.visitLabel(l2);
 
         return null;
     }
@@ -273,6 +307,24 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         node.getFirstNode().accept(this);
         node.getSecondNode().accept(this);
         mv.visitJumpInsn(IF_ICMPGE, l1);
+        mv.visitInsn(ICONST_1);
+        mv.visitJumpInsn(GOTO, l2);
+        mv.visitLabel(l1);
+        mv.visitInsn(ICONST_0);
+        mv.visitLabel(l2);
+
+        return null;
+    }
+
+
+    @Override
+    public Void visitLessEqualThanNode(LessEqualThanNode node) {
+        Label l1 = new Label();
+        Label l2 = new Label();
+
+        node.getFirstNode().accept(this);
+        node.getSecondNode().accept(this);
+        mv.visitJumpInsn(IF_ICMPGT, l1);
         mv.visitInsn(ICONST_1);
         mv.visitJumpInsn(GOTO, l2);
         mv.visitLabel(l1);

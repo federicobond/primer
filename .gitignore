@@ -2,3 +2,5 @@
 *.iml
 out/
 src-gen/
+bin/lang.jar
+src/main/java/ar/edu/itba/lang/Borrador.java

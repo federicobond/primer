@@ -30,7 +30,7 @@ public class IntegrationTests extends TestCase {
             fail(e.getMessage());
         }
 
-        String output = out.toString();
+        String output = out.toString().replace(System.lineSeparator(), "\n");
         System.setOut(stdout);
 
         return output;
@@ -76,13 +76,26 @@ public class IntegrationTests extends TestCase {
         assertThat(output, equalTo("hello\n"));
     }
 
+    public void testIfLessEqualsThanExpression() {
+        String output = run("if 2 <= 2 { println(\"hello\") }");
+        assertThat(output, equalTo("hello\n"));
+    }
+
     public void testIfGreaterThanExpression() {
         String output = run("if 2 > 1 { println(\"hello\") }");
         assertThat(output, equalTo("hello\n"));
     }
 
+    public void testIfGreaterEqualThanExpression() {
+        String output = run("if 2 >= 2 { println(\"hello\") }");
+        assertThat(output, equalTo("hello\n"));
+    }
     public void testIfEqualExpression() {
         String output = run("if 1 == 1 { println(\"hello\") }");
+        assertThat(output, equalTo("hello\n"));
+    }
+    public void testIfNotEqualExpression() {
+        String output = run("if 1 != 2 { println(\"hello\") }");
         assertThat(output, equalTo("hello\n"));
     }
 
