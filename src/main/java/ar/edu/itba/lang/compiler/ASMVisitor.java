@@ -8,6 +8,7 @@ import org.objectweb.asm.signature.SignatureWriter;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
@@ -17,8 +18,8 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
     private MethodVisitor mv;
     private Map<String, Symbol> symbols = new HashMap<String, Symbol>();
 
-    private Label breakLabel = null;
-    private Label continueLabel = null;
+    private Stack<Label> breakLabels = new Stack<Label>();
+    private Stack<Label> continueLabels = new Stack<Label>();
 
     public ASMVisitor(Node root, ClassVisitor cw) {
         this.cw = cw;
@@ -105,10 +106,10 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     @Override
     public Void visitBreakNode(BreakNode node) {
-        if (breakLabel == null) {
+        if (breakLabels.isEmpty()) {
             throw new Script.ScriptException("nowhere to break to");
         }
-        mv.visitJumpInsn(GOTO, breakLabel);
+        mv.visitJumpInsn(GOTO, breakLabels.peek());
 
         return null;
     }
@@ -130,10 +131,10 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     @Override
     public Void visitContinueNode(ContinueNode node) {
-        if (continueLabel == null) {
+        if (continueLabels.isEmpty()) {
             throw new Script.ScriptException("nowhere to continue to");
         }
-        mv.visitJumpInsn(GOTO, continueLabel);
+        mv.visitJumpInsn(GOTO, continueLabels.peek());
         return null;
     }
 
@@ -358,8 +359,8 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         Label conditionLabel = new Label();
         Label endLabel = new Label();
 
-        continueLabel = conditionLabel;
-        breakLabel = endLabel;
+        continueLabels.push(conditionLabel);
+        breakLabels.push(endLabel);
 
         mv.visitLabel(conditionLabel);
         node.getConditionNode().accept(this);
@@ -368,8 +369,8 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         mv.visitJumpInsn(GOTO, conditionLabel);
         mv.visitLabel(endLabel);
 
-        continueLabel = null;
-        breakLabel = null;
+        continueLabels.pop();
+        breakLabels.pop();
 
         return null;
     }
