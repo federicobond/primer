@@ -82,6 +82,9 @@
                 <attribute name="Main-Class" value="ar.edu.itba.lang.Main"/>
             </manifest>
         </jar>
+        <jar destfile="bin/lang-runtime.jar">
+            <fileset dir="${basedir}/out/production" includes="**/Kernel.class" />
+        </jar>
     </target>
 
     <target name="all" depends="jar" description="build all"/>
