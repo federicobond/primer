@@ -8,7 +8,9 @@ public interface NodeVisitor<T> {
     public T visitAndNode(AndNode node);
     public T visitArgsNode(ArgsNode node);
     public T visitBlockNode(BlockNode node);
+    public T visitBreakNode(BreakNode node);
     public T visitCallNode(CallNode node);
+    public T visitContinueNode(ContinueNode node);
     public T visitDivideNode(DivideNode node);
     public T visitEqualNode(EqualNode node);
     public T visitFalseNode(FalseNode node);

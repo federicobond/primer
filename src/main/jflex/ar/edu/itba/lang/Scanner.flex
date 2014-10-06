@@ -100,6 +100,8 @@ string          = "\"" [^\"]* "\""
 "true"              { return symbol("true", TRUE); }
 "return"            { return symbol("return", RETURN); }
 "nil"               { return symbol("nil", NIL); }
+"continue"          { return symbol("continue", CONTINUE); }
+"break"             { return symbol("break", BREAK); }
 "{"                 { return symbol("{", OPEN_BRACKET); }
 "}"                 { return symbol("}", CLOSE_BRACKET); }
 ","                 { return symbol(",", COMMA); }

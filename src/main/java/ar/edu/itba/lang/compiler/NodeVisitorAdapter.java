@@ -38,8 +38,18 @@ public class NodeVisitorAdapter implements NodeVisitor<Node> {
     }
 
     @Override
+    public Node visitBreakNode(BreakNode node) {
+        return node;
+    }
+
+    @Override
     public Node visitCallNode(CallNode node) {
         return new CallNode(node.getName(), (ListNode)node.getArgs().accept(this));
+    }
+
+    @Override
+    public Node visitContinueNode(ContinueNode node) {
+        return node;
     }
 
     @Override

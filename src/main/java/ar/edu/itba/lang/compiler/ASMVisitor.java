@@ -17,6 +17,9 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
     private MethodVisitor mv;
     private Map<String, Symbol> symbols = new HashMap<String, Symbol>();
 
+    private Label breakLabel = null;
+    private Label continueLabel = null;
+
     public ASMVisitor(Node root, ClassVisitor cw) {
         this.cw = cw;
 
@@ -101,6 +104,16 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
     }
 
     @Override
+    public Void visitBreakNode(BreakNode node) {
+        if (breakLabel == null) {
+            throw new Script.ScriptException("nowhere to break to");
+        }
+        mv.visitJumpInsn(GOTO, breakLabel);
+
+        return null;
+    }
+
+    @Override
     public Void visitCallNode(CallNode node) {
         node.getArgs().accept(this);
 
@@ -112,6 +125,15 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
                 sym.getType().getDescriptor(),
                 false);
 
+        return null;
+    }
+
+    @Override
+    public Void visitContinueNode(ContinueNode node) {
+        if (continueLabel == null) {
+            throw new Script.ScriptException("nowhere to continue to");
+        }
+        mv.visitJumpInsn(GOTO, continueLabel);
         return null;
     }
 
@@ -336,12 +358,18 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         Label conditionLabel = new Label();
         Label endLabel = new Label();
 
+        continueLabel = conditionLabel;
+        breakLabel = endLabel;
+
         mv.visitLabel(conditionLabel);
         node.getConditionNode().accept(this);
         mv.visitJumpInsn(IFEQ, endLabel);
         node.getBodyNode().accept(this);
         mv.visitJumpInsn(GOTO, conditionLabel);
         mv.visitLabel(endLabel);
+
+        continueLabel = null;
+        breakLabel = null;
 
         return null;
     }

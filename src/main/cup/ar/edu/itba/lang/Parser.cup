@@ -23,6 +23,7 @@ terminal AND, OR;
 terminal DEF;
 terminal RETURN;
 terminal NIL;
+terminal BREAK, CONTINUE;
 
 terminal T;
 terminal Integer INT;
@@ -59,6 +60,8 @@ Statement     ::= If:i                                  {: RESULT = i; :}
                 | Call:c                                {: RESULT = c; :}
                 | Function:f                            {: RESULT = f; :}
                 | Return:r                              {: RESULT = r; :}
+                | CONTINUE                              {: RESULT = new ContinueNode(); :}
+                | BREAK                                 {: RESULT = new BreakNode(); :}
                 ;
 
 Expression    ::= Expression:e1 PLUS  Expression:e2     {: RESULT = new AddNode(e1, e2); :}

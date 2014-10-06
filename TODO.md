@@ -29,7 +29,6 @@ Nice to haves
     loop {
       ...
     }
- * Implement `break` and `continue` instructions
  * Add support for const blocks similar to Go
  * Add support for mutable and inmutable references
     `let|val|const x = 10` vs `var x = 10` or just `x = 10`
