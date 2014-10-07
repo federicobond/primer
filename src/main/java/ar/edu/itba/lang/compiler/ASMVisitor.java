@@ -42,7 +42,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
                     null);
             root.accept(this);
             mv.visitInsn(RETURN);
-            mv.visitMaxs(2, 1);
+            mv.visitMaxs(0, 0); /* computed automatically */
             mv.visitEnd();
         }
         cw.visitEnd();

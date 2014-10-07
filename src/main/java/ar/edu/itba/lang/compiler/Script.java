@@ -114,7 +114,8 @@ public class Script {
     public byte[] compile() throws ScriptException {
         Node root = parse();
 
-        return new ASMVisitor(root, new ClassWriter(0)).getByteArray();
+        ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
+        return new ASMVisitor(root, cw).getByteArray();
     }
 
     private Class<?> loadClass(byte[] classBytes) throws ScriptException {
