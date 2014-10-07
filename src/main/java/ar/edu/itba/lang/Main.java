@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
+import java.util.List;
 
 public class Main {
 
@@ -47,6 +48,10 @@ public class Main {
             case "compile":
                 byte[] classBytes = Script.fromFile(file).compile();
                 Files.write(Paths.get("Main.class"), classBytes, StandardOpenOption.CREATE);
+                break;
+            case "tokens":
+                List<String> tokens = Script.fromFile(file).tokenList();
+                System.out.println(tokens);
                 break;
             default:
                 System.err.println("error: invalid command " + subCommand);

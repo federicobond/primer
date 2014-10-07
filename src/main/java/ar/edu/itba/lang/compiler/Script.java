@@ -2,6 +2,7 @@ package ar.edu.itba.lang.compiler;
 
 import ar.edu.itba.lang.Lexer;
 import ar.edu.itba.lang.Parser;
+import ar.edu.itba.lang.Symbols;
 import ar.edu.itba.lang.ast.Node;
 import java_cup.runtime.ComplexSymbolFactory;
 import java_cup.runtime.Scanner;
@@ -16,10 +17,12 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Script {
 
-    public static boolean enableOptimizations = false;
+    public static boolean enableOptimizations = true;
 
     private final byte[] code;
 
@@ -37,6 +40,24 @@ public class Script {
 
     public static Script fromString(String code) throws IOException {
         return new Script(code.getBytes("UTF-8"), "unnamed");
+    }
+
+    public List<String> tokenList() throws ScriptException {
+        List<String> list = new ArrayList<String>();
+
+        Lexer lexer = getLexer(new ComplexSymbolFactory());
+
+        try {
+            String token;
+            do {
+                token = Symbols.terminalNames[lexer.next_token().sym];
+                list.add(token);
+            } while (!token.equals("EOF"));
+        } catch (IOException e) {
+            throw new ScriptException(e.getMessage());
+        }
+
+        return list;
     }
 
     public static class ScriptException extends RuntimeException {
@@ -111,6 +132,12 @@ public class Script {
 
     private Parser getParser() {
         ComplexSymbolFactory csf = new ComplexSymbolFactory();
+        Lexer lexer = getLexer(csf);
+        Scanner scanner = new ScannerBuffer(lexer);
+        return new Parser(scanner, csf);
+    }
+
+    private Lexer getLexer(ComplexSymbolFactory csf) {
         Lexer lexer = null;
         try {
             Reader reader = new InputStreamReader(
@@ -121,9 +148,7 @@ public class Script {
         if (fileName != null) {
             lexer.setFilename(fileName);
         }
-
-        Scanner scanner = new ScannerBuffer(lexer);
-        return new Parser(scanner, csf);
+        return lexer;
     }
 
     private Node getRootNode(Parser parser) throws ScriptException {
