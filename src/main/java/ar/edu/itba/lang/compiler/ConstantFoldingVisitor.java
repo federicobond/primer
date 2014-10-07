@@ -36,13 +36,20 @@ public class ConstantFoldingVisitor extends NodeVisitorAdapter {
 
         if (firstFalse || secondFalse) {
             return new FalseNode();
-        } else if (firstTrue && secondTrue) {
+        }
+
+        if (firstTrue && secondTrue) {
             return new TrueNode();
-        } else if (firstTrue) {
+        }
+
+        if (firstTrue) {
             return secondNode;
-        } else if (secondTrue) {
+        }
+
+        if (secondTrue) {
             return firstNode;
         }
+
         return super.visitAndNode(node);
     }
 
@@ -58,35 +65,53 @@ public class ConstantFoldingVisitor extends NodeVisitorAdapter {
 
         if (firstFalse && secondFalse) {
             return new FalseNode();
-        } else if (firstTrue || secondTrue) {
+        }
+
+        if (firstTrue || secondTrue) {
             return new TrueNode();
-        } else if (firstFalse) {
+        }
+
+        if (firstFalse) {
             return secondNode;
-        } else if (secondFalse) {
+        }
+
+        if (secondFalse) {
             return firstNode;
         }
+
         return super.visitOrNode(node);
     }
 
     @Override
     public Node visitIfNode(IfNode node) {
         Node condition = node.getCondition().accept(this);
+
         if (condition.getNodeType().isAlwaysTrue()) {
             return node.getThenBody().accept(this);
-        } else if (condition.getNodeType().isAlwaysFalse()) {
+        }
+
+        if (condition.getNodeType().isAlwaysFalse()) {
             return new BlockNode(); /* empty block */
         }
-        return new IfNode(condition, node.getThenBody());
+
+        Node thenBody = node.getThenBody().accept(this);
+        return new IfNode(condition, thenBody);
     }
 
     @Override
     public Node visitIfElseNode(IfElseNode node) {
         Node condition = node.getCondition().accept(this);
+
         if (condition.getNodeType().isAlwaysTrue()) {
             return node.getThenBody().accept(this);
-        } else if (node.getCondition().getNodeType().isAlwaysFalse()) {
+        }
+
+        if (node.getCondition().getNodeType().isAlwaysFalse()) {
             return node.getElseBody().accept(this);
         }
-        return new IfElseNode(condition, node.getThenBody(), node.getElseBody());
+
+        Node thenBody = node.getThenBody().accept(this);
+        Node elseBody = node.getElseBody().accept(this);
+        return new IfElseNode(condition, thenBody, elseBody);
     }
 }
