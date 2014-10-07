@@ -110,4 +110,6 @@ string          = "\"" [^\"]* "\""
 "<"                 { return symbol("<", LESS_THAN); }
 ">"                 { return symbol(">", GREATER_THAN); }
 "=="                { return symbol("==", EQUAL); }
+"var"               { return symbol("var", VAR); }
+"="                 { return symbol("=", ASSIGN); }
 {identifier}        { return symbol(yytext(), IDENTIFIER, yytext()); }

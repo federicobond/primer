@@ -7,10 +7,12 @@ public interface NodeVisitor<T> {
     public T visitAddNode(AddNode node);
     public T visitAndNode(AndNode node);
     public T visitArgsNode(ArgsNode node);
+    public T visitAssignmentNode(AssignmentNode node);
     public T visitBlockNode(BlockNode node);
     public T visitBreakNode(BreakNode node);
     public T visitCallNode(CallNode node);
     public T visitContinueNode(ContinueNode node);
+    public T visitDeclarationNode(DeclarationNode node);
     public T visitDivideNode(DivideNode node);
     public T visitEqualNode(EqualNode node);
     public T visitFalseNode(FalseNode node);
@@ -28,5 +30,6 @@ public interface NodeVisitor<T> {
     public T visitReturnNode(ReturnNode node);
     public T visitSubstractNode(SubstractNode node);
     public T visitTrueNode(TrueNode node);
+    public T visitVariableNode(VariableNode node);
     public T visitWhileNode(WhileNode node);
 }

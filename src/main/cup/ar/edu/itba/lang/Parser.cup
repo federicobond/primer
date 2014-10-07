@@ -24,6 +24,8 @@ terminal DEF;
 terminal RETURN;
 terminal NIL;
 terminal BREAK, CONTINUE;
+terminal VAR;
+terminal ASSIGN;
 
 terminal T;
 terminal Integer INT;
@@ -42,7 +44,12 @@ non terminal FunctionArgsNode FunctionArgs;
 non terminal Node If;
 non terminal Node While;
 non terminal Node Return;
+non terminal Node Assignment;
+non terminal Node Declaration;
+non terminal Node Variable;
 
+
+precedence left Variable, Call;
 precedence left RETURN;
 precedence left AND, OR;
 precedence left LESS_THAN, GREATER_THAN, EQUAL;
@@ -62,6 +69,8 @@ Statement     ::= If:i                                  {: RESULT = i; :}
                 | Return:r                              {: RESULT = r; :}
                 | CONTINUE                              {: RESULT = new ContinueNode(); :}
                 | BREAK                                 {: RESULT = new BreakNode(); :}
+                | Declaration:d                         {: RESULT = d; :}
+                | Assignment:a                          {: RESULT = a; :}
                 ;
 
 Expression    ::= Expression:e1 PLUS  Expression:e2     {: RESULT = new AddNode(e1, e2); :}
@@ -77,6 +86,7 @@ Expression    ::= Expression:e1 PLUS  Expression:e2     {: RESULT = new AddNode(
                   %prec UMINUS
                 | LEFT_PAREN Expression:e RIGHT_PAREN   {: RESULT = e; :}
                 | Call:c                                {: RESULT = c; :}
+                | Variable:v                            {: RESULT = v; :}
                 | Literal:l                             {: RESULT = l; :}
                 ;
 
@@ -117,4 +127,10 @@ FunctionArgs ::= IDENTIFIER:i COMMA FunctionArgs:l      {: RESULT = l; l.add((St
 Return       ::= RETURN Expression:e                    {: RESULT = new ReturnNode(e); :}
                | RETURN                                 {: RESULT = new ReturnNode(null); :}
                ;
+
+Assignment   ::= IDENTIFIER:i ASSIGN Expression:e       {: RESULT = new AssignmentNode(i, e); :};
+
+Declaration  ::= VAR IDENTIFIER:i ASSIGN Expression:e   {: RESULT = new DeclarationNode(i, e); :};
+
+Variable     ::= IDENTIFIER:i                           {: RESULT = new VariableNode(i); :};
 

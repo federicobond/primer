@@ -29,6 +29,11 @@ public class NodeVisitorAdapter implements NodeVisitor<Node> {
     }
 
     @Override
+    public Node visitAssignmentNode(AssignmentNode node) {
+        return new AssignmentNode(node.getName(), node.getValue().accept(this));
+    }
+
+    @Override
     public Node visitBlockNode(BlockNode node) {
         List<Node> newList = new ArrayList<Node>();
         for (Node child : node.childNodes()) {
@@ -50,6 +55,11 @@ public class NodeVisitorAdapter implements NodeVisitor<Node> {
     @Override
     public Node visitContinueNode(ContinueNode node) {
         return node;
+    }
+
+    @Override
+    public Node visitDeclarationNode(DeclarationNode node) {
+        return new DeclarationNode(node.getName(), node.getValue().accept(this));
     }
 
     @Override
@@ -146,6 +156,11 @@ public class NodeVisitorAdapter implements NodeVisitor<Node> {
 
     @Override
     public Node visitTrueNode(TrueNode node) {
+        return node;
+    }
+
+    @Override
+    public Node visitVariableNode(VariableNode node) {
         return node;
     }
 

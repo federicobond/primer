@@ -15,7 +15,9 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     private ClassVisitor cw;
     private MethodVisitor mv;
-    private Map<String, Symbol> symbols = new HashMap<String, Symbol>();
+    private Map<String, Symbol> functions = new HashMap<String, Symbol>();
+    private Map<String, Integer> variables = new HashMap<String, Integer>();
+    private int variableMaxIndex = 0;
 
     private Stack<Label> breakLabels = new Stack<Label>();
     private Stack<Label> continueLabels = new Stack<Label>();
@@ -51,7 +53,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
     private void initializeSymbols() {
         Method[] methods = Kernel.class.getMethods();
         for (Method m : methods) {
-            symbols.put(m.getName(), new Symbol(Type.getType(m), Type.getInternalName(Kernel.class)));
+            functions.put(m.getName(), new Symbol(Type.getType(m), Type.getInternalName(Kernel.class)));
         }
     }
 
@@ -85,6 +87,20 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         for (Node child : node.childNodes()) {
             child.accept(this);
         }
+        return null;
+    }
+
+    @Override
+    public Void visitAssignmentNode(AssignmentNode node) {
+        if (!variables.containsKey(node.getName())) {
+            throw new Script.ScriptException("variable " + node.getName() + " is not defined");
+        }
+
+        node.getValue().accept(this);
+
+        // We will assume it is a string for now.
+        mv.visitIntInsn(ASTORE, variables.get(node.getName()));
+
         return null;
     }
 
@@ -137,11 +153,28 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         return null;
     }
 
+    @Override
+    public Void visitDeclarationNode(DeclarationNode node) {
+        if (variables.containsKey(node.getName())) {
+            throw new Script.ScriptException("variable " + node.getName() + " is already defined");
+        }
+
+        variables.put(node.getName(), variableMaxIndex);
+
+        node.getValue().accept(this);
+
+        // We will assume it is a string for now.
+        mv.visitIntInsn(ASTORE, variableMaxIndex);
+
+        variableMaxIndex++;
+        return null;
+    }
+
     private Symbol getCalledMethod(CallNode node) {
-        if (!symbols.containsKey(node.getName())) {
+        if (!functions.containsKey(node.getName())) {
             throw new Script.ScriptException("undefined method " + node.getName());
         }
-        return symbols.get(node.getName());
+        return functions.get(node.getName());
     }
 
     @Override
@@ -182,10 +215,10 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         String name = node.getName();
         Type type = Type.getMethodType(Type.getType(Object.class), args);
 
-        if (symbols.containsKey(name)) {
+        if (functions.containsKey(name)) {
             throw new Script.ScriptException("symbol " + name + " already defined");
         }
-        symbols.put(name, new Symbol(type, MAIN_CLASS));
+        functions.put(name, new Symbol(type, MAIN_CLASS));
 
         mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, name, type.getDescriptor(), null, null);
 
@@ -349,6 +382,17 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
     @Override
     public Void visitTrueNode(TrueNode node) {
         mv.visitInsn(ICONST_1);
+
+        return null;
+    }
+
+    @Override
+    public Void visitVariableNode(VariableNode node) {
+        if (!variables.containsKey(node.getName())) {
+            throw new Script.ScriptException("variable " + node.getName() + " is not defined");
+        }
+
+        mv.visitIntInsn(ALOAD, variables.get(node.getName()));
 
         return null;
     }
