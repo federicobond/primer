@@ -2,7 +2,27 @@ package ar.edu.itba.lang.compiler;
 
 import ar.edu.itba.lang.ast.*;
 
-public class ConstantOptimizerVisitor extends NodeVisitorAdapter {
+import java.util.ArrayList;
+import java.util.List;
+
+public class ConstantFoldingVisitor extends NodeVisitorAdapter {
+
+    @Override
+    public Node visitBlockNode(BlockNode node) {
+        List<Node> list = node.childNodes();
+        List<Node> newList = new ArrayList<Node>();
+
+        for (Node child : list) {
+            child = child.accept(this);
+            if (child instanceof BlockNode) {
+                newList.addAll(child.childNodes());
+            } else {
+                newList.add(child);
+            }
+        }
+
+        return new BlockNode(newList);
+    }
 
     @Override
     public Node visitAndNode(AndNode node) {

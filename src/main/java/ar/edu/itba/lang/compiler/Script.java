@@ -63,8 +63,7 @@ public class Script {
         Node root = getRootNode(getParser());
 
         if (enableOptimizations) {
-            root = root.accept(new ConstantOptimizerVisitor())
-                    .accept(new FlattenBlocksOptimizerVisitor());
+            root = root.accept(new ConstantFoldingVisitor());
         }
 
         return root;
