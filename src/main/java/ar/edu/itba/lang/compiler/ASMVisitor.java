@@ -186,6 +186,18 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         return null;
     }
 
+    //TODO SOLO FUNCIONA CON ENTEROS POR AHORA
+    @Override
+    public Void visitModulusNode(ModulusNode node) {
+        node.getFirstNode().accept(this);
+        node.getSecondNode().accept(this);
+        mv.visitInsn(IREM);
+
+        return null;
+
+
+    }
+
     @Override
     public Void visitFunctionNode(FunctionNode node) {
         MethodVisitor old = mv;

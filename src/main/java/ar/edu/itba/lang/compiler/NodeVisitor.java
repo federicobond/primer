@@ -33,4 +33,6 @@ public interface NodeVisitor<T> {
     public T visitWhileNode(WhileNode node);
 
     public T visitNotEqualNode(NotEqualNode notEqualNode);
+
+    public T visitModulusNode(ModulusNode modulusNode);
 }

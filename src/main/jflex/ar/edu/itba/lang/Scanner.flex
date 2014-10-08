@@ -114,3 +114,4 @@ string          = "\"" [^\"]* "\""
 "=="                { return symbol("==", EQUAL); }
 "!="                { return symbol("!=", NOT_EQUAL); }
 {identifier}        { return symbol(yytext(), IDENTIFIER, yytext()); }
+"%"                 { return symbol("%", MODULUS); }

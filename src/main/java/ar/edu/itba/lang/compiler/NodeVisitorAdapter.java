@@ -145,6 +145,13 @@ public class NodeVisitorAdapter implements NodeVisitor<Node> {
         return new NotEqualNode(node.getFirstNode().accept(this),
                 node.getSecondNode().accept(this));
     }
+
+    @Override
+    public Node visitModulusNode(ModulusNode node) {
+        return new ModulusNode(node.getFirstNode().accept(this),
+                node.getSecondNode().accept(this));
+    }
+
     @Override
     public Node visitOrNode(OrNode node) {
         return new OrNode(node.getFirstNode().accept(this),

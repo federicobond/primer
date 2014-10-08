@@ -16,22 +16,19 @@ parser code {:
 terminal PLUS, TIMES, MINUS, UMINUS, DIVIDE;
 terminal LEFT_PAREN, RIGHT_PAREN;
 terminal IF, ELSE, WHILE, OPEN_BRACKET, CLOSE_BRACKET;
-terminal LESS_THAN, LESS_EQUAL_THAN, EQUAL, NOT_EQUAL, GREATER_THAN, GREATER_EQUAL_THAN;
+terminal LESS_THAN, EQUAL, GREATER_THAN;
 terminal COMMA;
 terminal TRUE, FALSE;
 terminal AND, OR;
 terminal DEF;
 terminal RETURN;
 terminal NIL;
-terminal BREAK, CONTINUE;
-terminal MODULUS;
 
 terminal T;
 terminal Integer INT;
 terminal Double REAL;
 terminal String STRING;
 terminal String IDENTIFIER;
-
 
 non terminal ListNode StatementList;
 non terminal Node Statement;
@@ -47,8 +44,8 @@ non terminal Node Return;
 
 precedence left RETURN;
 precedence left AND, OR;
-precedence left LESS_THAN, LESS_EQUAL_THAN, GREATER_THAN, EQUAL, NOT_EQUAL, GREATER_EQUAL_THAN;
-precedence left PLUS, MINUS, MODULUS;
+precedence left LESS_THAN, GREATER_THAN, EQUAL;
+precedence left PLUS, MINUS;
 precedence left TIMES, DIVIDE;
 precedence left UMINUS;
 
@@ -62,8 +59,6 @@ Statement     ::= If:i                                  {: RESULT = i; :}
                 | Call:c                                {: RESULT = c; :}
                 | Function:f                            {: RESULT = f; :}
                 | Return:r                              {: RESULT = r; :}
-                | CONTINUE                              {: RESULT = new ContinueNode(); :}
-                | BREAK                                 {: RESULT = new BreakNode(); :}
                 ;
 
 Expression    ::= Expression:e1 PLUS  Expression:e2     {: RESULT = new AddNode(e1, e2); :}
@@ -73,17 +68,13 @@ Expression    ::= Expression:e1 PLUS  Expression:e2     {: RESULT = new AddNode(
                 | Expression:e1 AND Expression:e2       {: RESULT = new AndNode(e1, e2); :}
                 | Expression:e1 OR Expression:e2        {: RESULT = new OrNode(e1, e2); :}
                 | Expression:e1 LESS_THAN Expression:e2       {: RESULT = new LessThanNode(e1, e2); :}
-                | Expression:e1 LESS_EQUAL_THAN Expression:e2       {: RESULT = new LessEqualThanNode(e1, e2); :}
                 | Expression:e1 GREATER_THAN Expression:e2        {: RESULT = new GreaterThanNode(e1, e2); :}
-                | Expression:e1 GREATER_EQUAL_THAN Expression:e2        {: RESULT = new GreaterEqualThanNode(e1, e2); :}
                 | Expression:e1 EQUAL Expression:e2        {: RESULT = new EqualNode(e1, e2); :}
-                | Expression:e1 NOT_EQUAL Expression:e2        {: RESULT = new NotEqualNode(e1, e2); :}
                 | MINUS Expression:e                    {: RESULT = new NegateNode(e); :}
                   %prec UMINUS
                 | LEFT_PAREN Expression:e RIGHT_PAREN   {: RESULT = e; :}
                 | Call:c                                {: RESULT = c; :}
                 | Literal:l                             {: RESULT = l; :}
-                | Expression:e1 MODULUS Expression:e2     {: RESULT = new ModulusNode(e1, e2); :}
                 ;
 
 If            ::= IF Expression:condition OPEN_BRACKET StatementList:thenBody CLOSE_BRACKET
