@@ -163,6 +163,11 @@ public class NodeVisitorAdapter implements NodeVisitor<Node> {
     }
 
     @Override
+    public Node visitStringLiteralNode(StringLiteralNode node) {
+        return node;
+    }
+
+    @Override
     public Node visitSubstractNode(SubstractNode node) {
         return new SubstractNode(node.getFirstNode().accept(this),
                                  node.getSecondNode().accept(this));

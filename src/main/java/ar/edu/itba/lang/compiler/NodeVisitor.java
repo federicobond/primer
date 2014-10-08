@@ -30,6 +30,7 @@ public interface NodeVisitor<T> {
     public T visitNotEqualNode(NotEqualNode notEqualNode);
     public T visitOrNode(OrNode node);
     public T visitReturnNode(ReturnNode node);
+    public T visitStringLiteralNode(StringLiteralNode node);
     public T visitSubstractNode(SubstractNode node);
     public T visitTrueNode(TrueNode node);
     public T visitWhileNode(WhileNode node);

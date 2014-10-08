@@ -28,7 +28,6 @@ terminal MODULUS;
 
 terminal T;
 terminal Integer INT;
-terminal Double REAL;
 terminal String STRING;
 terminal String IDENTIFIER;
 
@@ -105,8 +104,7 @@ Args          ::= Expression:e COMMA Args:l             {: RESULT = l; l.add(e);
                 ;
 
 Literal       ::= INT:n                                 {: RESULT = new LiteralNode(n); :}
-                | REAL:d                                {: RESULT = new LiteralNode(d); :}
-                | STRING:s                              {: RESULT = new LiteralNode(s); :}
+                | STRING:s                              {: RESULT = new StringLiteralNode(s); :}
                 | TRUE                                  {: RESULT = new TrueNode(); :}
                 | FALSE                                 {: RESULT = new FalseNode(); :}
                 | NIL                                   {: RESULT = new NilNode(); :}

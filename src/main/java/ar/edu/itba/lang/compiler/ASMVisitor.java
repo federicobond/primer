@@ -400,6 +400,14 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
     }
 
     @Override
+    public Void visitStringLiteralNode(StringLiteralNode node) {
+        String value = node.getValue();
+        mv.visitLdcInsn(value);
+
+        return null;
+    }
+
+    @Override
     public Void visitSubstractNode(SubstractNode node) {
         node.getFirstNode().accept(this);
         node.getSecondNode().accept(this);

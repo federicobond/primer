@@ -87,7 +87,6 @@ string          = "\"" [^\"]* "\""
 "("                 { return symbol("(", LEFT_PAREN); }
 ")"                 { return symbol(")", RIGHT_PAREN); }
 {integer}           { return symbol(Integer.valueOf(yytext()).toString(), INT, Integer.valueOf(yytext())); }
-{real}              { return symbol(Double.valueOf(yytext()).toString(), REAL, Double.valueOf(yytext())); }
 {comment}           { /* Ignore comment. */ }
 {whitespace}        { /* Ignore whitespace. */ }
 {line_terminator}   { return symbol("t", T); }
