@@ -6,6 +6,10 @@ import java.util.List;
 
 public class FalseNode extends Node {
 
+    public static final FalseNode INSTANCE = new FalseNode();
+
+    private FalseNode() { }
+
     @Override
     public <T> T accept(NodeVisitor<T> visitor) {
         return visitor.visitFalseNode(this);

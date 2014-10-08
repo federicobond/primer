@@ -61,8 +61,8 @@ Statement     ::= If:i                                  {: RESULT = i; :}
                 | Call:c                                {: RESULT = c; :}
                 | Function:f                            {: RESULT = f; :}
                 | Return:r                              {: RESULT = r; :}
-                | CONTINUE                              {: RESULT = new ContinueNode(); :}
-                | BREAK                                 {: RESULT = new BreakNode(); :}
+                | CONTINUE                              {: RESULT = ContinueNode.INSTANCE; :}
+                | BREAK                                 {: RESULT = BreakNode.INSTANCE; :}
                 ;
 
 Expression    ::= Expression:e1 PLUS  Expression:e2     {: RESULT = new AddNode(e1, e2); :}
@@ -105,9 +105,9 @@ Args          ::= Expression:e COMMA Args:l             {: RESULT = l; l.add(e);
 
 Literal       ::= INT:n                                 {: RESULT = new LiteralNode(n); :}
                 | STRING:s                              {: RESULT = new StringLiteralNode(s); :}
-                | TRUE                                  {: RESULT = new TrueNode(); :}
-                | FALSE                                 {: RESULT = new FalseNode(); :}
-                | NIL                                   {: RESULT = new NilNode(); :}
+                | TRUE                                  {: RESULT = TrueNode.INSTANCE; :}
+                | FALSE                                 {: RESULT = FalseNode.INSTANCE; :}
+                | NIL                                   {: RESULT = NilNode.INSTANCE; :}
                 ;
 
 Function     ::= DEF IDENTIFIER:name LEFT_PAREN FunctionArgs:args RIGHT_PAREN OPEN_BRACKET StatementList:body CLOSE_BRACKET
