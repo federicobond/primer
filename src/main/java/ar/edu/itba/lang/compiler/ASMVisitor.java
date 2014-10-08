@@ -3,8 +3,9 @@ package ar.edu.itba.lang.compiler;
 import ar.edu.itba.lang.Kernel;
 import ar.edu.itba.lang.ast.*;
 import org.objectweb.asm.*;
+import org.objectweb.asm.commons.GeneratorAdapter;
+import org.objectweb.asm.commons.Method;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -13,51 +14,50 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     private static final String MAIN_CLASS = "Main";
 
-    private ClassVisitor cw;
-    private MethodVisitor mv;
+    private ClassVisitor cv;
+    private GeneratorAdapter mv;
+
     private Map<String, Symbol> symbols = new HashMap<String, Symbol>();
 
     private Stack<Label> breakLabels = new Stack<Label>();
     private Stack<Label> continueLabels = new Stack<Label>();
 
-    public ASMVisitor(Node root, ClassVisitor cw) {
-        this.cw = cw;
+    public ASMVisitor(Node root, ClassVisitor cv) {
+        this.cv = cv;
 
         initializeSymbols();
 
-        cw.visit(49,
+        cv.visit(V1_5,
                 ACC_PUBLIC + ACC_SUPER,
                 MAIN_CLASS,
                 null,
                 "java/lang/Object",
                 null);
 
-        cw.visitSource(MAIN_CLASS + ".java", null);
+        cv.visitSource(MAIN_CLASS + ".java", null);
 
         {
-            mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC,
-                    "main",
-                    "([Ljava/lang/String;)V",
-                    null,
-                    null);
+            Method m = Method.getMethod("void main (String[])");
+            mv = new GeneratorAdapter(ACC_PUBLIC + ACC_STATIC, m, null, null, cv);
+
             root.accept(this);
             mv.visitInsn(RETURN);
             mv.visitMaxs(0, 0); /* computed automatically */
             mv.visitEnd();
         }
-        cw.visitEnd();
+        cv.visitEnd();
     }
 
     private void initializeSymbols() {
-        Method[] methods = Kernel.class.getMethods();
-        for (Method m : methods) {
+        java.lang.reflect.Method[] methods = Kernel.class.getMethods();
+        for (java.lang.reflect.Method m : methods) {
             symbols.put(m.getName(), new Symbol(Type.getType(m), Type.getInternalName(Kernel.class)));
         }
     }
 
     public byte[] getByteArray() {
-        if (cw instanceof ClassWriter) {
-            return ((ClassWriter)cw).toByteArray();
+        if (cv instanceof ClassWriter) {
+            return ((ClassWriter) cv).toByteArray();
         }
         throw new IllegalArgumentException();
     }
@@ -198,7 +198,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     @Override
     public Void visitFunctionNode(FunctionNode node) {
-        MethodVisitor old = mv;
+        GeneratorAdapter old = mv;
 
         Type[] args = new Type[node.getArgs().getList().size()];
         for (int i = 0; i < args.length; i++) {
@@ -213,7 +213,8 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         }
         symbols.put(name, new Symbol(type, MAIN_CLASS));
 
-        mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, name, type.getDescriptor(), null, null);
+        Method m = new Method(name, type.getDescriptor());
+        mv = new GeneratorAdapter(ACC_PUBLIC + ACC_STATIC, m, null, null, cv);
 
         Node body = node.getBody();
         Node lastInstruction = body.childNodes().get(body.childNodes().size() - 1);
