@@ -1,1 +1,3 @@
-exec java -jar $(dirname "$0")/lang.jar $*
+#!/bin/bash
+
+exec java -jar $(dirname "$0")/lang.jar "$@"
