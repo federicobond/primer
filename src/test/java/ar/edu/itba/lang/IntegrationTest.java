@@ -10,7 +10,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.text.IsEmptyString.isEmptyString;
 import static org.junit.Assert.assertThat;
 
-public class IntegrationTests extends TestCase {
+public class IntegrationTest extends TestCase {
 
     @BeforeClass
     public static void configure() {

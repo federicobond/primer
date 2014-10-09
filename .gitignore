@@ -1,12 +1,6 @@
 .idea/
 *.iml
-out/
-src-gen/
-bin/lang.jar
-src/main/java/ar/edu/itba/lang/Borrador.java
+target/
 .classpath
 .project
 *.class
-bin/ar/edu/itba/lang/Parser.cup
-bin/ar/edu/itba/lang/Scanner.flex
-bin/lang-runtime.jar
