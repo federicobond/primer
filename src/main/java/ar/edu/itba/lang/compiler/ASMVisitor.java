@@ -194,8 +194,6 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         mv.visitInsn(IREM);
 
         return null;
-
-
     }
 
     @Override

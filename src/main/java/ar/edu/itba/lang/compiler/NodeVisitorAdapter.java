@@ -139,7 +139,6 @@ public class NodeVisitorAdapter implements NodeVisitor<Node> {
         return node;
     }
 
-
     @Override
     public Node visitNotEqualNode(NotEqualNode node) {
         return new NotEqualNode(node.getFirstNode().accept(this),

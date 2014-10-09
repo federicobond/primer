@@ -83,6 +83,7 @@ string          = "\"" [^\"]* "\""
 "+"                 { return symbol("+", PLUS); }
 "-"                 { return symbol("-", MINUS); }
 "/"                 { return symbol("/", DIVIDE); }
+"%"                 { return symbol("%", MODULUS); }
 "("                 { return symbol("(", LEFT_PAREN); }
 ")"                 { return symbol(")", RIGHT_PAREN); }
 {integer}           { return symbol(Integer.valueOf(yytext()).toString(), INT, Integer.valueOf(yytext())); }
@@ -114,4 +115,3 @@ string          = "\"" [^\"]* "\""
 "=="                { return symbol("==", EQUAL); }
 "!="                { return symbol("!=", NOT_EQUAL); }
 {identifier}        { return symbol(yytext(), IDENTIFIER, yytext()); }
-"%"                 { return symbol("%", MODULUS); }

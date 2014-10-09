@@ -23,16 +23,14 @@ public interface NodeVisitor<T> {
     public T visitLessThanNode(LessThanNode node);
     public T visitLessEqualThanNode(LessEqualThanNode node);
     public T visitLiteralNode(LiteralNode node);
+    public T visitModulusNode(ModulusNode modulusNode);
     public T visitMultiplyNode(MultiplyNode node);
     public T visitNegateNode(NegateNode node);
     public T visitNilNode(NilNode node);
+    public T visitNotEqualNode(NotEqualNode notEqualNode);
     public T visitOrNode(OrNode node);
     public T visitReturnNode(ReturnNode node);
     public T visitSubstractNode(SubstractNode node);
     public T visitTrueNode(TrueNode node);
     public T visitWhileNode(WhileNode node);
-
-    public T visitNotEqualNode(NotEqualNode notEqualNode);
-
-    public T visitModulusNode(ModulusNode modulusNode);
 }
