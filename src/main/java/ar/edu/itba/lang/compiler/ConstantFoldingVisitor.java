@@ -35,11 +35,11 @@ public class ConstantFoldingVisitor extends NodeVisitorAdapter {
         boolean secondFalse = secondNode.getNodeType().isAlwaysFalse();
 
         if (firstFalse || secondFalse) {
-            return new FalseNode();
+            return FalseNode.INSTANCE;
         }
 
         if (firstTrue && secondTrue) {
-            return new TrueNode();
+            return TrueNode.INSTANCE;
         }
 
         if (firstTrue) {
@@ -64,11 +64,11 @@ public class ConstantFoldingVisitor extends NodeVisitorAdapter {
         boolean secondFalse = secondNode.getNodeType().isAlwaysFalse();
 
         if (firstFalse && secondFalse) {
-            return new FalseNode();
+            return FalseNode.INSTANCE;
         }
 
         if (firstTrue || secondTrue) {
-            return new TrueNode();
+            return TrueNode.INSTANCE;
         }
 
         if (firstFalse) {

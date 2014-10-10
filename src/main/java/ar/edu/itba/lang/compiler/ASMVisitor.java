@@ -3,8 +3,9 @@ package ar.edu.itba.lang.compiler;
 import ar.edu.itba.lang.Kernel;
 import ar.edu.itba.lang.ast.*;
 import org.objectweb.asm.*;
+import org.objectweb.asm.commons.GeneratorAdapter;
+import org.objectweb.asm.commons.Method;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -13,8 +14,9 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     private static final String MAIN_CLASS = "Main";
 
-    private ClassVisitor cw;
-    private MethodVisitor mv;
+    private ClassVisitor cv;
+    private GeneratorAdapter mv;
+
     private Map<String, Symbol> functions = new HashMap<String, Symbol>();
     private Map<String, Integer> variables = new HashMap<String, Integer>();
     private int variableMaxIndex = 0;
@@ -22,44 +24,42 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
     private Stack<Label> breakLabels = new Stack<Label>();
     private Stack<Label> continueLabels = new Stack<Label>();
 
-    public ASMVisitor(Node root, ClassVisitor cw) {
-        this.cw = cw;
+    public ASMVisitor(Node root, ClassVisitor cv) {
+        this.cv = cv;
 
         initializeSymbols();
 
-        cw.visit(49,
+        cv.visit(V1_5,
                 ACC_PUBLIC + ACC_SUPER,
                 MAIN_CLASS,
                 null,
                 "java/lang/Object",
                 null);
 
-        cw.visitSource(MAIN_CLASS + ".java", null);
+        cv.visitSource(MAIN_CLASS + ".java", null);
 
         {
-            mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC,
-                    "main",
-                    "([Ljava/lang/String;)V",
-                    null,
-                    null);
+            Method m = Method.getMethod("void main (String[])");
+            mv = new GeneratorAdapter(ACC_PUBLIC + ACC_STATIC, m, null, null, cv);
+
             root.accept(this);
             mv.visitInsn(RETURN);
             mv.visitMaxs(0, 0); /* computed automatically */
             mv.visitEnd();
         }
-        cw.visitEnd();
+        cv.visitEnd();
     }
 
     private void initializeSymbols() {
-        Method[] methods = Kernel.class.getMethods();
-        for (Method m : methods) {
+        java.lang.reflect.Method[] methods = Kernel.class.getMethods();
+        for (java.lang.reflect.Method m : methods) {
             functions.put(m.getName(), new Symbol(Type.getType(m), Type.getInternalName(Kernel.class)));
         }
     }
 
     public byte[] getByteArray() {
-        if (cw instanceof ClassWriter) {
-            return ((ClassWriter)cw).toByteArray();
+        if (cv instanceof ClassWriter) {
+            return ((ClassWriter) cv).toByteArray();
         }
         throw new IllegalArgumentException();
     }
@@ -202,10 +202,36 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
         return null;
     }
+    @Override
+    public Void visitNotEqualNode(NotEqualNode node) {
+        Label l1 = new Label();
+        Label l2 = new Label();
+
+        node.getFirstNode().accept(this);
+        node.getSecondNode().accept(this);
+        mv.visitJumpInsn(IFEQ, l1);
+        mv.visitInsn(ICONST_1);
+        mv.visitJumpInsn(GOTO, l2);
+        mv.visitLabel(l1);
+        mv.visitInsn(ICONST_0);
+        mv.visitLabel(l2);
+
+        return null;
+    }
+
+    //TODO SOLO FUNCIONA CON ENTEROS POR AHORA
+    @Override
+    public Void visitModulusNode(ModulusNode node) {
+        node.getFirstNode().accept(this);
+        node.getSecondNode().accept(this);
+        mv.visitInsn(IREM);
+
+        return null;
+    }
 
     @Override
     public Void visitFunctionNode(FunctionNode node) {
-        MethodVisitor old = mv;
+        GeneratorAdapter old = mv;
 
         Type[] args = new Type[node.getArgs().getList().size()];
         for (int i = 0; i < args.length; i++) {
@@ -220,7 +246,8 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         }
         functions.put(name, new Symbol(type, MAIN_CLASS));
 
-        mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, name, type.getDescriptor(), null, null);
+        Method m = new Method(name, type.getDescriptor());
+        mv = new GeneratorAdapter(ACC_PUBLIC + ACC_STATIC, m, null, null, cv);
 
         Node body = node.getBody();
         Node lastInstruction = body.childNodes().get(body.childNodes().size() - 1);
@@ -241,6 +268,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         return null;
     }
 
+
     @Override
     public Void visitFunctionArgsNode(FunctionArgsNode node) {
         return null;
@@ -249,6 +277,23 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
     @Override
     public Void visitFalseNode(FalseNode node) {
         mv.visitInsn(ICONST_0);
+
+        return null;
+    }
+
+    @Override
+    public Void visitGreaterEqualThanNode(GreaterEqualThanNode node) {
+        Label l1 = new Label();
+        Label l2 = new Label();
+
+        node.getFirstNode().accept(this);
+        node.getSecondNode().accept(this);
+        mv.visitJumpInsn(IF_ICMPLT, l1);
+        mv.visitInsn(ICONST_1);
+        mv.visitJumpInsn(GOTO, l2);
+        mv.visitLabel(l1);
+        mv.visitInsn(ICONST_0);
+        mv.visitLabel(l2);
 
         return null;
     }
@@ -315,6 +360,24 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         return null;
     }
 
+
+    @Override
+    public Void visitLessEqualThanNode(LessEqualThanNode node) {
+        Label l1 = new Label();
+        Label l2 = new Label();
+
+        node.getFirstNode().accept(this);
+        node.getSecondNode().accept(this);
+        mv.visitJumpInsn(IF_ICMPGT, l1);
+        mv.visitInsn(ICONST_1);
+        mv.visitJumpInsn(GOTO, l2);
+        mv.visitLabel(l1);
+        mv.visitInsn(ICONST_0);
+        mv.visitLabel(l2);
+
+        return null;
+    }
+
     @Override
     public Void visitLiteralNode(LiteralNode node) {
         Object value = node.getValue();
@@ -366,6 +429,14 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
             value.accept(this);
         }
         mv.visitInsn(ARETURN);
+
+        return null;
+    }
+
+    @Override
+    public Void visitStringLiteralNode(StringLiteralNode node) {
+        String value = node.getValue();
+        mv.visitLdcInsn(value);
 
         return null;
     }

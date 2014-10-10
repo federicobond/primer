@@ -5,6 +5,11 @@ import ar.edu.itba.lang.compiler.NodeVisitor;
 import java.util.List;
 
 public class ContinueNode extends Node {
+
+    public static final ContinueNode INSTANCE = new ContinueNode();
+
+    private ContinueNode() { }
+
     @Override
     public <T> T accept(NodeVisitor<T> visitor) {
         return visitor.visitContinueNode(this);

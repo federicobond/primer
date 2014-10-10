@@ -13,10 +13,10 @@ parser code {:
   }
 :};
 
-terminal PLUS, TIMES, MINUS, UMINUS, DIVIDE;
+terminal PLUS, TIMES, MINUS, UMINUS, DIVIDE, MODULUS;
 terminal LEFT_PAREN, RIGHT_PAREN;
 terminal IF, ELSE, WHILE, OPEN_BRACKET, CLOSE_BRACKET;
-terminal LESS_THAN, EQUAL, GREATER_THAN;
+terminal LESS_THAN, LESS_EQUAL_THAN, EQUAL, NOT_EQUAL, GREATER_THAN, GREATER_EQUAL_THAN;
 terminal COMMA;
 terminal TRUE, FALSE;
 terminal AND, OR;
@@ -29,9 +29,9 @@ terminal ASSIGN;
 
 terminal T;
 terminal Integer INT;
-terminal Double REAL;
 terminal String STRING;
 terminal String IDENTIFIER;
+
 
 non terminal ListNode StatementList;
 non terminal Node Statement;
@@ -52,8 +52,8 @@ non terminal Node Variable;
 precedence left Variable, Call;
 precedence left RETURN;
 precedence left AND, OR;
-precedence left LESS_THAN, GREATER_THAN, EQUAL;
-precedence left PLUS, MINUS;
+precedence left LESS_THAN, LESS_EQUAL_THAN, GREATER_THAN, EQUAL, NOT_EQUAL, GREATER_EQUAL_THAN;
+precedence left PLUS, MINUS, MODULUS;
 precedence left TIMES, DIVIDE;
 precedence left UMINUS;
 
@@ -67,8 +67,8 @@ Statement     ::= If:i                                  {: RESULT = i; :}
                 | Call:c                                {: RESULT = c; :}
                 | Function:f                            {: RESULT = f; :}
                 | Return:r                              {: RESULT = r; :}
-                | CONTINUE                              {: RESULT = new ContinueNode(); :}
-                | BREAK                                 {: RESULT = new BreakNode(); :}
+                | CONTINUE                              {: RESULT = ContinueNode.INSTANCE; :}
+                | BREAK                                 {: RESULT = BreakNode.INSTANCE; :}
                 | Declaration:d                         {: RESULT = d; :}
                 | Assignment:a                          {: RESULT = a; :}
                 ;
@@ -80,14 +80,18 @@ Expression    ::= Expression:e1 PLUS  Expression:e2     {: RESULT = new AddNode(
                 | Expression:e1 AND Expression:e2       {: RESULT = new AndNode(e1, e2); :}
                 | Expression:e1 OR Expression:e2        {: RESULT = new OrNode(e1, e2); :}
                 | Expression:e1 LESS_THAN Expression:e2       {: RESULT = new LessThanNode(e1, e2); :}
+                | Expression:e1 LESS_EQUAL_THAN Expression:e2       {: RESULT = new LessEqualThanNode(e1, e2); :}
                 | Expression:e1 GREATER_THAN Expression:e2        {: RESULT = new GreaterThanNode(e1, e2); :}
+                | Expression:e1 GREATER_EQUAL_THAN Expression:e2        {: RESULT = new GreaterEqualThanNode(e1, e2); :}
                 | Expression:e1 EQUAL Expression:e2        {: RESULT = new EqualNode(e1, e2); :}
+                | Expression:e1 NOT_EQUAL Expression:e2        {: RESULT = new NotEqualNode(e1, e2); :}
                 | MINUS Expression:e                    {: RESULT = new NegateNode(e); :}
                   %prec UMINUS
                 | LEFT_PAREN Expression:e RIGHT_PAREN   {: RESULT = e; :}
                 | Call:c                                {: RESULT = c; :}
                 | Variable:v                            {: RESULT = v; :}
                 | Literal:l                             {: RESULT = l; :}
+                | Expression:e1 MODULUS Expression:e2     {: RESULT = new ModulusNode(e1, e2); :}
                 ;
 
 If            ::= IF Expression:condition OPEN_BRACKET StatementList:thenBody CLOSE_BRACKET
@@ -109,11 +113,10 @@ Args          ::= Expression:e COMMA Args:l             {: RESULT = l; l.add(e);
                 ;
 
 Literal       ::= INT:n                                 {: RESULT = new LiteralNode(n); :}
-                | REAL:d                                {: RESULT = new LiteralNode(d); :}
-                | STRING:s                              {: RESULT = new LiteralNode(s); :}
-                | TRUE                                  {: RESULT = new TrueNode(); :}
-                | FALSE                                 {: RESULT = new FalseNode(); :}
-                | NIL                                   {: RESULT = new NilNode(); :}
+                | STRING:s                              {: RESULT = new StringLiteralNode(s); :}
+                | TRUE                                  {: RESULT = TrueNode.INSTANCE; :}
+                | FALSE                                 {: RESULT = FalseNode.INSTANCE; :}
+                | NIL                                   {: RESULT = NilNode.INSTANCE; :}
                 ;
 
 Function     ::= DEF IDENTIFIER:name LEFT_PAREN FunctionArgs:args RIGHT_PAREN OPEN_BRACKET StatementList:body CLOSE_BRACKET

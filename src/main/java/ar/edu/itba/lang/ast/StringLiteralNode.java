@@ -4,15 +4,17 @@ import ar.edu.itba.lang.compiler.NodeVisitor;
 
 import java.util.List;
 
-public class BreakNode extends Node {
+public class StringLiteralNode extends Node {
 
-    public static final BreakNode INSTANCE = new BreakNode();
+    private final String value;
 
-    private BreakNode() { }
+    public StringLiteralNode(String value) {
+        this.value = value;
+    }
 
     @Override
     public <T> T accept(NodeVisitor<T> visitor) {
-        return visitor.visitBreakNode(this);
+        return visitor.visitStringLiteralNode(this);
     }
 
     @Override
@@ -22,6 +24,10 @@ public class BreakNode extends Node {
 
     @Override
     public NodeType getNodeType() {
-        return NodeType.BREAKNODE;
+        return NodeType.STRINGLITERALNODE;
+    }
+
+    public String getValue() {
+        return value;
     }
 }

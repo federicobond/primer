@@ -6,13 +6,13 @@ import java.util.List;
 
 public class LiteralNode extends Node {
 
-    private final Object value;
+    private final Integer value;
 
-    public LiteralNode(Object value) {
+    public LiteralNode(Integer value) {
         this.value = value;
     }
 
-    public Object getValue() {
+    public Integer getValue() {
         return value;
     }
 

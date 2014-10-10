@@ -83,10 +83,10 @@ string          = "\"" [^\"]* "\""
 "+"                 { return symbol("+", PLUS); }
 "-"                 { return symbol("-", MINUS); }
 "/"                 { return symbol("/", DIVIDE); }
+"%"                 { return symbol("%", MODULUS); }
 "("                 { return symbol("(", LEFT_PAREN); }
 ")"                 { return symbol(")", RIGHT_PAREN); }
 {integer}           { return symbol(Integer.valueOf(yytext()).toString(), INT, Integer.valueOf(yytext())); }
-{real}              { return symbol(Double.valueOf(yytext()).toString(), REAL, Double.valueOf(yytext())); }
 {comment}           { /* Ignore comment. */ }
 {whitespace}        { /* Ignore whitespace. */ }
 {line_terminator}   { return symbol("t", T); }
@@ -108,8 +108,11 @@ string          = "\"" [^\"]* "\""
 "&&"                { return symbol("&&", AND); }
 "||"                { return symbol("||", OR); }
 "<"                 { return symbol("<", LESS_THAN); }
+"<="                { return symbol("<=", LESS_EQUAL_THAN); }
 ">"                 { return symbol(">", GREATER_THAN); }
+">="                { return symbol(">=", GREATER_EQUAL_THAN); }
 "=="                { return symbol("==", EQUAL); }
+"!="                { return symbol("!=", NOT_EQUAL); }
 "var"               { return symbol("var", VAR); }
 "="                 { return symbol("=", ASSIGN); }
 {identifier}        { return symbol(yytext(), IDENTIFIER, yytext()); }

@@ -10,7 +10,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.text.IsEmptyString.isEmptyString;
 import static org.junit.Assert.assertThat;
 
-public class IntegrationTests extends TestCase {
+public class IntegrationTest extends TestCase {
 
     @BeforeClass
     public static void configure() {
@@ -30,7 +30,7 @@ public class IntegrationTests extends TestCase {
             fail(e.getMessage());
         }
 
-        String output = out.toString();
+        String output = out.toString().replace(System.lineSeparator(), "\n");
         System.setOut(stdout);
 
         return output;
@@ -76,13 +76,38 @@ public class IntegrationTests extends TestCase {
         assertThat(output, equalTo("hello\n"));
     }
 
+    public void testIfLessEqualsThanExpression() {
+        String output = run("if 2 <= 2 { println(\"hello\") }");
+        assertThat(output, equalTo("hello\n"));
+    }
+
     public void testIfGreaterThanExpression() {
         String output = run("if 2 > 1 { println(\"hello\") }");
         assertThat(output, equalTo("hello\n"));
     }
 
+    public void testIfGreaterEqualThanExpression() {
+        String output = run("if 2 >= 2 { println(\"hello\") }");
+        assertThat(output, equalTo("hello\n"));
+    }
+
+    public void testModulus() {
+        String output = run("if (4 % 2) == 0 { println(\"hello\") }");
+        assertThat(output, equalTo("hello\n"));
+    }
+
+    public void testModulus2() {
+        String output = run("if (3 % 2) == 1 { println(\"hello\") }");
+        assertThat(output, equalTo("hello\n"));
+    }
+
     public void testIfEqualExpression() {
         String output = run("if 1 == 1 { println(\"hello\") }");
+        assertThat(output, equalTo("hello\n"));
+    }
+
+    public void testIfNotEqualExpression() {
+        String output = run("if 1 != 2 { println(\"hello\") }");
         assertThat(output, equalTo("hello\n"));
     }
 

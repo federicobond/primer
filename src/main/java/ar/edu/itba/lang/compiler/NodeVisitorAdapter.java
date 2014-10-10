@@ -86,6 +86,7 @@ public class NodeVisitorAdapter implements NodeVisitor<Node> {
                 node.getBody().accept(this));
     }
 
+
     @Override
     public Node visitFunctionArgsNode(FunctionArgsNode node) {
         return node;
@@ -97,6 +98,12 @@ public class NodeVisitorAdapter implements NodeVisitor<Node> {
                                    node.getSecondNode().accept(this));
     }
 
+    @Override
+    public Node visitGreaterEqualThanNode(GreaterEqualThanNode node) {
+        return new GreaterEqualThanNode(node.getFirstNode().accept(this),
+                node.getSecondNode().accept(this));
+
+    }
     @Override
     public Node visitIfNode(IfNode node) {
         return new IfNode(node.getCondition().accept(this),
@@ -115,11 +122,16 @@ public class NodeVisitorAdapter implements NodeVisitor<Node> {
         return new LessThanNode(node.getFirstNode().accept(this),
                                 node.getSecondNode().accept(this));
     }
-
+    @Override
+    public Node visitLessEqualThanNode(LessEqualThanNode node) {
+        return new LessEqualThanNode(node.getFirstNode().accept(this),
+                node.getSecondNode().accept(this));
+    }
     @Override
     public Node visitLiteralNode(LiteralNode node) {
         return node;
     }
+
 
     @Override
     public Node visitMultiplyNode(MultiplyNode node) {
@@ -138,6 +150,18 @@ public class NodeVisitorAdapter implements NodeVisitor<Node> {
     }
 
     @Override
+    public Node visitNotEqualNode(NotEqualNode node) {
+        return new NotEqualNode(node.getFirstNode().accept(this),
+                node.getSecondNode().accept(this));
+    }
+
+    @Override
+    public Node visitModulusNode(ModulusNode node) {
+        return new ModulusNode(node.getFirstNode().accept(this),
+                node.getSecondNode().accept(this));
+    }
+
+    @Override
     public Node visitOrNode(OrNode node) {
         return new OrNode(node.getFirstNode().accept(this),
                           node.getSecondNode().accept(this));
@@ -146,6 +170,11 @@ public class NodeVisitorAdapter implements NodeVisitor<Node> {
     @Override
     public Node visitReturnNode(ReturnNode node) {
         return new ReturnNode(node.getValue().accept(this));
+    }
+
+    @Override
+    public Node visitStringLiteralNode(StringLiteralNode node) {
+        return node;
     }
 
     @Override
@@ -169,4 +198,5 @@ public class NodeVisitorAdapter implements NodeVisitor<Node> {
         return new WhileNode(node.getConditionNode().accept(this),
                              node.getBodyNode().accept(this));
     }
+
 }

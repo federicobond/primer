@@ -6,6 +6,10 @@ import java.util.List;
 
 public class TrueNode extends Node {
 
+    public static final TrueNode INSTANCE = new TrueNode();
+
+    private TrueNode() { }
+
     @Override
     public <T> T accept(NodeVisitor<T> visitor) {
         return visitor.visitTrueNode(this);

@@ -1,4 +1,6 @@
 .idea/
 *.iml
-out/
-src-gen/
+target/
+.classpath
+.project
+*.class
