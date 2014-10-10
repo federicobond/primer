@@ -95,7 +95,7 @@ public class Script {
 
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
-        new ASMVisitor(root, new TraceClassVisitor(null, new Textifier(), pw));
+        new ASMVisitor(root, new TraceClassVisitor(null, new Textifier(), pw), fileName);
 
         return sw.toString();
     }
@@ -115,7 +115,7 @@ public class Script {
         Node root = parse();
 
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
-        return new ASMVisitor(root, cw).getByteArray();
+        return new ASMVisitor(root, cw, fileName).getByteArray();
     }
 
     private Class<?> loadClass(byte[] classBytes) throws ScriptException {

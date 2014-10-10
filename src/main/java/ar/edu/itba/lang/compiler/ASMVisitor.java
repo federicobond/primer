@@ -14,6 +14,8 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     private static final String MAIN_CLASS = "Main";
 
+    private final String fileName;
+
     private ClassVisitor cv;
     private GeneratorAdapter mv;
 
@@ -22,11 +24,19 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
     private Stack<Label> breakLabels = new Stack<Label>();
     private Stack<Label> continueLabels = new Stack<Label>();
 
-    public ASMVisitor(Node root, ClassVisitor cv) {
+    public ASMVisitor(Node root, ClassVisitor cv, String fileName) {
         this.cv = cv;
+        this.fileName = fileName;
 
         initializeSymbols();
+        visitRootNode(root);
+    }
 
+    public ASMVisitor(Node root, ClassVisitor cv) {
+        this(root, cv, "unknown");
+    }
+
+    private void visitRootNode(Node root) {
         cv.visit(V1_5,
                 ACC_PUBLIC + ACC_SUPER,
                 MAIN_CLASS,
@@ -34,7 +44,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
                 "java/lang/Object",
                 null);
 
-        cv.visitSource(MAIN_CLASS + ".java", null);
+        cv.visitSource(fileName, null);
 
         {
             Method m = Method.getMethod("void main (String[])");
@@ -45,6 +55,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
             mv.visitMaxs(0, 0); /* computed automatically */
             mv.visitEnd();
         }
+
         cv.visitEnd();
     }
 
@@ -226,7 +237,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
             mv.visitInsn(ARETURN);
         }
 
-        mv.visitMaxs(2, 1);
+        mv.visitMaxs(0, 0);
 
         mv.visitEnd();
 
