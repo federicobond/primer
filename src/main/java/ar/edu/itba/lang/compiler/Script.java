@@ -42,7 +42,7 @@ public class Script {
         return new Script(code.getBytes("UTF-8"), "unnamed");
     }
 
-    public List<String> tokenList() throws ScriptException {
+    public List<String> tokenList() {
         List<String> list = new ArrayList<String>();
 
         Lexer lexer = getLexer(new ComplexSymbolFactory());
@@ -60,12 +60,6 @@ public class Script {
         return list;
     }
 
-    public static class ScriptException extends RuntimeException {
-        public ScriptException(String message) {
-            super(message);
-        }
-    }
-
     public static class ByteClassLoader extends URLClassLoader {
         private final byte[] classBytes;
 
@@ -80,7 +74,7 @@ public class Script {
         }
     }
 
-    public Node parse() throws ScriptException {
+    public Node parse() {
         Node root = getRootNode(getParser());
 
         if (enableOptimizations) {
@@ -90,7 +84,7 @@ public class Script {
         return root;
     }
 
-    public String trace() throws ScriptException {
+    public String trace() {
         Node root = parse();
 
         StringWriter sw = new StringWriter();
@@ -100,7 +94,7 @@ public class Script {
         return sw.toString();
     }
 
-    public void exec(String[] argv) throws ScriptException {
+    public void exec(String[] argv) {
         Class<?> klass = loadClass(compile());
 
         try {
@@ -111,14 +105,14 @@ public class Script {
                 | IllegalAccessException ignored) { }
     }
 
-    public byte[] compile() throws ScriptException {
+    public byte[] compile() {
         Node root = parse();
 
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
         return new ASMVisitor(root, cw).getByteArray();
     }
 
-    private Class<?> loadClass(byte[] classBytes) throws ScriptException {
+    private Class<?> loadClass(byte[] classBytes) {
         URLClassLoader cl = new ByteClassLoader(new URL[0], ClassLoader.getSystemClassLoader(), classBytes);
 
         Class<?> klass = null;
@@ -152,7 +146,7 @@ public class Script {
         return lexer;
     }
 
-    private Node getRootNode(Parser parser) throws ScriptException {
+    private Node getRootNode(Parser parser) {
         Node root;
         try {
             root = (Node)parser.parse().value;

@@ -106,7 +106,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
     @Override
     public Void visitBreakNode(BreakNode node) {
         if (breakLabels.isEmpty()) {
-            throw new Script.ScriptException("nowhere to break to");
+            throw new ScriptException("nowhere to break to");
         }
         mv.visitJumpInsn(GOTO, breakLabels.peek());
 
@@ -131,7 +131,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
     @Override
     public Void visitContinueNode(ContinueNode node) {
         if (continueLabels.isEmpty()) {
-            throw new Script.ScriptException("nowhere to continue to");
+            throw new ScriptException("nowhere to continue to");
         }
         mv.visitJumpInsn(GOTO, continueLabels.peek());
         return null;
@@ -139,7 +139,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     private Symbol getCalledMethod(CallNode node) {
         if (!symbols.containsKey(node.getName())) {
-            throw new Script.ScriptException("undefined method " + node.getName());
+            throw new ScriptException("undefined method " + node.getName());
         }
         return symbols.get(node.getName());
     }
@@ -209,7 +209,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         Type type = Type.getMethodType(Type.getType(Object.class), args);
 
         if (symbols.containsKey(name)) {
-            throw new Script.ScriptException("symbol " + name + " already defined");
+            throw new ScriptException("symbol " + name + " already defined");
         }
         symbols.put(name, new Symbol(type, MAIN_CLASS));
 

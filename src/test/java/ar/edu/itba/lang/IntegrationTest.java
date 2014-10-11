@@ -1,6 +1,7 @@
 package ar.edu.itba.lang;
 
 import ar.edu.itba.lang.compiler.Script;
+import ar.edu.itba.lang.compiler.ScriptException;
 import junit.framework.TestCase;
 import org.junit.BeforeClass;
 
@@ -26,7 +27,7 @@ public class IntegrationTest extends TestCase {
 
         try {
             Script.fromString(code).exec(new String[0]);
-        } catch (Script.ScriptException | IOException e) {
+        } catch (ScriptException | IOException e) {
             fail(e.getMessage());
         }
 
