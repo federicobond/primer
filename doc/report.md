@@ -1,9 +1,9 @@
-lang
-====
+Primer
+======
 
 ## Introduction
 
-This document describes the design of the lang language. lang is an imperative
+This document describes the design of the Primer language. Primer is an imperative
 language for the [Java Virtual Machine][jvm] (from now on, the JVM). It has a
 clean syntax inspired by languages like [Scala][scala] and [Kotlin][kotlin].
 

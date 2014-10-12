@@ -1,0 +1,124 @@
+package ar.edu.itba.primer;
+
+import java_cup.runtime.ComplexSymbolFactory;
+import java_cup.runtime.Symbol;
+import ar.edu.itba.primer.ast.*;
+
+parser code {:
+  Lexer lexer;
+
+  public Parser(Lexer lex, ComplexSymbolFactory sf) {
+    super(lex,sf);
+    lexer = lex;
+  }
+:};
+
+terminal PLUS, TIMES, MINUS, UMINUS, DIVIDE;
+terminal LEFT_PAREN, RIGHT_PAREN;
+terminal IF, ELSE, WHILE, OPEN_BRACKET, CLOSE_BRACKET;
+terminal LESS_THAN, LESS_EQUAL_THAN, EQUAL, NOT_EQUAL, GREATER_THAN, GREATER_EQUAL_THAN;
+terminal COMMA;
+terminal TRUE, FALSE;
+terminal AND, OR;
+terminal DEF;
+terminal RETURN;
+terminal NIL;
+terminal BREAK, CONTINUE;
+terminal MODULUS;
+
+terminal T;
+terminal Integer INT;
+terminal String STRING;
+terminal String IDENTIFIER;
+
+
+non terminal ListNode StatementList;
+non terminal Node Statement;
+non terminal Node Expression;
+non terminal Node Literal;
+non terminal Node Call;
+non terminal ListNode Args;
+non terminal Node Function;
+non terminal FunctionArgsNode FunctionArgs;
+non terminal Node If;
+non terminal Node While;
+non terminal Node Return;
+
+precedence left RETURN;
+precedence left AND, OR;
+precedence left LESS_THAN, LESS_EQUAL_THAN, GREATER_THAN, EQUAL, NOT_EQUAL, GREATER_EQUAL_THAN;
+precedence left PLUS, MINUS, MODULUS;
+precedence left TIMES, DIVIDE;
+precedence left UMINUS;
+
+
+StatementList ::= Statement:s StatementList:xs          {: RESULT = xs; xs.add(s); :}
+                |                                       {: RESULT = new BlockNode(); :}
+                ;
+
+Statement     ::= If:i                                  {: RESULT = i; :}
+                | While:w                               {: RESULT = w; :}
+                | Call:c                                {: RESULT = c; :}
+                | Function:f                            {: RESULT = f; :}
+                | Return:r                              {: RESULT = r; :}
+                | CONTINUE                              {: RESULT = ContinueNode.INSTANCE; :}
+                | BREAK                                 {: RESULT = BreakNode.INSTANCE; :}
+                ;
+
+Expression    ::= Expression:e1 PLUS  Expression:e2     {: RESULT = new AddNode(e1, e2); :}
+                | Expression:e1 MINUS Expression:e2     {: RESULT = new SubstractNode(e1, e2); :}
+                | Expression:e1 TIMES Expression:e2     {: RESULT = new MultiplyNode(e1, e2); :}
+                | Expression:e1 DIVIDE Expression:e2    {: RESULT = new DivideNode(e1, e2); :}
+                | Expression:e1 AND Expression:e2       {: RESULT = new AndNode(e1, e2); :}
+                | Expression:e1 OR Expression:e2        {: RESULT = new OrNode(e1, e2); :}
+                | Expression:e1 LESS_THAN Expression:e2       {: RESULT = new LessThanNode(e1, e2); :}
+                | Expression:e1 LESS_EQUAL_THAN Expression:e2       {: RESULT = new LessEqualThanNode(e1, e2); :}
+                | Expression:e1 GREATER_THAN Expression:e2        {: RESULT = new GreaterThanNode(e1, e2); :}
+                | Expression:e1 GREATER_EQUAL_THAN Expression:e2        {: RESULT = new GreaterEqualThanNode(e1, e2); :}
+                | Expression:e1 EQUAL Expression:e2        {: RESULT = new EqualNode(e1, e2); :}
+                | Expression:e1 NOT_EQUAL Expression:e2        {: RESULT = new NotEqualNode(e1, e2); :}
+                | MINUS Expression:e                    {: RESULT = new NegateNode(e); :}
+                  %prec UMINUS
+                | LEFT_PAREN Expression:e RIGHT_PAREN   {: RESULT = e; :}
+                | Call:c                                {: RESULT = c; :}
+                | Literal:l                             {: RESULT = l; :}
+                | Expression:e1 MODULUS Expression:e2     {: RESULT = new ModulusNode(e1, e2); :}
+                ;
+
+If            ::= IF Expression:condition OPEN_BRACKET StatementList:thenBody CLOSE_BRACKET
+                    {: RESULT = new IfNode(condition, thenBody); :}
+                | IF Expression:condition OPEN_BRACKET StatementList:thenBody CLOSE_BRACKET
+                  ELSE OPEN_BRACKET StatementList:elseBody CLOSE_BRACKET
+                    {: RESULT = new IfElseNode(condition, thenBody, elseBody); :}
+                ;
+
+While         ::= WHILE Expression:condition OPEN_BRACKET StatementList:body CLOSE_BRACKET
+                    {: RESULT = new WhileNode(condition, body); :};
+
+Call          ::= IDENTIFIER:i LEFT_PAREN Args:a RIGHT_PAREN
+                    {: RESULT = new CallNode((String)i, a); :};
+
+Args          ::= Expression:e COMMA Args:l             {: RESULT = l; l.add(e); :}
+                | Expression:e                          {: RESULT = new ArgsNode(); RESULT.add(e); :}
+                |                                       {: RESULT = new ArgsNode(); :}
+                ;
+
+Literal       ::= INT:n                                 {: RESULT = new LiteralNode(n); :}
+                | STRING:s                              {: RESULT = new StringLiteralNode(s); :}
+                | TRUE                                  {: RESULT = TrueNode.INSTANCE; :}
+                | FALSE                                 {: RESULT = FalseNode.INSTANCE; :}
+                | NIL                                   {: RESULT = NilNode.INSTANCE; :}
+                ;
+
+Function     ::= DEF IDENTIFIER:name LEFT_PAREN FunctionArgs:args RIGHT_PAREN OPEN_BRACKET StatementList:body CLOSE_BRACKET
+                   {: RESULT = new FunctionNode((String)name, args, body); :};
+
+FunctionArgs ::= IDENTIFIER:i COMMA FunctionArgs:l      {: RESULT = l; l.add((String)i); :}
+               | IDENTIFIER:i                          {: RESULT = new FunctionArgsNode(); RESULT.add((String)i); :}
+               |                                       {: RESULT = new FunctionArgsNode(); :}
+               ;
+
+Return       ::= RETURN Expression:e                    {: RESULT = new ReturnNode(e); :}
+               | RETURN                                 {: RESULT = new ReturnNode(null); :}
+               ;
+
