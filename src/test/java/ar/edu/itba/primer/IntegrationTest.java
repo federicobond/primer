@@ -1,7 +1,7 @@
 package ar.edu.itba.primer;
 
-import ar.edu.itba.lang.compiler.Script;
-import ar.edu.itba.lang.compiler.ScriptException;
+import ar.edu.itba.primer.compiler.Script;
+import ar.edu.itba.primer.compiler.ScriptException;
 import junit.framework.TestCase;
 import org.junit.BeforeClass;
 

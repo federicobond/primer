@@ -1,4 +1,4 @@
-package ar.edu.itba.lang.compiler;
+package ar.edu.itba.primer.compiler;
 
 public class ScriptException extends RuntimeException {
 
