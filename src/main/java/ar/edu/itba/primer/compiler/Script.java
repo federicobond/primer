@@ -89,7 +89,7 @@ public class Script {
 
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
-        new ASMVisitor(new TraceClassVisitor(null, new Textifier(), pw)).start(root);
+        new ASMVisitor(new TraceClassVisitor(null, new Textifier(), pw), fileName).start(root);
 
         return sw.toString();
     }
@@ -109,7 +109,7 @@ public class Script {
         Node root = parse();
 
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
-        return new ASMVisitor(cw).start(root).getByteArray();
+        return new ASMVisitor(cw, fileName).start(root).getByteArray();
     }
 
     private Class<?> loadClass(byte[] classBytes) {
