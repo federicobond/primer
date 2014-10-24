@@ -6,10 +6,6 @@ import org.objectweb.asm.*;
 import org.objectweb.asm.commons.GeneratorAdapter;
 import org.objectweb.asm.commons.Method;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
-
 public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     private static final String MAIN_CLASS = "Main";
@@ -19,10 +15,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
     private ClassVisitor cv;
     private GeneratorAdapter mv;
 
-    private Map<String, Symbol> symbols = new HashMap<String, Symbol>();
-
-    private Stack<Label> breakLabels = new Stack<Label>();
-    private Stack<Label> continueLabels = new Stack<Label>();
+    private Context context = Context.rootContext();
 
     public ASMVisitor(ClassVisitor cv, String fileName) {
         this.cv = cv;
@@ -34,7 +27,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
     private void initializeSymbols() {
         java.lang.reflect.Method[] methods = Kernel.class.getMethods();
         for (java.lang.reflect.Method m : methods) {
-            symbols.put(m.getName(), new Symbol(Type.getType(m), Type.getInternalName(Kernel.class)));
+            context.set(m.getName(), Type.getType(m), Type.getInternalName(Kernel.class));
         }
     }
 
@@ -116,10 +109,10 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     @Override
     public Void visitBreakNode(BreakNode node) {
-        if (breakLabels.isEmpty()) {
+        if (!context.isLoop()) {
             throw new ScriptException("nowhere to break to");
         }
-        mv.visitJumpInsn(GOTO, breakLabels.peek());
+        mv.visitJumpInsn(GOTO, context.breakLabel());
 
         return null;
     }
@@ -141,18 +134,18 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     @Override
     public Void visitContinueNode(ContinueNode node) {
-        if (continueLabels.isEmpty()) {
+        if (!context.isLoop()) {
             throw new ScriptException("nowhere to continue to");
         }
-        mv.visitJumpInsn(GOTO, continueLabels.peek());
+        mv.visitJumpInsn(GOTO, context.continueLabel());
         return null;
     }
 
     private Symbol getCalledMethod(CallNode node) {
-        if (!symbols.containsKey(node.getName())) {
+        if (!context.isDefined(node.getName())) {
             throw new ScriptException("undefined method " + node.getName());
         }
-        return symbols.get(node.getName());
+        return context.get(node.getName());
     }
 
     @Override
@@ -197,7 +190,6 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         return null;
     }
 
-    //TODO SOLO FUNCIONA CON ENTEROS POR AHORA
     @Override
     public Void visitModulusNode(ModulusNode node) {
         node.getFirstNode().accept(this);
@@ -219,10 +211,10 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         String name = node.getName();
         Type type = Type.getMethodType(Type.getType(Object.class), args);
 
-        if (symbols.containsKey(name)) {
+        if (context.isDefined(name)) {
             throw new ScriptException("symbol " + name + " already defined");
         }
-        symbols.put(name, new Symbol(type, MAIN_CLASS));
+        context.set(name, type, MAIN_CLASS);
 
         Method m = new Method(name, type.getDescriptor());
         mv = new GeneratorAdapter(ACC_PUBLIC + ACC_STATIC, m, null, null, cv);
@@ -230,7 +222,9 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         Node body = node.getBody();
         Node lastInstruction = body.childNodes().get(body.childNodes().size() - 1);
 
+        context = Context.childOf(context);
         body.accept(this);
+        context = context.parentContext();
 
         if (!(lastInstruction instanceof ReturnNode)) {
             mv.visitInsn(ACONST_NULL);
@@ -440,8 +434,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         Label conditionLabel = new Label();
         Label endLabel = new Label();
 
-        continueLabels.push(conditionLabel);
-        breakLabels.push(endLabel);
+        context.pushLoop(conditionLabel, endLabel);
 
         mv.visitLabel(conditionLabel);
         node.getConditionNode().accept(this);
@@ -450,28 +443,8 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         mv.visitJumpInsn(GOTO, conditionLabel);
         mv.visitLabel(endLabel);
 
-        continueLabels.pop();
-        breakLabels.pop();
+        context.popLoop();
 
         return null;
-    }
-
-    private static class Symbol {
-
-        private final Type type;
-        private final String container;
-
-        Symbol(Type type, String container) {
-            this.type = type;
-            this.container = container;
-        }
-
-        public Type getType() {
-            return type;
-        }
-
-        public String getContainer() {
-            return container;
-        }
     }
 }
