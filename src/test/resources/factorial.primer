@@ -1,0 +1,10 @@
+var n = 5
+var r = 1
+
+while (n > 1) {
+  r = r * n
+  n = n - 1
+}
+
+print("Factorial: ")
+println(r)
