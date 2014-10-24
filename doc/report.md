@@ -1,9 +1,9 @@
-lang
-====
+Primer
+======
 
 ## Introduction
 
-This document describes the design of the lang language. lang is an imperative
+This document describes the design of the Primer language. Primer is an imperative
 language for the [Java Virtual Machine][jvm] (from now on, the JVM). It has a
 clean syntax inspired by languages like [Scala][scala] and [Kotlin][kotlin].
 
@@ -22,14 +22,14 @@ obsolete code examples.
 
 The other main obstacle was coming up with a suitable workflow for adding new
 language features. Adding integration tests early on made it possible to work
-on the codebase with confidet that we would not break any previous
+on the codebase with confidence that we would not break any previous
 functionality.
 
 ## Preliminary research
 
 After some research we found out that the [Jasmin][jasmin] library suggested in
 class was not the best choice for implementing the language, since it was no
-longer mantained and lacked useful abstraction for generating the required code
+longer maintained and lacked useful abstraction for generating the required code
 from the Abstract Syntax Tree.
 
 ## Supporting libraries
@@ -80,7 +80,7 @@ We compared the code against equivalent Java and Scala implementations.
 
 ## Future extensions
 
-Throught the project we kept a `TODO.md` file with ideas for things we could
+Thorough the project we kept a `TODO.md` file with ideas for things we could
 add to the language. Some of them landed on the final release, but others
 demanded too much time and are listed below as future extensions.
 

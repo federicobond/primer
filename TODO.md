@@ -3,12 +3,11 @@ To Do
 =====
 
  * Implement variable assignment (Kevin)
- * Implement bin/lang compile myscript.lang
  * Finish Negate implementation (using NegateNode)
- * Implement `LESS_OR_EQUAL_THAN`, `GREATER_OR_EQUAL_THAN`, `NOT_EQUAL` (Fer)
- * Implement modulo operator `%`
- * Replace dummy implementation of method invocation
  * Make sure that Kernel methods are usable for basic input/output
+ * Use visitLocalVariable to declare local variables to debugger
+ * Test debugging compiled class
+ * Provide a way to do string comparison (either overloading operators or with a Kernel method)
 
 Nice to haves
 =============

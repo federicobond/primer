@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>ar.edu.itba.lang</groupId>
-    <artifactId>lang</artifactId>
+    <groupId>ar.edu.itba.primer</groupId>
+    <artifactId>primer</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>lang</name>
-    <description>lang is a simple language for the JVM.</description>
+    <name>Primer</name>
+    <description>Primer is a simple language for the JVM.</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -64,7 +64,7 @@
     </repositories>
 
     <build>
-        <finalName>lang</finalName>
+        <finalName>primer</finalName>
         <plugins>
             <plugin>
                 <groupId>de.jflex</groupId>
@@ -87,7 +87,7 @@
                         <configuration>
                             <target>
                                 <taskdef name="cup" classname="java_cup.anttask.CUPTask" classpath="repo/java-cup/java-cup/11b/java-cup-11b.jar"/>
-                                <cup srcfile="${basedir}/src/main/cup/ar/edu/itba/lang/Parser.cup" destdir="target/generated-sources/cup" symbols="Symbols" parser="Parser"/>
+                                <cup srcfile="${basedir}/src/main/cup/ar/edu/itba/primer/Parser.cup" destdir="target/generated-sources/cup" symbols="Symbols" parser="Parser"/>
                             </target>
                         </configuration>
                         <goals>
@@ -141,7 +141,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>ar.edu.itba.lang.Main</mainClass>
+                            <mainClass>ar.edu.itba.primer.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
