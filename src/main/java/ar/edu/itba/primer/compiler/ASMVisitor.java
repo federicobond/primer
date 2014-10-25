@@ -319,17 +319,28 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         Node lastInstruction = body.childNodes().get(body.childNodes().size() - 1);
 
         context = Context.childOf(context);
+
+        Label start = new Label();
+        Label end = new Label();
+
+        mv.visitLabel(start);
         body.accept(this);
-        context = context.parentContext();
+        mv.visitLabel(end);
 
         if (!(lastInstruction instanceof ReturnNode)) {
             mv.visitInsn(ACONST_NULL);
             mv.visitInsn(ARETURN);
         }
 
+        for (VariableSymbol var : context.localVariables()) {
+            mv.visitLocalVariable(var.getName(), Type.getDescriptor(Object.class), Type.getDescriptor(Object.class), start, end, var.getIndex());
+        }
+
         mv.visitMaxs(0, 0);
 
         mv.visitEnd();
+
+        context = context.parentContext();
 
         mv = old;
 
