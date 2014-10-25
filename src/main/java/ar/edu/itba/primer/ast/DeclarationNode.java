@@ -1,32 +1,32 @@
-package ar.edu.itba.lang.ast;
+package ar.edu.itba.primer.ast;
 
-import ar.edu.itba.lang.compiler.NodeVisitor;
+import ar.edu.itba.primer.compiler.NodeVisitor;
 
 import java.util.List;
 
-public class AssignmentNode extends Node {
+public class DeclarationNode extends Node {
 
-    private final String name;
     private final Node value;
+    private final String name;
 
-    public AssignmentNode(String name, Node value) {
+    public DeclarationNode(String name, Node value) {
         this.name = name;
         this.value = value;
     }
 
     @Override
     public <T> T accept(NodeVisitor<T> visitor) {
-        return visitor.visitAssignmentNode(this);
+        return visitor.visitDeclarationNode(this);
     }
 
     @Override
     public List<Node> childNodes() {
-        return Node.createList(value);
+        return createList(value);
     }
 
     @Override
     public NodeType getNodeType() {
-        return NodeType.ASSIGNMENTNODE;
+        return NodeType.DECLARATIONNODE;
     }
 
     public String getName() {

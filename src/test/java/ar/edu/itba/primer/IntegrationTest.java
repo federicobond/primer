@@ -131,4 +131,14 @@ public class IntegrationTest extends TestCase {
         String output = run("if 10 / 3 == 3 { println(\"hello\") }");
         assertThat(output, equalTo("hello\n"));
     }
+
+    public void testWhileBreak() {
+        String output = run("while true { println(\"hello\")\n break }");
+        assertThat(output, equalTo("hello\n"));
+    }
+
+    public void testAssignment() {
+        String output = run("var foo = \"hello\"\n println(foo)");
+        assertThat(output, equalTo("hello\n"));
+    }
 }

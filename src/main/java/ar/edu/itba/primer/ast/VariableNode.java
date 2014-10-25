@@ -1,6 +1,6 @@
-package ar.edu.itba.lang.ast;
+package ar.edu.itba.primer.ast;
 
-import ar.edu.itba.lang.compiler.NodeVisitor;
+import ar.edu.itba.primer.compiler.NodeVisitor;
 
 import java.util.List;
 
