@@ -3,16 +3,13 @@ package ar.edu.itba.primer.compiler;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.Type;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 public class Context {
 
     private final Context parentContext;
 
     private Map<String, Symbol> symbols = new HashMap<String, Symbol>();
-    private int variableIndex = 0;
 
     private Stack<Label> breakLabels = new Stack<Label>();
     private Stack<Label> continueLabels = new Stack<Label>();
@@ -50,10 +47,8 @@ public class Context {
         symbols.put(name, new FunctionSymbol(type, className));
     }
 
-    public int setVariable(String name) {
-        int index = variableIndex++;
-        symbols.put(name, new VariableSymbol(index));
-        return index;
+    public void setVariable(String name, int index) {
+        symbols.put(name, new VariableSymbol(name, index));
     }
 
     public FunctionSymbol getFunction(String name) {
@@ -78,6 +73,25 @@ public class Context {
             return true;
         }
         return parentContext.hasName(name);
+    }
+
+    public List<VariableSymbol> localVariables() {
+        List<VariableSymbol> list = new ArrayList<>();
+
+        for (Map.Entry<String, Symbol> e : symbols.entrySet()) {
+            if (e.getValue() instanceof VariableSymbol) {
+                list.add((VariableSymbol) e.getValue());
+            }
+        }
+
+        Collections.sort(list, new Comparator<VariableSymbol>() {
+            @Override
+            public int compare(VariableSymbol o1, VariableSymbol o2) {
+                return o1.getIndex() - o2.getIndex();
+            }
+        });
+
+        return list;
     }
 
     public boolean isLoop() {

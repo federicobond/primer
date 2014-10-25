@@ -1,5 +1,6 @@
 package ar.edu.itba.primer.compiler;
 
+import com.google.common.base.MoreObjects;
 import org.objectweb.asm.Type;
 
 public class FunctionSymbol extends Symbol {
@@ -18,5 +19,12 @@ public class FunctionSymbol extends Symbol {
 
     public String getContainer() {
         return container;
+    }
+
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("type", type)
+                .add("container", container)
+                .toString();
     }
 }

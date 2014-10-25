@@ -123,8 +123,8 @@ Function     ::= DEF IDENTIFIER:name LEFT_PAREN FunctionArgs:args RIGHT_PAREN OP
                    {: RESULT = new FunctionNode((String)name, args, body); :};
 
 FunctionArgs ::= IDENTIFIER:i COMMA FunctionArgs:l      {: RESULT = l; l.add((String)i); :}
-               | IDENTIFIER:i                          {: RESULT = new FunctionArgsNode(); RESULT.add((String)i); :}
-               |                                       {: RESULT = new FunctionArgsNode(); :}
+               | IDENTIFIER:i                           {: RESULT = new FunctionArgsNode(); RESULT.add((String)i); :}
+               |                                        {: RESULT = new FunctionArgsNode(); :}
                ;
 
 Return       ::= RETURN Expression:e                    {: RESULT = new ReturnNode(e); :}

@@ -4,14 +4,17 @@ import ar.edu.itba.primer.compiler.Script;
 import ar.edu.itba.primer.compiler.ScriptException;
 import junit.framework.TestCase;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import java.io.*;
 
+import static junit.framework.TestCase.fail;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.text.IsEmptyString.isEmptyString;
 import static org.junit.Assert.assertThat;
 
-public class IntegrationTest extends TestCase {
+public class IntegrationTest {
 
     @BeforeClass
     public static void configure() {
@@ -37,108 +40,159 @@ public class IntegrationTest extends TestCase {
         return output;
     }
 
-    public void testIfTrue() {
+    @Test
+    public void ifTrue() {
         String output = run("if true { println(\"hello\") }");
         assertThat(output, equalTo("hello\n"));
     }
 
-    public void testIfFalse() {
+    @Test
+    public void ifFalse() {
         String output = run("if false { println(\"hello\") }");
         assertThat(output, isEmptyString());
     }
 
-    public void testIfTrueElse() {
+    @Test
+    public void ifTrueElse() {
         String output = run("if true { println(\"hello\") } else { println(\"world\") }");
         assertThat(output, equalTo("hello\n"));
     }
 
-    public void testIfFalseElse() {
+    @Test
+    public void ifFalseElse() {
         String output = run("if false { println(\"hello\") } else { println(\"world\") }");
         assertThat(output, equalTo("world\n"));
     }
 
-    public void testWhileFalse() {
+    @Test
+    public void whileFalse() {
         String output = run("while false { println(\"hello\") }");
         assertThat(output, isEmptyString());
     }
 
-    public void testIfAndExpression() {
+    @Test
+    public void ifAndExpression() {
         String output = run("if true && true { println(\"hello\") }");
         assertThat(output, equalTo("hello\n"));
     }
 
-    public void testIfOrExpression() {
+    @Test
+    public void ifOrExpression() {
         String output = run("if true || false { println(\"hello\") }");
         assertThat(output, equalTo("hello\n"));
     }
 
-    public void testIfLessThanExpression() {
+    @Test
+    public void ifLessThanExpression() {
         String output = run("if 1 < 2 { println(\"hello\") }");
         assertThat(output, equalTo("hello\n"));
     }
 
-    public void testIfLessEqualsThanExpression() {
+    @Test
+    public void ifLessEqualsThanExpression() {
         String output = run("if 2 <= 2 { println(\"hello\") }");
         assertThat(output, equalTo("hello\n"));
     }
 
-    public void testIfGreaterThanExpression() {
+    @Test
+    public void ifGreaterThanExpression() {
         String output = run("if 2 > 1 { println(\"hello\") }");
         assertThat(output, equalTo("hello\n"));
     }
 
-    public void testIfGreaterEqualThanExpression() {
+    @Test
+    public void ifGreaterEqualThanExpression() {
         String output = run("if 2 >= 2 { println(\"hello\") }");
         assertThat(output, equalTo("hello\n"));
     }
 
-    public void testModulus() {
+    @Test
+    public void modulus() {
         String output = run("if (4 % 2) == 0 { println(\"hello\") }");
         assertThat(output, equalTo("hello\n"));
     }
 
-    public void testModulus2() {
+    @Test
+    public void modulus2() {
         String output = run("if (3 % 2) == 1 { println(\"hello\") }");
         assertThat(output, equalTo("hello\n"));
     }
 
-    public void testIfEqualExpression() {
+    @Test
+    public void ifEqualExpression() {
         String output = run("if 1 == 1 { println(\"hello\") }");
         assertThat(output, equalTo("hello\n"));
     }
 
-    public void testIfNotEqualExpression() {
+    @Test
+    public void ifNotEqualExpression() {
         String output = run("if 1 != 2 { println(\"hello\") }");
         assertThat(output, equalTo("hello\n"));
     }
 
-    public void testIfAddEqualExpression() {
+    @Test
+    public void ifAddEqualExpression() {
         String output = run("if 1 + 1 == 2 { println(\"hello\") }");
         assertThat(output, equalTo("hello\n"));
     }
 
-    public void testIfSubstractEqualExpression() {
+    @Test
+    public void ifSubstractEqualExpression() {
         String output = run("if 1 - 1 == 0 { println(\"hello\") }");
         assertThat(output, equalTo("hello\n"));
     }
 
-    public void testIfMultiplyEqualExpression() {
+    @Test
+    public void ifMultiplyEqualExpression() {
         String output = run("if 2 * 5 == 10 { println(\"hello\") }");
         assertThat(output, equalTo("hello\n"));
     }
 
-    public void testIfDivideEqualExpression() {
+    @Test
+    public void ifDivideEqualExpression() {
         String output = run("if 10 / 3 == 3 { println(\"hello\") }");
         assertThat(output, equalTo("hello\n"));
     }
 
-    public void testWhileBreak() {
+    @Test
+    public void whileBreak() {
         String output = run("while true { println(\"hello\")\n break }");
         assertThat(output, equalTo("hello\n"));
     }
 
-    public void testAssignment() {
+    @Test
+    public void assignment() {
         String output = run("var foo = \"hello\"\n println(foo)");
+        assertThat(output, equalTo("hello\n"));
+    }
+
+    @Test
+    public void simpleBoxVariable() {
+        String output = run("var foo = 42\n println(foo)");
+        assertThat(output, equalTo("42\n"));
+    }
+
+    @Test
+    public void boxVariable() {
+        String output = run("var foo = 21 + 21\n println(foo)");
+        assertThat(output, equalTo("42\n"));
+    }
+
+    @Test
+    public void unboxVariable() {
+        String output = run("var foo = 21\n var bar = foo + 21\n println(bar)");
+        assertThat(output, equalTo("42\n"));
+    }
+
+    @Test
+    public void ifEqualsIntegerVariable() {
+        String output = run("var foo = 42\n if foo == 42 { println(\"hello\") }");
+        assertThat(output, equalTo("hello\n"));
+    }
+
+    @Test
+    public void ifEqualsStringVariable() {
+        String output = run("var foo = \"foo\"\n if foo == \"foo\" { println(\"hello\") }");
         assertThat(output, equalTo("hello\n"));
     }
 }

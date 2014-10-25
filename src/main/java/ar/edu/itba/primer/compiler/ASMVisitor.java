@@ -57,8 +57,23 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
             Method m = Method.getMethod("void main (String[])");
             mv = new GeneratorAdapter(ACC_PUBLIC + ACC_STATIC, m, null, null, cv);
 
+            /* declare args parameter as local */
+            //mv.newLocal(Type.getType(Object.class));
+            context.setVariable("args", 0);
+
+            Label start = new Label();
+            mv.visitLabel(start);
+
             root.accept(this);
             mv.visitInsn(RETURN);
+
+            Label end = new Label();
+            mv.visitLabel(end);
+
+            for (VariableSymbol var : context.localVariables()) {
+                mv.visitLocalVariable(var.getName(), Type.getDescriptor(Object.class), Type.getDescriptor(Object.class), start, end, var.getIndex());
+            }
+
             mv.visitMaxs(0, 0); /* computed automatically */
             mv.visitEnd();
         }
@@ -67,26 +82,53 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     @Override
     public Void visitAddNode(AddNode node) {
-        node.getFirstNode().accept(this);
-        node.getSecondNode().accept(this);
+        visitIntegerOperands(node.getFirstNode(), node.getSecondNode());
         mv.visitInsn(IADD);
 
         return null;
     }
 
+    private void visitIntegerOperands(Node first, Node second) {
+        first.accept(this);
+        if (first.getNodeType().getType().equals(Type.getType(Object.class))) {
+            mv.unbox(Type.INT_TYPE);
+        }
+
+        second.accept(this);
+        if (second.getNodeType().getType().equals(Type.getType(Object.class))) {
+            mv.unbox(Type.INT_TYPE);
+        }
+    }
+
     @Override
     public Void visitAndNode(AndNode node) {
-        node.getFirstNode().accept(this);
-        node.getSecondNode().accept(this);
+        visitBooleanOperands(node.getFirstNode(), node.getSecondNode());
         mv.visitInsn(IAND);
 
         return null;
+    }
+
+    private void visitBooleanOperands(Node first, Node second) {
+        first.accept(this);
+        if (first.getNodeType().getType().equals(Type.getType(Object.class))) {
+            mv.unbox(Type.BOOLEAN_TYPE);
+        }
+
+        second.accept(this);
+        if (second.getNodeType().getType().equals(Type.getType(Object.class))) {
+            mv.unbox(Type.BOOLEAN_TYPE);
+        }
     }
 
     @Override
     public Void visitArgsNode(ArgsNode node) {
         for (Node child : node.childNodes()) {
             child.accept(this);
+
+            Type childType = child.getNodeType().getType();
+            if (!childType.equals(Object.class)) {
+                mv.valueOf(childType);
+            }
         }
         return null;
     }
@@ -161,9 +203,17 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
             throw new ScriptException("variable " + node.getName() + " is already defined");
         }
 
-        int index = context.setVariable(node.getName());
+        int index = mv.newLocal(Type.getType(Object.class));
+        context.setVariable(node.getName(), index);
 
-        node.getValue().accept(this);
+        Node value = node.getValue();
+        value.accept(this);
+
+        Type valueType = value.getNodeType().getType();
+
+        if (!valueType.equals(Type.getType(Object.class))) {
+            mv.valueOf(valueType);
+        }
 
         // We will assume it is a string for now.
         mv.visitIntInsn(ASTORE, index);
@@ -179,8 +229,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     @Override
     public Void visitDivideNode(DivideNode node) {
-        node.getFirstNode().accept(this);
-        node.getSecondNode().accept(this);
+        visitIntegerOperands(node.getFirstNode(), node.getSecondNode());
         mv.visitInsn(IDIV);
 
         return null;
@@ -188,28 +237,47 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     @Override
     public Void visitEqualNode(EqualNode node) {
-        Label l1 = new Label();
-        Label l2 = new Label();
+        visitReferenceOperands(node.getFirstNode(), node.getSecondNode());
 
-        node.getFirstNode().accept(this);
-        node.getSecondNode().accept(this);
-        mv.visitJumpInsn(IF_ICMPNE, l1);
-        mv.visitInsn(ICONST_1);
-        mv.visitJumpInsn(GOTO, l2);
-        mv.visitLabel(l1);
-        mv.visitInsn(ICONST_0);
-        mv.visitLabel(l2);
+        mv.visitMethodInsn(INVOKESTATIC,
+                "java/util/Objects",
+                "equals",
+                "(Ljava/lang/Object;Ljava/lang/Object;)Z",
+                false);
 
         return null;
     }
+
+    private void visitReferenceOperands(Node first, Node second) {
+        first.accept(this);
+
+        Type firstType = first.getNodeType().getType();
+        if (!firstType.equals(Type.getType(Object.class))) {
+            mv.valueOf(firstType);
+        }
+
+        second.accept(this);
+
+        Type secondType = second.getNodeType().getType();
+        if (!secondType.equals(Type.getType(Object.class))) {
+            mv.valueOf(secondType);
+        }
+    }
+
+
     @Override
     public Void visitNotEqualNode(NotEqualNode node) {
         Label l1 = new Label();
         Label l2 = new Label();
 
-        node.getFirstNode().accept(this);
-        node.getSecondNode().accept(this);
-        mv.visitJumpInsn(IFEQ, l1);
+        visitReferenceOperands(node.getFirstNode(), node.getSecondNode());
+
+        mv.visitMethodInsn(INVOKESTATIC,
+                "java/util/Objects",
+                "equals",
+                "(Ljava/lang/Object;Ljava/lang/Object;)Z",
+                false);
+        mv.visitJumpInsn(IFNE, l1);
         mv.visitInsn(ICONST_1);
         mv.visitJumpInsn(GOTO, l2);
         mv.visitLabel(l1);
@@ -221,8 +289,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     @Override
     public Void visitModulusNode(ModulusNode node) {
-        node.getFirstNode().accept(this);
-        node.getSecondNode().accept(this);
+        visitIntegerOperands(node.getFirstNode(), node.getSecondNode());
         mv.visitInsn(IREM);
 
         return null;
@@ -287,8 +354,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         Label l1 = new Label();
         Label l2 = new Label();
 
-        node.getFirstNode().accept(this);
-        node.getSecondNode().accept(this);
+        visitIntegerOperands(node.getFirstNode(), node.getSecondNode());
         mv.visitJumpInsn(IF_ICMPLT, l1);
         mv.visitInsn(ICONST_1);
         mv.visitJumpInsn(GOTO, l2);
@@ -304,8 +370,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         Label l1 = new Label();
         Label l2 = new Label();
 
-        node.getFirstNode().accept(this);
-        node.getSecondNode().accept(this);
+        visitIntegerOperands(node.getFirstNode(), node.getSecondNode());
         mv.visitJumpInsn(IF_ICMPLE, l1);
         mv.visitInsn(ICONST_1);
         mv.visitJumpInsn(GOTO, l2);
@@ -349,8 +414,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         Label l1 = new Label();
         Label l2 = new Label();
 
-        node.getFirstNode().accept(this);
-        node.getSecondNode().accept(this);
+        visitIntegerOperands(node.getFirstNode(), node.getSecondNode());
         mv.visitJumpInsn(IF_ICMPGE, l1);
         mv.visitInsn(ICONST_1);
         mv.visitJumpInsn(GOTO, l2);
@@ -367,8 +431,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         Label l1 = new Label();
         Label l2 = new Label();
 
-        node.getFirstNode().accept(this);
-        node.getSecondNode().accept(this);
+        visitIntegerOperands(node.getFirstNode(), node.getSecondNode());
         mv.visitJumpInsn(IF_ICMPGT, l1);
         mv.visitInsn(ICONST_1);
         mv.visitJumpInsn(GOTO, l2);
@@ -389,8 +452,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     @Override
     public Void visitMultiplyNode(MultiplyNode node) {
-        node.getFirstNode().accept(this);
-        node.getSecondNode().accept(this);
+        visitIntegerOperands(node.getFirstNode(), node.getSecondNode());
         mv.visitInsn(IMUL);
 
         return null;
@@ -413,8 +475,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     @Override
     public Void visitOrNode(OrNode node) {
-        node.getFirstNode().accept(this);
-        node.getSecondNode().accept(this);
+        visitBooleanOperands(node.getFirstNode(), node.getSecondNode());
         mv.visitInsn(IOR);
 
         return null;
@@ -428,6 +489,11 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
             mv.visitInsn(ACONST_NULL);
         } else {
             value.accept(this);
+
+            Type valueType = value.getNodeType().getType();
+            if (valueType.equals(Type.getType(Object.class))) {
+                mv.valueOf(valueType);
+            }
         }
         mv.visitInsn(ARETURN);
 
@@ -444,8 +510,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     @Override
     public Void visitSubstractNode(SubstractNode node) {
-        node.getFirstNode().accept(this);
-        node.getSecondNode().accept(this);
+        visitIntegerOperands(node.getFirstNode(), node.getSecondNode());
         mv.visitInsn(ISUB);
 
         return null;

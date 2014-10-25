@@ -1,5 +1,7 @@
 package ar.edu.itba.primer.ast;
 
+import org.objectweb.asm.Type;
+
 public enum NodeType {
     ADDNODE, ANDNODE, ARGSNODE, BLOCKNODE, CALLNODE, DIVIDENODE, FALSENODE,
     IFNODE, LITERALNODE, MULTIPLYNODE, NEGATENODE, ORNODE, SUBSTRACTNODE,
@@ -9,22 +11,43 @@ public enum NodeType {
     MODULUSNODE, ASSIGNMENTNODE, DECLARATIONNODE, VARIABLENODE;
 
     public boolean isAlwaysTrue() {
-        switch(this) {
-            case TRUENODE:
-            case LITERALNODE:
+        return this == TRUENODE;
+    }
+
+    public boolean isAlwaysFalse() {
+        switch (this) {
+            case FALSENODE:
+            case NILNODE:
                 return true;
             default:
                 return false;
         }
     }
 
-    public boolean isAlwaysFalse() {
-        switch(this) {
+    public Type getType() {
+        switch (this) {
+            case TRUENODE:
             case FALSENODE:
+            case EQUALNODE:
+            case NOTEQUALNODE:
+            case LESSTHANNODE:
+            case LESSEQUALSTHANNODE:
+            case GREATERTHANNODE:
+            case GREATEREQUALTHANNODE:
+                return Type.BOOLEAN_TYPE;
+            case LITERALNODE:
+            case ADDNODE:
+            case SUBSTRACTNODE:
+            case MULTIPLYNODE:
+            case DIVIDENODE:
+            case MODULUSNODE:
+                return Type.INT_TYPE;
+            case STRINGLITERALNODE:
+            case VARIABLENODE:
             case NILNODE:
-                return true;
+                return Type.getType(Object.class);
             default:
-                return false;
+                throw new RuntimeException("missing type info for node " + this);
         }
     }
 }
