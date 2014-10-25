@@ -3,23 +3,26 @@ package ar.edu.itba.primer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Random;
 
 public class Kernel {
 
     public static final String NIL_STRING = "nil";
 
-    public static void print(Object o) {
+    public static Object print(Object o) {
         if (o == null) {
             o = NIL_STRING;
         }
         System.out.print(o);
+        return null;
     }
 
-    public static void println(Object o) {
+    public static Object println(Object o) {
         if (o == null) {
             o = NIL_STRING;
         }
         System.out.println(o);
+        return null;
     }
 
     public static Object getenv(Object o) {
@@ -32,6 +35,15 @@ public class Kernel {
             return r.readLine();
         } catch (IOException ignore) {}
         return null;
+    }
+
+    public static Object random(Object n) {
+        Random r = new Random();
+        return Integer.valueOf(r.nextInt((Integer)n));
+    }
+
+    public static Object abs(Object n) {
+        return Math.abs((Integer)n);
     }
 
 }

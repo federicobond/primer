@@ -126,7 +126,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
             child.accept(this);
 
             Type childType = child.getNodeType().getType();
-            if (!childType.equals(Object.class)) {
+            if (!childType.equals(Type.getType(Object.class))) {
                 mv.valueOf(childType);
             }
         }
@@ -139,10 +139,15 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
             throw new ScriptException("variable " + node.getName() + " is not defined");
         }
 
-        node.getValue().accept(this);
+        Node value = node.getValue();
 
-        // We will assume it is a reference for now.
-        // TODO: check this
+        value.accept(this);
+
+        Type childType = value.getNodeType().getType();
+        if (!childType.equals(Type.getType(Object.class))) {
+            mv.valueOf(childType);
+        }
+
         mv.visitIntInsn(ASTORE, context.getVariable(node.getName()).getIndex());
 
         return null;
@@ -153,11 +158,8 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         for (Node child : node.childNodes()) {
             child.accept(this);
             if (child instanceof CallNode) {
-                Type type = getCalledMethod((CallNode)child).getType();
-                if (!type.getReturnType().equals(Type.getType(Void.TYPE))) {
-                    // Discard result
-                    mv.visitInsn(POP);
-                }
+                // Discard result
+                mv.visitInsn(POP);
             }
         }
         return null;
@@ -324,6 +326,12 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         Label end = new Label();
 
         mv.visitLabel(start);
+
+        int index = 0;
+        for (String arg : node.getArgs().getList()) {
+            context.setVariable(arg, index++);
+        }
+
         body.accept(this);
         mv.visitLabel(end);
 
@@ -502,7 +510,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
             value.accept(this);
 
             Type valueType = value.getNodeType().getType();
-            if (valueType.equals(Type.getType(Object.class))) {
+            if (!valueType.equals(Type.getType(Object.class))) {
                 mv.valueOf(valueType);
             }
         }

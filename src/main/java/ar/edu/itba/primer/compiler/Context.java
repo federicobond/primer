@@ -59,10 +59,7 @@ public class Context {
     }
 
     public VariableSymbol getVariable(String name) {
-        if (parentContext == null || symbols.containsKey(name)) {
-            return (VariableSymbol)symbols.get(name);
-        }
-        return parentContext.getVariable(name);
+        return (VariableSymbol)symbols.get(name);
     }
 
     public boolean hasName(String name) {

@@ -13,6 +13,10 @@ public class FunctionArgsNode extends Node {
         list.add(arg);
     }
 
+    public void shift(String arg) {
+        list.add(0, arg);
+    }
+
     public List<String> getList() {
         return list;
     }

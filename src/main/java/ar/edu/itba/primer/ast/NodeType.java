@@ -34,6 +34,8 @@ public enum NodeType {
             case LESSEQUALSTHANNODE:
             case GREATERTHANNODE:
             case GREATEREQUALTHANNODE:
+            case ANDNODE:
+            case ORNODE:
                 return Type.BOOLEAN_TYPE;
             case INTEGERLITERALNODE:
             case ADDNODE:
@@ -44,6 +46,7 @@ public enum NodeType {
                 return Type.INT_TYPE;
             case STRINGLITERALNODE:
             case VARIABLENODE:
+            case CALLNODE:
             case NILNODE:
                 return Type.getType(Object.class);
             default:

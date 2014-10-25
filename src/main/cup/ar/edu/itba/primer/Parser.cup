@@ -112,7 +112,7 @@ Args          ::= Expression:e COMMA Args:l             {: RESULT = l; l.add(e);
                 |                                       {: RESULT = new ArgsNode(); :}
                 ;
 
-Literal       ::= INT:n                                 {: RESULT = new LiteralNode(n); :}
+Literal       ::= INT:n                                 {: RESULT = new IntegerLiteralNode(n); :}
                 | STRING:s                              {: RESULT = new StringLiteralNode(s); :}
                 | TRUE                                  {: RESULT = TrueNode.INSTANCE; :}
                 | FALSE                                 {: RESULT = FalseNode.INSTANCE; :}
@@ -122,13 +122,12 @@ Literal       ::= INT:n                                 {: RESULT = new LiteralN
 Function     ::= DEF IDENTIFIER:name LEFT_PAREN FunctionArgs:args RIGHT_PAREN OPEN_BRACKET StatementList:body CLOSE_BRACKET
                    {: RESULT = new FunctionNode((String)name, args, body); :};
 
-FunctionArgs ::= IDENTIFIER:i COMMA FunctionArgs:l      {: RESULT = l; l.add((String)i); :}
+FunctionArgs ::= IDENTIFIER:i COMMA FunctionArgs:l      {: RESULT = l; l.shift((String)i); :}
                | IDENTIFIER:i                           {: RESULT = new FunctionArgsNode(); RESULT.add((String)i); :}
                |                                        {: RESULT = new FunctionArgsNode(); :}
                ;
 
 Return       ::= RETURN Expression:e                    {: RESULT = new ReturnNode(e); :}
-               | RETURN                                 {: RESULT = new ReturnNode(null); :}
                ;
 
 Assignment   ::= IDENTIFIER:i ASSIGN Expression:e       {: RESULT = new AssignmentNode(i, e); :};

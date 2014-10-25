@@ -1,33 +1,65 @@
-let choices = ["rock", "scissor", "paper"]
+var wins = 0
+var loses = 0
  
-var win = 0
-var lose = 0
- 
-loop {
-    index = nil
-    do {
+while wins != 3 && loses != 3 {
+    var user = nil
+
+    while user != "rock" && user != "paper" && user != "scissor" {
         print("Your turn: ")
-        pick = index(choices, readln())
-    } while (index == null)
- 
-    other = random(3)
+        user = readln()
+    }
+
     print("Computer picks ")
-    print(get(choices, other))
+
+    var index = random(3)
+    var computer = nil
+
+    if index == 0 {
+        computer = "rock"
+    }
+    if index == 1 {
+        computer = "paper"
+    }
+    if index == 2 {
+        computer = "scissor"
+    }
+
+    print(computer)
     println(".")
- 
-    if (pick - other) % 3 == 2 {
-        win = win + 1
-        println("You win!)
-    }
-    if (pick - other) % 3 == 1 {
-        lose = lose + 1
-        println("Computer wins!")
-    }
-    if pick == other {
+
+    if (user == computer) {
         println("Tie!")
+        continue
     }
- 
-    if (win == 3 || lose == 3) {
-        break
+
+    if user == "paper" {
+        if computer == "rock" {
+            wins = wins + 1
+            println("You win!")
+        } else {
+            loses = loses + 1
+            println("Computer wins!")
+        }
+        continue
+    }
+    if user == "rock" {
+        if computer == "scissor" {
+            wins = wins + 1
+            println("You win!")
+        } else {
+            loses = loses + 1
+            println("Computer wins!")
+        }
+        continue
+    }
+    if user == "scissor" {
+        if computer == "paper" {
+            wins = wins + 1
+            println("You win!")
+        } else {
+            loses = loses + 1
+            println("Computer wins!")
+        }
+        continue
     }
 }
