@@ -443,7 +443,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
     }
 
     @Override
-    public Void visitLiteralNode(LiteralNode node) {
+    public Void visitIntegerLiteralNode(IntegerLiteralNode node) {
         Object value = node.getValue();
         mv.visitLdcInsn(value);
 

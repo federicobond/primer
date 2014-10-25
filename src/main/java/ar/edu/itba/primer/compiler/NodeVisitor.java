@@ -24,7 +24,7 @@ public interface NodeVisitor<T> {
     public T visitIfElseNode(IfElseNode node);
     public T visitLessThanNode(LessThanNode node);
     public T visitLessEqualThanNode(LessEqualThanNode node);
-    public T visitLiteralNode(LiteralNode node);
+    public T visitIntegerLiteralNode(IntegerLiteralNode node);
     public T visitModulusNode(ModulusNode modulusNode);
     public T visitMultiplyNode(MultiplyNode node);
     public T visitNegateNode(NegateNode node);

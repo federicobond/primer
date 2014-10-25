@@ -128,7 +128,7 @@ public class NodeVisitorAdapter implements NodeVisitor<Node> {
                 node.getSecondNode().accept(this));
     }
     @Override
-    public Node visitLiteralNode(LiteralNode node) {
+    public Node visitIntegerLiteralNode(IntegerLiteralNode node) {
         return node;
     }
 

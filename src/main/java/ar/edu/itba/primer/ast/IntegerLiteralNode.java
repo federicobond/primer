@@ -4,11 +4,11 @@ import ar.edu.itba.primer.compiler.NodeVisitor;
 
 import java.util.List;
 
-public class LiteralNode extends Node {
+public class IntegerLiteralNode extends Node {
 
     private final Integer value;
 
-    public LiteralNode(Integer value) {
+    public IntegerLiteralNode(Integer value) {
         this.value = value;
     }
 
@@ -18,7 +18,7 @@ public class LiteralNode extends Node {
 
     @Override
     public <T> T accept(NodeVisitor<T> visitor) {
-        return visitor.visitLiteralNode(this);
+        return visitor.visitIntegerLiteralNode(this);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class LiteralNode extends Node {
 
     @Override
     public NodeType getNodeType() {
-        return NodeType.LITERALNODE;
+        return NodeType.INTEGERLITERALNODE;
     }
 
     @Override
