@@ -79,19 +79,19 @@ Expression    ::= Expression:e1 PLUS  Expression:e2     {: RESULT = new AddNode(
                 | Expression:e1 DIVIDE Expression:e2    {: RESULT = new DivideNode(e1, e2); :}
                 | Expression:e1 AND Expression:e2       {: RESULT = new AndNode(e1, e2); :}
                 | Expression:e1 OR Expression:e2        {: RESULT = new OrNode(e1, e2); :}
-                | Expression:e1 LESS_THAN Expression:e2       {: RESULT = new LessThanNode(e1, e2); :}
+                | Expression:e1 LESS_THAN Expression:e2             {: RESULT = new LessThanNode(e1, e2); :}
                 | Expression:e1 LESS_EQUAL_THAN Expression:e2       {: RESULT = new LessEqualThanNode(e1, e2); :}
-                | Expression:e1 GREATER_THAN Expression:e2        {: RESULT = new GreaterThanNode(e1, e2); :}
-                | Expression:e1 GREATER_EQUAL_THAN Expression:e2        {: RESULT = new GreaterEqualThanNode(e1, e2); :}
-                | Expression:e1 EQUAL Expression:e2        {: RESULT = new EqualNode(e1, e2); :}
-                | Expression:e1 NOT_EQUAL Expression:e2        {: RESULT = new NotEqualNode(e1, e2); :}
+                | Expression:e1 GREATER_THAN Expression:e2          {: RESULT = new GreaterThanNode(e1, e2); :}
+                | Expression:e1 GREATER_EQUAL_THAN Expression:e2    {: RESULT = new GreaterEqualThanNode(e1, e2); :}
+                | Expression:e1 EQUAL Expression:e2     {: RESULT = new EqualNode(e1, e2); :}
+                | Expression:e1 NOT_EQUAL Expression:e2 {: RESULT = new NotEqualNode(e1, e2); :}
                 | MINUS Expression:e                    {: RESULT = new NegateNode(e); :}
                   %prec UMINUS
                 | LEFT_PAREN Expression:e RIGHT_PAREN   {: RESULT = e; :}
                 | Call:c                                {: RESULT = c; :}
                 | Variable:v                            {: RESULT = v; :}
                 | Literal:l                             {: RESULT = l; :}
-                | Expression:e1 MODULUS Expression:e2     {: RESULT = new ModulusNode(e1, e2); :}
+                | Expression:e1 MODULUS Expression:e2   {: RESULT = new ModulusNode(e1, e2); :}
                 ;
 
 If            ::= IF Expression:condition OPEN_BRACKET StatementList:thenBody CLOSE_BRACKET
