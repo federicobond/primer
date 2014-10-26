@@ -463,8 +463,40 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     @Override
     public Void visitIntegerLiteralNode(IntegerLiteralNode node) {
-        Object value = node.getValue();
-        mv.visitLdcInsn(value);
+        int value = node.getValue();
+
+        switch (value) {
+            case -1:
+                mv.visitInsn(ICONST_M1);
+                break;
+            case 0:
+                mv.visitInsn(ICONST_0);
+                break;
+            case 1:
+                mv.visitInsn(ICONST_1);
+                break;
+            case 2:
+                mv.visitInsn(ICONST_2);
+                break;
+            case 3:
+                mv.visitInsn(ICONST_3);
+                break;
+            case 4:
+                mv.visitInsn(ICONST_4);
+                break;
+            case 5:
+                mv.visitInsn(ICONST_5);
+                break;
+            default:
+                if (value <= Byte.MAX_VALUE) {
+                    mv.visitIntInsn(BIPUSH, value);
+                } else if (value <= Short.MAX_VALUE) {
+                    mv.visitIntInsn(SIPUSH, value);
+                } else {
+                    mv.visitLdcInsn(value);
+                }
+                break;
+        }
 
         return null;
     }
