@@ -1,6 +1,7 @@
 package ar.edu.itba.primer.ast;
 
 import ar.edu.itba.primer.compiler.NodeVisitor;
+import com.google.common.base.MoreObjects;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,9 @@ public class FunctionArgsNode extends Node {
 
     @Override
     public String getNodeName() {
-        return super.getNodeName() + "{list=" + list + "}";
+        return MoreObjects.toStringHelper(this)
+                .add("list", list)
+                .toString();
     }
 
     @Override

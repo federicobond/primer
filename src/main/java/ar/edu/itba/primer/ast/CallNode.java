@@ -1,6 +1,7 @@
 package ar.edu.itba.primer.ast;
 
 import ar.edu.itba.primer.compiler.NodeVisitor;
+import com.google.common.base.MoreObjects;
 
 import java.util.List;
 
@@ -39,6 +40,8 @@ public class CallNode extends Node {
 
     @Override
     public String getNodeName() {
-        return super.getNodeName() + String.format("{name=%s}", name);
+        return MoreObjects.toStringHelper(this)
+                .add("name", name)
+                .toString();
     }
 }
