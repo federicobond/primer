@@ -114,4 +114,84 @@ public class ConstantFoldingVisitor extends NodeVisitorAdapter {
         Node elseBody = node.getElseBody().accept(this);
         return new IfElseNode(condition, thenBody, elseBody);
     }
+
+    @Override
+    public Node visitAddNode(AddNode node) {
+        Node first = node.getFirstNode().accept(this);
+        Node second = node.getSecondNode().accept(this);
+
+        if (first instanceof IntegerLiteralNode &&
+            second instanceof IntegerLiteralNode) {
+
+            int left = ((IntegerLiteralNode)first).getValue();
+            int right = ((IntegerLiteralNode)second).getValue();
+
+            return new IntegerLiteralNode(left + right);
+        }
+        return new AddNode(first, second);
+    }
+
+    @Override
+    public Node visitSubstractNode(SubstractNode node) {
+        Node first = node.getFirstNode().accept(this);
+        Node second = node.getSecondNode().accept(this);
+
+        if (first instanceof IntegerLiteralNode &&
+                second instanceof IntegerLiteralNode) {
+
+            int left = ((IntegerLiteralNode)first).getValue();
+            int right = ((IntegerLiteralNode)second).getValue();
+
+            return new IntegerLiteralNode(left - right);
+        }
+        return new SubstractNode(first, second);
+    }
+
+    @Override
+    public Node visitMultiplyNode(MultiplyNode node) {
+        Node first = node.getFirstNode().accept(this);
+        Node second = node.getSecondNode().accept(this);
+
+        if (first instanceof IntegerLiteralNode &&
+                second instanceof IntegerLiteralNode) {
+
+            int left = ((IntegerLiteralNode)first).getValue();
+            int right = ((IntegerLiteralNode)second).getValue();
+
+            return new IntegerLiteralNode(left * right);
+        }
+        return new MultiplyNode(first, second);
+    }
+
+    @Override
+    public Node visitDivideNode(DivideNode node) {
+        Node first = node.getFirstNode().accept(this);
+        Node second = node.getSecondNode().accept(this);
+
+        if (first instanceof IntegerLiteralNode &&
+                second instanceof IntegerLiteralNode) {
+
+            int left = ((IntegerLiteralNode)first).getValue();
+            int right = ((IntegerLiteralNode)second).getValue();
+
+            return new IntegerLiteralNode(left / right);
+        }
+        return new DivideNode(first, second);
+    }
+
+    @Override
+    public Node visitModulusNode(ModulusNode node) {
+        Node first = node.getFirstNode().accept(this);
+        Node second = node.getSecondNode().accept(this);
+
+        if (first instanceof IntegerLiteralNode &&
+                second instanceof IntegerLiteralNode) {
+
+            int left = ((IntegerLiteralNode)first).getValue();
+            int right = ((IntegerLiteralNode)second).getValue();
+
+            return new IntegerLiteralNode(left % right);
+        }
+        return new ModulusNode(first, second);
+    }
 }
