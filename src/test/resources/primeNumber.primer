@@ -1,0 +1,27 @@
+def prime(n){
+    var i = 2
+
+
+    while(i<n){
+    	        if(n%i==0)
+    	            return false;
+    	         i = i+1
+    	    }
+    	    return true;
+
+}
+
+ println("Type the number to be tested  to see if it is prime")
+var num = toInt( readln())
+
+if (prime(num)){
+    println("The number you entered is prime")
+
+    } else {
+    println("The number you entered is not prime")
+    }
+
+
+
+
+
