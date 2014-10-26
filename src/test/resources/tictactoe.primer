@@ -1,0 +1,293 @@
+
+//fuente http://www.coderslexicon.com/a-beginner-tic-tac-toe-class-for-java/
+
+
+
+
+    var currentPlayerMark
+    var player="Player1, type <row><column>"
+
+    var c00
+    var c01
+    var c02
+    var c10
+    var c11
+    var c12
+    var c20
+    var c21
+    var c22
+
+
+
+
+
+
+   def putPos(row , col , s){
+
+			if(row==0){
+
+			    		if(col==0){
+			    			c00=s
+			    		}
+			    		if(col==1){
+			    			c01=s
+			    		}
+			    		if(col==2){
+			    			c02=s
+			    		}
+			    	}
+
+			if(row==1){
+
+			    		if(col==0){
+			    			c10=s
+			    		}
+			    		if(col==1){
+			    			c11=s
+			    		}
+			    		if(col==2){
+			    			c12=s
+			    		}
+			    	}
+
+			if(row==2){
+
+			    		if(col==0){
+			    			c20=s
+			    		}
+			    		if(col==1){
+			    			c21=s
+			    		}
+			    		if(col==2){
+			    			c22=s
+			    		}
+			    	}
+
+    }
+
+
+    def getPos( row, col){
+    	var ans=""
+
+    	if(row==0){
+
+    		if(col==0){
+    			ans=c00
+    		}
+    		if(col==1){
+    			ans= c01
+    		}
+    		if(col==2){
+    			ans= c02
+    		}
+    	}
+
+
+    	else if(row==1){
+
+    		if(col==0){
+    			ans= c10
+    		}
+    		if(col==1){
+    			return c11
+    		}
+    		if(col==2){
+    			ans= c12
+    		}
+    	} else if(row==2){
+
+    		if(col==0){
+    			ans= c20
+    		}
+    		if(col==1){
+    			ans= c21
+    		}
+    		if(col==2){
+    			ans= c22
+    		}
+    	}
+
+    	return ans
+
+    }
+
+
+    // Set or Reset the board back to all empty values.
+    def initializeBoard() {
+
+        // Loop through rows
+        var i = 0
+        while( i < 3 ) {
+
+            // Loop through columns
+            var j=0
+            while ( j < 3 ) {
+              
+            	putPos(i, j, "-")
+            	j=j+1
+            }
+            i=i+1
+        }
+    }
+
+
+    // Print the current board (may be replaced by GUI implementation later)
+   def printBoard() {
+        println("-------------")
+
+        var i=0
+        while( i < 3 ) {
+            System.out.print("| ")
+            var j=0
+            while (j < 3 ) {
+
+            	print(getPos(i, j) + " | ")
+            	j=j+1
+            }
+            println()
+            println("-------------")
+            i=i+1
+        }
+    }
+
+
+    // Loop through all cells of the board and if one is found to be empty (contains char '-') then return false.
+    // Otherwise the board is full.
+    def isBoardFull() {
+
+        for (int i = 0 i < 3 i++) {
+            for (int j = 0 j < 3 j++) {
+                if (getPos(i, j) == "-") {
+                    return  false
+                }
+            }
+        }
+
+        return true
+    }
+
+
+
+    def checkForWin() {
+        return (checkRowsForWin() || checkColumnsForWin() || checkDiagonalsForWin())
+    }
+
+
+
+    def checkRowsForWin() {
+        var i = 0
+
+        while( i < 3 ) {
+
+        	if(checkRowCol(getPos(i, 0),getPos(i, 1) ,getPos(i, 1) )){
+                return true
+            }
+            i=i+1
+        }
+        return false
+    }
+
+
+
+    def  checkColumnsForWin() {
+       var i=0
+        while( i < 3) {
+
+        	if(checkRowCol(getPos(0, 1), getPos(1, i), getPos(2, i))){
+                return true
+            }
+            i=i+1
+        }
+        return false
+    }
+
+
+
+   def checkDiagonalsForWin() {
+        return
+        		checkRowCol(getPos(0, 0), getPos(1, 1), getPos(2, 2))
+        		|| (checkRowCol(getPos(0, 2), getPos(1,1), getPos(2, 0))
+        		)
+    }
+
+
+
+    def checkRowCol(c1, c2, c3) {
+        return ((c1 != "-") && (c1 == c2) && (c2 == c3))
+    }
+
+
+
+    def changePlayer() {
+        if (currentPlayerMark == "x") {
+            currentPlayerMark = "o"
+            player="Player2, type <row><column>"
+        }
+        else {
+            currentPlayerMark = "x"
+            player="Player1, type <row><column>"
+        }
+    }
+
+
+
+    def placeMark( row,  col) {
+
+
+        if ((row >= 0) && (row < 3)) {
+            if ((col >= 0) && (col < 3)) {
+                if (getPos(row, col) == "-") {
+
+
+
+                    putPos(row, col, currentPlayerMark)
+
+                	return true
+                }
+            }
+        }
+
+        return false
+    }
+
+
+
+
+
+     main() {
+
+            currentPlayerMark = "x"
+            initializeBoard()
+            println("Starting game.")
+
+            var end=false
+
+    	    while(!end){
+
+    		        println(player)
+    		        String input = readLine()
+    		        var  row = Integer.parseInt(""+input.charAt(0))
+    		        var column = Integer.parseInt(""+input.charAt(1))
+
+    		        placeMark(row,column)
+
+    		     // Lets print the board
+    		     printBoard()
+
+    		     // Did we have a winner?
+    		     if (checkForWin()) {
+    		        System.out.println("We have a winner! Congrats!")
+    		        end=true
+    		     }
+    		     else if (isBoardFull()) {
+    		        System.out.println("Appears we have a draw!")
+    		       end=true
+    		     }
+
+    		     // No winner or draw, switch players to 'o'
+    		     println("")
+    		     changePlayer()
+
+    	    }
+
+    	}
