@@ -2,12 +2,16 @@ package ar.edu.itba.primer;
 
 import ar.edu.itba.primer.compiler.Script;
 import ar.edu.itba.primer.compiler.ScriptException;
+import com.google.common.io.CharStreams;
+import com.google.common.io.Resources;
 import junit.framework.TestCase;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -38,6 +42,16 @@ public class IntegrationTest {
         System.setOut(stdout);
 
         return output;
+    }
+
+    private String runFile(String path) {
+        String code = null;
+        try {
+            code = Resources.toString(getClass().getResource("/" + path), Charset.forName("UTF-8"));
+        } catch (IOException e) {
+            fail(e.getMessage());
+        }
+        return run(code);
     }
 
     @Test
@@ -194,5 +208,17 @@ public class IntegrationTest {
     public void ifEqualsStringVariable() {
         String output = run("var foo = \"foo\"\n if foo == \"foo\" { println(\"hello\") }");
         assertThat(output, equalTo("hello\n"));
+    }
+
+    @Test
+    public void factorial() {
+        String output = runFile("factorial.primer");
+        assertThat(output, equalTo("Factorial: 120\n"));
+    }
+
+    @Test
+    public void fibonacci() {
+        String output = runFile("fibonacci.primer");
+        assertThat(output, equalTo("Result: 21\n"));
     }
 }
