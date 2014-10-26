@@ -18,7 +18,7 @@ public class Main {
         System.err.println("usage: primer COMMAND filename.primer");
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         if (args.length < 2) {
             printUsage();
             System.exit(1);
@@ -32,29 +32,33 @@ public class Main {
             System.exit(1);
         }
 
-        switch (subCommand) {
-            case "run":
-                String[] argv = Arrays.copyOfRange(args, 2, args.length);
-                Script.fromFile(file).exec(argv);
-                break;
-            case "ast":
-                Node root = Script.fromFile(file).parse();
-                System.out.println(root);
-                break;
-            case "bytecode":
-                String byteCode = Script.fromFile(file).trace();
-                System.out.println(byteCode);
-                break;
-            case "compile":
-                byte[] classBytes = Script.fromFile(file).compile();
-                Files.write(Paths.get("Main.class"), classBytes, StandardOpenOption.CREATE);
-                break;
-            case "tokens":
-                List<String> tokens = Script.fromFile(file).tokenList();
-                System.out.println(tokens);
-                break;
-            default:
-                System.err.println("error: invalid command " + subCommand);
+        try {
+            switch (subCommand) {
+                case "run":
+                    String[] argv = Arrays.copyOfRange(args, 2, args.length);
+                    Script.fromFile(file).exec(argv);
+                    break;
+                case "ast":
+                    Node root = Script.fromFile(file).parse();
+                    System.out.println(root);
+                    break;
+                case "bytecode":
+                    String byteCode = Script.fromFile(file).trace();
+                    System.out.println(byteCode);
+                    break;
+                case "compile":
+                    byte[] classBytes = Script.fromFile(file).compile();
+                    Files.write(Paths.get("Main.class"), classBytes, StandardOpenOption.CREATE);
+                    break;
+                case "tokens":
+                    List<String> tokens = Script.fromFile(file).tokenList();
+                    System.out.println(tokens);
+                    break;
+                default:
+                    System.err.println("error: invalid command " + subCommand);
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 }
