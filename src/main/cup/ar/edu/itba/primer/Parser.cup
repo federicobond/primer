@@ -53,8 +53,8 @@ precedence left Variable, Call;
 precedence left RETURN;
 precedence left AND, OR;
 precedence left LESS_THAN, LESS_EQUAL_THAN, GREATER_THAN, EQUAL, NOT_EQUAL, GREATER_EQUAL_THAN;
-precedence left PLUS, MINUS, MODULUS;
-precedence left TIMES, DIVIDE;
+precedence left PLUS, MINUS;
+precedence left TIMES, DIVIDE, MODULUS;
 precedence left UMINUS;
 
 
