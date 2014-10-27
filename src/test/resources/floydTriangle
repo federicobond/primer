@@ -1,0 +1,19 @@
+
+var i=1
+  var c=1
+   var a = 1;
+
+	 println("Enter the number of rows of Floyd's triangle to print\n");
+	 var n = toInt(readln())
+
+	  while ( i <= n)
+	  {
+	    while(c <= i)
+	    {
+	      print(a);
+	      a=a+1
+	      c=c+1
+	    }
+	  System.out.println();
+	  i=i+1
+	  }

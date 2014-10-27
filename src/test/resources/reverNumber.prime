@@ -1,0 +1,14 @@
+        reverse = 0;
+        println("Enter a number to reverse\n");
+		var n=toInt(readln())
+
+
+		   while (n != 0)
+		   {
+		      reverse = reverse * 10;
+		      reverse = reverse + n%10;
+		      n = n/10;
+		   }
+
+		  println("Reverse of entered number is ");
+		  println(reverse);
