@@ -1,0 +1,3 @@
+println("Type the text to be transformed into capital letters")
+var str = readln()
+println(stringToUpper(str))

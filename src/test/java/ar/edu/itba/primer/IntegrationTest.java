@@ -141,4 +141,30 @@ public class IntegrationTest extends TestCase {
         String output = run("var foo = \"hello\"\n println(foo)");
         assertThat(output, equalTo("hello\n"));
     }
+
+    public void testToInt0(){
+        String output=run("var str = \"21\"\n  toInt(str) \n"
+        );
+
+
+    }
+    public void testUpperCase(){
+        String output=run("var str = \"hello\"\n  println( stringToUpper(str)) \n"
+
+        );
+        assertThat(output, equalTo("HELLO\n"));
+    }
+//    public void testToInt1(){
+//        String output=run("var str = \"21\"\n  var aNum = toInt(str) \n  "
+//        );
+//
+//
+//   }
+//   public void testGetInt2(){
+//        String output=run("var str = \"21\"\n  str= toInt(str) \n  str = str/10 \n  print(str)"
+//                         );
+//       assertThat(output, equalTo("2"));
+//
+//   }
+
 }

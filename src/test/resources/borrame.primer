@@ -1,0 +1,3 @@
+var original =  readln()
+ var other = toInt(original)
+

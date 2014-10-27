@@ -3,7 +3,7 @@ package ar.edu.itba.primer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
+import java.lang.Integer;
 public class Kernel {
 
     public static final String NIL_STRING = "nil";
@@ -33,5 +33,13 @@ public class Kernel {
         } catch (IOException ignore) {}
         return null;
     }
+
+    public static int toInt(Object o ){
+      return Integer.parseInt((String) o );
+
+   }
+   public static Object stringToUpper(Object o){
+       return ((String)o).toUpperCase();
+   }
 
 }

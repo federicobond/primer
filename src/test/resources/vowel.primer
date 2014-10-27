@@ -1,0 +1,8 @@
+let choices = ["a", "e", "i","o", "u", "A","E", "I", "O", "U","b","B","c","C","d","D","f","F","g","G","h","H","j","J","k","K","l","L","m","M","n","N","p","P","q","Q","r","R","s","S","t","T","v","V","w","W","x","X","y","Y","z","Z"]
+ println("Enter a character\n")
+index = nil
+ pick = index(choices, readln())
+if(pick<10)
+     println("You typed in a vowel");
+  else
+    println("You typed in a letter different from a vowel", ch);
