@@ -3,6 +3,7 @@ package ar.edu.itba.primer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Kernel {
@@ -46,4 +47,51 @@ public class Kernel {
         return Math.abs((Integer)n);
     }
 
+    public static Object list() {
+        return new ArrayList();
+    }
+
+    public static Object list_append(Object list, Object elem) {
+        ((ArrayList)list).add(elem);
+        return null;
+    }
+
+    public static Object list_get(Object list, Object index) {
+        return ((ArrayList)list).get((int)index);
+    }
+
+    public static Object list_remove(Object list, Object index) {
+        return ((ArrayList)list).remove(index);
+    }
+
+    public static Object list_empty(Object list) {
+        return ((ArrayList)list).isEmpty();
+    }
+
+    public static Object list_size(Object list) {
+        return ((ArrayList)list).size();
+    }
+
+    public static Object upper(Object str) {
+        return ((String)str).toUpperCase();
+    }
+
+    public static Object lower(Object str) {
+        return ((String)str).toLowerCase();
+    }
+
+    public static Object isupper(Object str) {
+        return str != null && ((String)str).toUpperCase().equals(str);
+    }
+
+    public static Object islower(Object str) {
+        return str != null && ((String)str).toLowerCase().equals(str);
+    }
+
+    public static Object parse_int(Object str) {
+        if (str == null) {
+            return null;
+        }
+        return Integer.valueOf((String)str);
+    }
 }
