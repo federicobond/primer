@@ -5,5 +5,9 @@ def fibonacci(n) {
   return fibonacci(n - 1) + fibonacci(n - 2)
 }
 
-print("Result: ")
-println(fibonacci(8))
+if list_size(ARGV) != 1 {
+  println("Enter only one parameter.")
+} else {
+  print("Result: ")
+  println(fibonacci(parse_int(list_get(ARGV, 0))))
+}

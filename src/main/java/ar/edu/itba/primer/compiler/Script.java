@@ -18,6 +18,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Script {
@@ -97,12 +98,22 @@ public class Script {
     public void exec(String[] argv) {
         Class<?> klass = loadClass(compile());
 
+        ArrayList args = new ArrayList();
+        Collections.addAll(args, argv);
+
         try {
-            Method m = klass.getMethod("main", String[].class);
-            m.invoke(null, (Object)argv);
+            Method m = klass.getMethod("main", ArrayList.class);
+            m.invoke(null, new Object[] { args });
         } catch (NoSuchMethodException
                 | InvocationTargetException
-                | IllegalAccessException ignored) { }
+                | IllegalAccessException e) {
+
+            if (e instanceof InvocationTargetException) {
+                throw new ScriptException(e.getCause().getMessage().replace("java.lang.", ""));
+            } else {
+                throw new ScriptException(e);
+            }
+        }
     }
 
     public byte[] compile() {

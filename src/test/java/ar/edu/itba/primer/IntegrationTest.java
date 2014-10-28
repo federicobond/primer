@@ -9,9 +9,9 @@ import org.junit.Test;
 import java.io.*;
 import java.nio.charset.Charset;
 
-import static junit.framework.TestCase.fail;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.text.IsEmptyString.isEmptyString;
+import static org.junit.Assert.fail;
 import static org.junit.Assert.assertThat;
 
 public class IntegrationTest {
@@ -21,7 +21,7 @@ public class IntegrationTest {
         Script.enableOptimizations = false;
     }
 
-    private String run(String code) {
+    private String run(String code, String ...argv) {
         PrintStream stdout = System.out;
         OutputStream out = new ByteArrayOutputStream();
         try {
@@ -29,8 +29,8 @@ public class IntegrationTest {
         } catch (UnsupportedEncodingException ignore) { }
 
         try {
-            Script.fromString(code).exec(new String[0]);
-        } catch (ScriptException | IOException e) {
+            Script.fromString(code).exec(argv);
+        } catch (IOException e) {
             fail(e.getMessage());
         }
 
@@ -40,14 +40,14 @@ public class IntegrationTest {
         return output;
     }
 
-    private String runFile(String path) {
+    private String runFile(String path, String ...argv) {
         String code = null;
         try {
             code = Resources.toString(getClass().getResource("/" + path), Charset.forName("UTF-8"));
         } catch (IOException e) {
             fail(e.getMessage());
         }
-        return run(code);
+        return run(code, argv);
     }
 
     @Test
@@ -206,15 +206,20 @@ public class IntegrationTest {
         assertThat(output, equalTo("hello\n"));
     }
 
+    @Test(expected=ScriptException.class)
+    public void stringIntegerComparisonFails() {
+        String output = run("var result = \"foo\" < 10");
+    }
+
     @Test
     public void factorial() {
-        String output = runFile("factorial.primer");
+        String output = runFile("factorial.primer", "5");
         assertThat(output, equalTo("Factorial: 120\n"));
     }
 
     @Test
     public void fibonacci() {
-        String output = runFile("fibonacci.primer");
+        String output = runFile("fibonacci.primer", "8");
         assertThat(output, equalTo("Result: 21\n"));
     }
 }

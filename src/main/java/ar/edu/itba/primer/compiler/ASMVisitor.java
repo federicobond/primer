@@ -54,12 +54,12 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         cv.visitSource(fileName, null);
 
         {
-            Method m = Method.getMethod("void main (String[])");
+            Method m = Method.getMethod("void main (java.util.ArrayList)");
             mv = new GeneratorAdapter(ACC_PUBLIC + ACC_STATIC, m, null, null, cv);
 
             /* declare args parameter as local */
             //mv.newLocal(Type.getType(Object.class));
-            context.setVariable("args", 0);
+            context.setVariable("ARGV", 0);
 
             Label start = new Label();
             mv.visitLabel(start);
