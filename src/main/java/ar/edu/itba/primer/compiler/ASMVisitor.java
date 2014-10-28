@@ -90,14 +90,10 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     private void visitIntegerOperands(Node first, Node second) {
         first.accept(this);
-        if (first.getNodeType().getType().equals(Type.getType(Object.class))) {
-            mv.unbox(Type.INT_TYPE);
-        }
+        unbox(first, Type.INT_TYPE);
 
         second.accept(this);
-        if (second.getNodeType().getType().equals(Type.getType(Object.class))) {
-            mv.unbox(Type.INT_TYPE);
-        }
+        unbox(second, Type.INT_TYPE);
     }
 
     @Override
@@ -110,25 +106,17 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     private void visitBooleanOperands(Node first, Node second) {
         first.accept(this);
-        if (first.getNodeType().getType().equals(Type.getType(Object.class))) {
-            mv.unbox(Type.BOOLEAN_TYPE);
-        }
+        unbox(first, Type.BOOLEAN_TYPE);
 
         second.accept(this);
-        if (second.getNodeType().getType().equals(Type.getType(Object.class))) {
-            mv.unbox(Type.BOOLEAN_TYPE);
-        }
+        unbox(second, Type.BOOLEAN_TYPE);
     }
 
     @Override
     public Void visitArgsNode(ArgsNode node) {
         for (Node child : node.childNodes()) {
             child.accept(this);
-
-            Type childType = child.getNodeType().getType();
-            if (!childType.equals(Type.getType(Object.class))) {
-                mv.valueOf(childType);
-            }
+            box(child);
         }
         return null;
     }
@@ -142,11 +130,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         Node value = node.getValue();
 
         value.accept(this);
-
-        Type childType = value.getNodeType().getType();
-        if (!childType.equals(Type.getType(Object.class))) {
-            mv.valueOf(childType);
-        }
+        box(value);
 
         mv.visitIntInsn(ASTORE, context.getVariable(node.getName()).getIndex());
 
@@ -210,12 +194,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
         Node value = node.getValue();
         value.accept(this);
-
-        Type valueType = value.getNodeType().getType();
-
-        if (!valueType.equals(Type.getType(Object.class))) {
-            mv.valueOf(valueType);
-        }
+        box(value);
 
         // We will assume it is a string for now.
         mv.visitIntInsn(ASTORE, index);
@@ -252,18 +231,10 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     private void visitReferenceOperands(Node first, Node second) {
         first.accept(this);
-
-        Type firstType = first.getNodeType().getType();
-        if (!firstType.equals(Type.getType(Object.class))) {
-            mv.valueOf(firstType);
-        }
+        box(first);
 
         second.accept(this);
-
-        Type secondType = second.getNodeType().getType();
-        if (!secondType.equals(Type.getType(Object.class))) {
-            mv.valueOf(secondType);
-        }
+        box(second);
     }
 
 
@@ -540,11 +511,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
             mv.visitInsn(ACONST_NULL);
         } else {
             value.accept(this);
-
-            Type valueType = value.getNodeType().getType();
-            if (!valueType.equals(Type.getType(Object.class))) {
-                mv.valueOf(valueType);
-            }
+            box(value);
         }
         mv.visitInsn(ARETURN);
 
@@ -602,5 +569,18 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         context.popLoop();
 
         return null;
+    }
+
+    private void box(Node node) {
+        Type type = node.getNodeType().getType();
+        if (!type.equals(Type.getType(Object.class))) {
+            mv.valueOf(type);
+        }
+    }
+
+    private void unbox(Node node, Type type) {
+        if (node.getNodeType().getType().equals(Type.getType(Object.class))) {
+            mv.unbox(type);
+        }
     }
 }
