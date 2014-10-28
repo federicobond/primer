@@ -2,16 +2,12 @@ package ar.edu.itba.primer;
 
 import ar.edu.itba.primer.compiler.Script;
 import ar.edu.itba.primer.compiler.ScriptException;
-import com.google.common.io.CharStreams;
 import com.google.common.io.Resources;
-import junit.framework.TestCase;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.*;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
 
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.CoreMatchers.equalTo;
