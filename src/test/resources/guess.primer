@@ -1,0 +1,32 @@
+var number = random(1000)
+var chances = 12
+
+while chances > 0 {
+
+    var choice = nil
+    while choice == nil {
+        print("Guess: ")
+        choice = parse_int(readln())
+    }
+
+    if choice > number {
+        println("Lower")
+    }
+
+    if choice < number {
+    # arreglar
+        println("Higher")
+    }
+
+    if choice == number {
+        break
+    }
+
+    chances = chances - 1
+}
+
+if chances > 0 {
+    println("You have won!")
+} else {
+    println("You have lost!")
+}

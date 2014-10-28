@@ -1,0 +1,41 @@
+var command = nil
+var balance = 0
+
+while command != "exit" {
+    println("Select operation (deposit <amount> | extract <amount> | balance | exit): ")
+    print("> ")
+
+    var line = readln()
+    var args = split(line, " ")
+    command = list_get(args, 0)
+
+    if command == "deposit" || command == "extract" {
+
+        if list_size(args) != 2 {
+            println("error: invalid arguments")
+            continue
+        }
+        var amount = parse_int(list_get(args, 1))
+        if amount == nil {
+            println("error: invalid amount")
+            continue
+        }
+
+        if command == "deposit" {
+            balance = balance + amount
+        }
+        if command == "extract" {
+            balance = balance - amount
+        }
+    } else {
+        if command == "balance" {
+            println(concat("Balance: $" , balance))
+        } else {
+            if command != "exit" {
+                println("error: invalid command")
+            }
+        }
+    }
+}
+
+println("Goodbye.")

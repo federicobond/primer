@@ -1,10 +1,18 @@
-var n = 5
-var r = 1
+if list_size(ARGV) == 1 {
 
-while (n > 1) {
-  r = r * n
-  n = n - 1
+    var n = parse_int(list_get(ARGV, 0))
+    var r = 1
+
+    while (n > 1) {
+      r = r * n
+      n = n - 1
+    }
+
+    print("Factorial: ")
+    println(r)
+
+} else {
+
+    println("Please provide a number.")
+
 }
-
-print("Factorial: ")
-println(r)
