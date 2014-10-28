@@ -3,6 +3,7 @@ package ar.edu.itba.primer.ast;
 import ar.edu.itba.primer.compiler.NodeVisitor;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class Node {
@@ -16,9 +17,7 @@ public abstract class Node {
     protected static List<Node> createList(Node... nodes) {
         List<Node> list = new ArrayList<>();
 
-        for (Node node : nodes) {
-            list.add(node);
-        }
+        Collections.addAll(list, nodes);
 
         return list;
     }
