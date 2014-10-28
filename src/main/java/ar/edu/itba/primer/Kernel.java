@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class Kernel {
 
-    public static final String NIL_STRING = "nil";
+    private static final String NIL_STRING = "nil";
 
     public static Object print(Object o) {
         if (o == null) {
