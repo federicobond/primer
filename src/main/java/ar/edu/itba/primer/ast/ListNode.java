@@ -8,10 +8,10 @@ public abstract class ListNode extends Node {
     private final List<Node> list;
 
     public ListNode() {
-        list = new ArrayList<Node>();
+        list = new ArrayList<>();
     }
 
-    public ListNode(List<Node> list) {
+    ListNode(List<Node> list) {
         this.list = list;
     }
 

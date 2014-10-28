@@ -21,7 +21,7 @@ public class NodeVisitorAdapter implements NodeVisitor<Node> {
 
     @Override
     public Node visitArgsNode(ArgsNode node) {
-        List<Node> newList = new ArrayList<Node>();
+        List<Node> newList = new ArrayList<>();
         for (Node child : node.childNodes()) {
             newList.add(child.accept(this));
         }
@@ -35,7 +35,7 @@ public class NodeVisitorAdapter implements NodeVisitor<Node> {
 
     @Override
     public Node visitBlockNode(BlockNode node) {
-        List<Node> newList = new ArrayList<Node>();
+        List<Node> newList = new ArrayList<>();
         for (Node child : node.childNodes()) {
             newList.add(child.accept(this));
         }

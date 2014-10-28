@@ -8,7 +8,7 @@ import java.util.List;
 
 public class FunctionArgsNode extends Node {
 
-    private final List<String> list = new ArrayList<String>();
+    private final List<String> list = new ArrayList<>();
 
     public void add(String arg) {
         list.add(arg);

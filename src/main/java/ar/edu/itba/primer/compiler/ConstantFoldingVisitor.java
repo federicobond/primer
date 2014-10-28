@@ -10,7 +10,7 @@ public class ConstantFoldingVisitor extends NodeVisitorAdapter {
     @Override
     public Node visitBlockNode(BlockNode node) {
         List<Node> list = node.childNodes();
-        List<Node> newList = new ArrayList<Node>();
+        List<Node> newList = new ArrayList<>();
 
         for (Node child : list) {
             child = child.accept(this);

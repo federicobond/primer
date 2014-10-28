@@ -7,14 +7,14 @@ import java.util.List;
 
 public abstract class Node {
 
-    static final List<Node> EMPTY_LIST = new ArrayList<Node>(0);
+    static final List<Node> EMPTY_LIST = new ArrayList<>(0);
 
     public abstract <T> T accept(NodeVisitor<T> visitor);
 
     public abstract List<Node> childNodes();
 
     protected static List<Node> createList(Node... nodes) {
-        List<Node> list = new ArrayList<Node>();
+        List<Node> list = new ArrayList<>();
 
         for (Node node : nodes) {
             list.add(node);

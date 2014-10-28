@@ -43,7 +43,7 @@ public class Script {
     }
 
     public List<String> tokenList() {
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
 
         Lexer lexer = getLexer(new ComplexSymbolFactory());
 

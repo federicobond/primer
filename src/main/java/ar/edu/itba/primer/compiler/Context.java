@@ -9,10 +9,10 @@ public class Context {
 
     private final Context parentContext;
 
-    private Map<String, Symbol> symbols = new HashMap<String, Symbol>();
+    private final Map<String, Symbol> symbols = new HashMap<>();
 
-    private Stack<Label> breakLabels = new Stack<Label>();
-    private Stack<Label> continueLabels = new Stack<Label>();
+    private final Stack<Label> breakLabels = new Stack<>();
+    private final Stack<Label> continueLabels = new Stack<>();
 
     static class ContextException extends RuntimeException {
         ContextException(String msg) {
