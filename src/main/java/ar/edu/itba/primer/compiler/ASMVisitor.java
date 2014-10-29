@@ -527,7 +527,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
     }
 
     @Override
-    public Void visitSubstractNode(SubstractNode node) {
+    public Void visitSubtractNode(SubtractNode node) {
         visitIntegerOperands(node.getFirstNode(), node.getSecondNode());
         mv.visitInsn(ISUB);
 

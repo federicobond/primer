@@ -132,7 +132,7 @@ public class ConstantFoldingVisitor extends NodeVisitorAdapter {
     }
 
     @Override
-    public Node visitSubstractNode(SubstractNode node) {
+    public Node visitSubtractNode(SubtractNode node) {
         Node first = node.getFirstNode().accept(this);
         Node second = node.getSecondNode().accept(this);
 
@@ -144,7 +144,7 @@ public class ConstantFoldingVisitor extends NodeVisitorAdapter {
 
             return new IntegerLiteralNode(left - right);
         }
-        return new SubstractNode(first, second);
+        return new SubtractNode(first, second);
     }
 
     @Override

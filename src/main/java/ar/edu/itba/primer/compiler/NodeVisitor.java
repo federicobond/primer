@@ -33,7 +33,7 @@ public interface NodeVisitor<T> {
     public T visitOrNode(OrNode node);
     public T visitReturnNode(ReturnNode node);
     public T visitStringLiteralNode(StringLiteralNode node);
-    public T visitSubstractNode(SubstractNode node);
+    public T visitSubtractNode(SubtractNode node);
     public T visitTrueNode(TrueNode node);
     public T visitVariableNode(VariableNode node);
     public T visitWhileNode(WhileNode node);

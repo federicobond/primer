@@ -178,8 +178,8 @@ public class NodeVisitorAdapter implements NodeVisitor<Node> {
     }
 
     @Override
-    public Node visitSubstractNode(SubstractNode node) {
-        return new SubstractNode(node.getFirstNode().accept(this),
+    public Node visitSubtractNode(SubtractNode node) {
+        return new SubtractNode(node.getFirstNode().accept(this),
                                  node.getSecondNode().accept(this));
     }
 
