@@ -9,7 +9,8 @@ public class Context {
 
     private final Context parentContext;
 
-    private final Map<String, Symbol> symbols = new HashMap<>();
+    private final Map<String, FunctionSymbol> functions = new HashMap<>();
+    private final Map<String, VariableSymbol> variables = new HashMap<>();
 
     private final Stack<Label> breakLabels = new Stack<>();
     private final Stack<Label> continueLabels = new Stack<>();
@@ -44,41 +45,43 @@ public class Context {
     }
 
     public void setFunction(String name, Type type, String className) {
-        symbols.put(name, new FunctionSymbol(type, className));
+        functions.put(name, new FunctionSymbol(type, className));
     }
 
-    public void setVariable(String name, int index) {
-        symbols.put(name, new VariableSymbol(name, index));
+    public void setVariable(String name, int index){
+        variables.put(name, new VariableSymbol(name, index));
     }
 
     public FunctionSymbol getFunction(String name) {
-        if (parentContext == null || symbols.containsKey(name)) {
-            return (FunctionSymbol)symbols.get(name);
+        if (parentContext == null || functions.containsKey(name)) {
+            return functions.get(name);
         }
         return parentContext.getFunction(name);
     }
 
     public VariableSymbol getVariable(String name) {
-        return (VariableSymbol)symbols.get(name);
+        return variables.get(name);
     }
 
-    public boolean hasName(String name) {
+    public boolean hasFunctionName(String name) {
         if (parentContext == null) {
-            return symbols.containsKey(name);
+            return functions.containsKey(name);
         }
-        if (symbols.containsKey(name)) {
+        if (functions.containsKey(name)) {
             return true;
         }
-        return parentContext.hasName(name);
+        return parentContext.hasFunctionName(name);
+    }
+
+    public boolean hasVariableName(String name) {
+        return variables.containsKey(name);
     }
 
     public List<VariableSymbol> localVariables() {
         List<VariableSymbol> list = new ArrayList<>();
 
-        for (Map.Entry<String, Symbol> e : symbols.entrySet()) {
-            if (e.getValue() instanceof VariableSymbol) {
-                list.add((VariableSymbol) e.getValue());
-            }
+        for (Map.Entry<String, VariableSymbol> e : variables.entrySet()) {
+            list.add(e.getValue());
         }
 
         Collections.sort(list, new Comparator<VariableSymbol>() {

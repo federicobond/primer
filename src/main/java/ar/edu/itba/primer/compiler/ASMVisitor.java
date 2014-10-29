@@ -123,7 +123,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     @Override
     public Void visitAssignmentNode(AssignmentNode node) {
-        if (!context.hasName(node.getName())) {
+        if (!context.hasVariableName(node.getName())) {
             throw new ScriptException("variable " + node.getName() + " is not defined");
         }
 
@@ -185,7 +185,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     @Override
     public Void visitDeclarationNode(DeclarationNode node) {
-        if (context.hasName(node.getName())) {
+        if (context.hasVariableName(node.getName())) {
             throw new ScriptException("variable " + node.getName() + " is already defined");
         }
 
@@ -202,7 +202,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
     }
 
     private FunctionSymbol getCalledMethod(CallNode node) {
-        if (!context.hasName(node.getName())) {
+        if (!context.hasFunctionName(node.getName())) {
             throw new ScriptException("undefined method " + node.getName());
         }
         return context.getFunction(node.getName());
@@ -280,7 +280,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         String name = node.getName();
         Type type = Type.getMethodType(Type.getType(Object.class), args);
 
-        if (context.hasName(name)) {
+        if (context.hasFunctionName(name)) {
             throw new ScriptException("symbol " + name + " already defined");
         }
         context.setFunction(name, type, MAIN_CLASS);
@@ -543,7 +543,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     @Override
     public Void visitVariableNode(VariableNode node) {
-        if (!context.hasName(node.getName())) {
+        if (!context.hasVariableName(node.getName())) {
             throw new ScriptException("variable " + node.getName() + " is not defined");
         }
 

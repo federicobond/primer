@@ -37,7 +37,7 @@ public class ContextTest extends TestCase {
         Context context = Context.rootContext();
 
         context.setFunction("foo", Type.getType(Object.class), "Test");
-        assertTrue(context.hasName("foo"));
+        assertTrue(context.hasFunctionName("foo"));
         assertThat(context.getFunction("foo"), isA(Symbol.class));
     }
 
@@ -45,11 +45,11 @@ public class ContextTest extends TestCase {
         Context context = Context.rootContext();
 
         context.setVariable("foo", 0);
-        assertTrue(context.hasName("foo"));
+        assertTrue(context.hasVariableName("foo"));
         assertThat(context.getVariable("foo").getIndex(), is(0));
 
         context.setVariable("bar", 1);
-        assertTrue(context.hasName("bar"));
+        assertTrue(context.hasVariableName("bar"));
         assertThat(context.getVariable("bar").getIndex(), is(1));
     }
 
