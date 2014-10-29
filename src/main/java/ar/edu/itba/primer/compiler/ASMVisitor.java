@@ -161,9 +161,15 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     @Override
     public Void visitCallNode(CallNode node) {
-        node.getArgs().accept(this);
-
         FunctionSymbol sym = getCalledMethod(node);
+
+        int arity = sym.getType().getArgumentTypes().length;
+
+        if (node.getArgs().childNodes().size() != arity) {
+            throw new ScriptException("wrong number of arguments in " + node.getName());
+        }
+
+        node.getArgs().accept(this);
 
         mv.visitMethodInsn(INVOKESTATIC,
                 sym.getContainer(),
