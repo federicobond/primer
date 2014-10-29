@@ -3,9 +3,7 @@ package ar.edu.itba.primer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
+import java.util.*;
 
 public class Kernel {
 
@@ -71,6 +69,37 @@ public class Kernel {
 
     public static Object list_size(Object list) {
         return ((ArrayList)list).size();
+    }
+
+    public static Object hash() {
+        return new HashMap();
+    }
+
+    public static Object hash_set(Object hash, Object key, Object value) {
+        return ((HashMap)hash).put(key, value);
+    }
+
+    public static Object hash_get(Object hash, Object key) {
+        return ((HashMap)hash).get(key);
+    }
+
+    public static Object hash_remove(Object hash, Object key) {
+        return ((HashMap)hash).remove(key);
+    }
+
+    public static Object hash_empty(Object hash) {
+        return ((HashMap)hash).isEmpty();
+    }
+
+    public static Object hash_size(Object hash) {
+        return ((HashMap)hash).size();
+    }
+
+    public static Object hash_keys(Object hash) {
+        Set keys = ((HashMap)hash).keySet();
+        List result = new ArrayList();
+        result.addAll(keys);
+        return result;
     }
 
     public static Object upper(Object str) {
