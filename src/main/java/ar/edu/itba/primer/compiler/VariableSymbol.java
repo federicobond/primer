@@ -21,7 +21,7 @@ public class VariableSymbol extends Symbol {
         return name;
     }
 
-    public String toStringHelper() {
+    public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("name", name)
                 .add("index", index)
