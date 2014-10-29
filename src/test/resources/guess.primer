@@ -10,12 +10,11 @@ while chances > 0 {
     }
 
     if choice > number {
-        println("Lower")
+        println("Lower!")
     }
 
     if choice < number {
-    # arreglar
-        println("Higher")
+        println("Higher!")
     }
 
     if choice == number {
