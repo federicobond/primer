@@ -74,7 +74,7 @@ Statement     ::= If:i                                  {: RESULT = i; :}
                 ;
 
 Expression    ::= Expression:e1 PLUS  Expression:e2     {: RESULT = new AddNode(e1, e2); :}
-                | Expression:e1 MINUS Expression:e2     {: RESULT = new SubstractNode(e1, e2); :}
+                | Expression:e1 MINUS Expression:e2     {: RESULT = new SubtractNode(e1, e2); :}
                 | Expression:e1 TIMES Expression:e2     {: RESULT = new MultiplyNode(e1, e2); :}
                 | Expression:e1 DIVIDE Expression:e2    {: RESULT = new DivideNode(e1, e2); :}
                 | Expression:e1 AND Expression:e2       {: RESULT = new AndNode(e1, e2); :}
