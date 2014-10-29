@@ -41,7 +41,7 @@ public class Kernel {
 
     public static Object random(Object n) {
         Random r = new Random();
-        return Integer.valueOf(r.nextInt((Integer)n));
+        return r.nextInt((Integer)n);
     }
 
     public static Object abs(Object n) {
