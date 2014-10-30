@@ -75,6 +75,48 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
             mv.visitMaxs(0, 0); /* computed automatically */
             mv.visitEnd();
+
+
+            m = Method.getMethod("void main (String[])");
+            mv = new GeneratorAdapter(ACC_PUBLIC + ACC_STATIC, m, null, null, cv);
+
+            start = new Label();
+
+            mv.visitLabel(start);
+            mv.visitTypeInsn(NEW, "java/util/ArrayList");
+            mv.visitInsn(DUP);
+            mv.visitMethodInsn(INVOKESPECIAL,
+                    "java/util/ArrayList",
+                    "<init>",
+                    "()V",
+                    false
+            );
+            mv.visitIntInsn(ASTORE, 1);
+            mv.visitIntInsn(ALOAD, 1);
+            mv.visitIntInsn(ALOAD, 0);
+            mv.visitMethodInsn(INVOKESTATIC,
+                    "java/util/Collections",
+                    "addAll",
+                    "(Ljava/util/Collection;[Ljava/lang/Object;)Z",
+                    false
+            );
+            mv.visitInsn(POP);
+            mv.visitIntInsn(ALOAD, 1);
+            mv.visitMethodInsn(INVOKESTATIC,
+                    "Main",
+                    "main",
+                    "(Ljava/util/ArrayList;)V",
+                    false);
+            mv.visitInsn(RETURN);
+
+            end = new Label();
+            mv.visitLabel(end);
+
+            mv.visitLocalVariable("args", Type.getDescriptor(Object.class), Type.getDescriptor(Object.class), start, end, 0);
+            mv.visitLocalVariable("list", Type.getDescriptor(Object.class), Type.getDescriptor(Object.class), start, end, 1);
+            mv.visitMaxs(0, 0);
+            mv.visitEnd();
+
         }
         cv.visitEnd();
     }
