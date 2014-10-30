@@ -52,14 +52,13 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
                 null);
 
         cv.visitSource(fileName, null);
-
+        
         {
             Method m = Method.getMethod("void main (java.util.ArrayList)");
             mv = new GeneratorAdapter(ACC_PUBLIC + ACC_STATIC, m, null, null, cv);
 
             /* declare args parameter as local */
-            //mv.newLocal(Type.getType(Object.class));
-            context.setVariable("ARGV", 0);
+            context.setVariable("ARGV");
 
             Label start = new Label();
             mv.visitLabel(start);
@@ -195,8 +194,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
             throw new ScriptException("variable " + node.getName() + " is already defined");
         }
 
-        int index = mv.newLocal(Type.getType(Object.class));
-        context.setVariable(node.getName(), index);
+        int index = context.setVariable(node.getName());
 
         Node value = node.getValue();
         value.accept(this);
@@ -304,9 +302,8 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
         mv.visitLabel(start);
 
-        int index = 0;
         for (String arg : node.getArgs().getList()) {
-            context.setVariable(arg, index++);
+            context.setVariable(arg);
         }
 
         body.accept(this);

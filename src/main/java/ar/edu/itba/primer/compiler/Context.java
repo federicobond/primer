@@ -12,6 +12,8 @@ public class Context {
     private final Map<String, FunctionSymbol> functions = new HashMap<>();
     private final Map<String, VariableSymbol> variables = new HashMap<>();
 
+    private int variableIndex = 0;
+
     private final Stack<Label> breakLabels = new Stack<>();
     private final Stack<Label> continueLabels = new Stack<>();
 
@@ -48,8 +50,10 @@ public class Context {
         functions.put(name, new FunctionSymbol(type, className));
     }
 
-    public void setVariable(String name, int index){
+    public int setVariable(String name) {
+        int index = variableIndex++;
         variables.put(name, new VariableSymbol(name, index));
+        return index;
     }
 
     public FunctionSymbol getFunction(String name) {

@@ -44,11 +44,11 @@ public class ContextTest extends TestCase {
     public void testSetGetVariable() {
         Context context = Context.rootContext();
 
-        context.setVariable("foo", 0);
+        context.setVariable("foo");
         assertTrue(context.hasVariableName("foo"));
         assertThat(context.getVariable("foo").getIndex(), is(0));
 
-        context.setVariable("bar", 1);
+        context.setVariable("bar");
         assertTrue(context.hasVariableName("bar"));
         assertThat(context.getVariable("bar").getIndex(), is(1));
     }
