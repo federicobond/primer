@@ -67,21 +67,25 @@ We would write:
         ...
     }
 
-The Java bytecode instruction listings found in Wikipedia also proved very useful, since
-it details the contents of the stack before and after the instruction.
+The Java bytecode instruction listings found in Wikipedia also proved very
+useful, since it details the contents of the stack before and after every
+instruction.
 
 # Optimization passes
 
-We designed an optimization pass that traverses the AST and simplifies nodes based on compile-time
-evaluation of constant expressions. One example of such case is an `if` statement whose condition
-can be determined to be always true. The optimization pass discards any `else` clauses and replaces
-the `if` node with a block. Thus, the compiled code will not contain unnecessary jumps.
+We designed an optimization pass that traverses the AST and simplifies nodes
+based on compile-time folding of constant expressions. It also handles `if`
+statements whose condition can be determined to be always true. The optimization
+pass also discards any `else` clauses and replaces the `if` node with a block.
+Thus, the compiled code will not contain any unnecessary jumps.
 
-The code for this optimization can be found in `ConstantFoldingVisitor` class.
+The code for this optimization can be found in the `ConstantFoldingVisitor`
+class.
 
 ## Benchmarking
 
-We compared primer code against equivalent Java and Ruby implementations of the fibonacci function.
+We compared primer code against equivalent Java and Ruby implementations of
+the fibonacci function. The results are listed in the table below.
 
 ### `Fibonacci.java`
 
@@ -123,13 +127,16 @@ We compared primer code against equivalent Java and Ruby implementations of the 
 
 ### Results
 
-  Language   Average run time  Tokens
-  --------- ----------------- -------
-  Java                 0.17 s      60
-  Ruby                 0.69 s      32
-  Primer\*             0.39 s      36
+  Language     Average run time\*  Tokens
+  ---------- -------------------- -------
+  Java                     0.17 s      60
+  Ruby                     0.69 s      32
+  Primer\*\*               0.39 s      36
 
-\* Includes compilation time.
+\* Average of ten invocations using the `time` UNIX command. Tested on a
+MacBook Pro 2.4 GHz (mid 2010)
+
+\*\* Includes compilation time.
 
 We can see from the table above that Primer achieves a performance between
 that of Java and Ruby, but with a conciseness much closer to the last one.
@@ -165,6 +172,24 @@ regexes. Example notation could be:
     var regex = /[^abc]*/
 
 Estimated time to implement: 3 days.
+
+### List and map indexing syntax
+
+Currently, we use the `list_get` and `hash_get` functions for accessing
+list and map elements. A more elegant solution involves the use of `[]`
+syntax for performing this task.
+
+    list
+    # => [1, 2, 3]
+    list[1]
+    # => 2
+
+    hash
+    # => { "foo": 1, "bar": 2 }
+    hash["foo"]
+    # => 1
+
+Estimated time to implement: 1 day.
 
 ### Lambda expressions
 
