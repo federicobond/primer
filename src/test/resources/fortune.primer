@@ -1,0 +1,15 @@
+var quotes = list()
+
+list_append(quotes, "Premature optimization is the root of all evil. - Donald Knuth")
+list_append(quotes, "There are only two hard things in Computer Science: cache invalidation and naming things. - Phil Karlton")
+list_append(quotes, "Computer science is no more about computers than astronomy is about telescopes. - Edsger Dijkstra")
+list_append(quotes, "The best way to predict the future is to invent it. - Alan Kay")
+list_append(quotes, "The only way of discovering the limits of the possible is to venture a little way past them into the impossible. - Arthur C. Clarke")
+
+var index = random(list_size(quotes))
+
+var parts = split(list_get(quotes, index), " - ")
+
+println(list_get(parts, 0))
+print("   - ")
+println(list_get(parts, 1))

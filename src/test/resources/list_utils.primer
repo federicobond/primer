@@ -1,0 +1,32 @@
+var list = list()
+
+list_append(list, "bar")
+list_append(list, "foo")
+list_append(list, "baz")
+
+def list_contains(list, e) {
+  var len = list_size(list)
+  var i = 0
+  while i < len {
+    if e == list_get(list, i) {
+      return true
+    }
+    i = i + 1
+  }
+  return false
+}
+
+def list_index(list, e) {
+  var len = list_size(list)
+  var i = 0
+  while i < len {
+    if e == list_get(list, i) {
+      return i
+    }
+    i = i + 1
+  }
+  return nil
+}
+
+println(list_contains(list, "foo"))
+println(list_index(list, "baz"))
