@@ -103,7 +103,7 @@ public class Script {
 
         try {
             Method m = klass.getMethod("main", ArrayList.class);
-            m.invoke(null, new Object[] { args });
+            m.invoke(null, args);
         } catch (NoSuchMethodException
                 | InvocationTargetException
                 | IllegalAccessException e) {

@@ -151,6 +151,15 @@ Thorough the project we kept a `TODO.md` file with ideas for things we could
 add to the language. Some of them landed on the final release, but others
 demanded too much time and are listed below as future extensions.
 
+### Lazy boolean operators
+
+Contrary to the behavior of many languages, report does not support lazy
+boolean operators, and has to evaluate both sides of each expression every
+time. To fix it, we need to revise the bytecode generator so that it outputs
+correct jump instructions for these cases.
+
+Estimated time to implement: one day.
+
 ### Java interoperability
 
 The main obstacle for achieving Java interoperability was the ability to

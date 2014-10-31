@@ -208,7 +208,7 @@ public class IntegrationTest {
 
     @Test(expected=ScriptException.class)
     public void stringIntegerComparisonFails() {
-        String output = run("var result = \"foo\" < 10");
+        run("var result = \"foo\" < 10");
     }
 
     @Test
