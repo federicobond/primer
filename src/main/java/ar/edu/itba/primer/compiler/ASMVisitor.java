@@ -421,6 +421,8 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         Label l1 = new Label();
 
         node.getCondition().accept(this);
+        unbox(node.getCondition(), Type.BOOLEAN_TYPE);
+
         mv.visitJumpInsn(IFEQ, l1);
         node.getThenBody().accept(this);
         mv.visitLabel(l1);
@@ -434,6 +436,8 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
         Label l2 = new Label();
 
         node.getCondition().accept(this);
+        unbox(node.getCondition(), Type.BOOLEAN_TYPE);
+
         mv.visitJumpInsn(IFEQ, l1);
         node.getThenBody().accept(this);
         mv.visitJumpInsn(GOTO, l2);
@@ -606,6 +610,8 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
         mv.visitLabel(conditionLabel);
         node.getConditionNode().accept(this);
+        unbox(node.getConditionNode(), Type.BOOLEAN_TYPE);
+
         mv.visitJumpInsn(IFEQ, endLabel);
         node.getBodyNode().accept(this);
         mv.visitJumpInsn(GOTO, conditionLabel);
