@@ -147,7 +147,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void ifSubstractEqualExpression() {
+    public void ifSubtractEqualExpression() {
         String output = run("if 1 - 1 == 0 { println(\"hello\") }");
         assertThat(output, equalTo("hello\n"));
     }
