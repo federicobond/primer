@@ -222,4 +222,10 @@ public class IntegrationTest {
         String output = runFile("fibonacci.primer", "8");
         assertThat(output, equalTo("Result: 21\n"));
     }
+
+    @Test
+    public void nesting() {
+        String output = runFile("nesting.primer");
+        assertThat(output, equalTo("foobar\n"));
+    }
 }

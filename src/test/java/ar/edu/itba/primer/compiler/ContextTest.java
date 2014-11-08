@@ -21,11 +21,6 @@ public class ContextTest extends TestCase {
         assertThat(Context.childOf(Context.rootContext()), isA(Context.class));
     }
 
-    public void testIsRoot() {
-        assertTrue(Context.rootContext().isRoot());
-        assertFalse(Context.childOf(Context.rootContext()).isRoot());
-    }
-
     public void testParentContext() {
         Context parent = Context.childOf(Context.rootContext());
         Context child = Context.childOf(parent);

@@ -1,0 +1,13 @@
+def foo() {
+  def bar() {
+    print("foo")  
+  }
+  bar()
+}
+
+def bar() {
+  println("bar")  
+}
+
+foo()
+bar()

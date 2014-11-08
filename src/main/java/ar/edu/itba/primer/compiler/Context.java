@@ -23,31 +23,59 @@ public class Context {
         }
     }
 
+    private static class RootContext extends Context {
+
+        private Map<String, Integer> functionNames = new HashMap<>();
+
+        RootContext() {
+            super(null);
+        }
+
+        String getRenamedFunction(String name) {
+            if (!functionNames.containsKey(name)) {
+                functionNames.put(name, 0);
+            }
+            int index = functionNames.get(name);
+            functionNames.put(name, index + 1);
+
+            if (index == 0) {
+                return name;
+            }
+            return String.format("%s$%d", name, index);
+        }
+
+    }
+
     private Context(Context parentContext) {
         this.parentContext = parentContext;
     }
 
     public static Context rootContext() {
-        return new Context(null);
+        return new RootContext();
     }
 
     public static Context childOf(Context parent) {
         return new Context(parent);
     }
 
-    public boolean isRoot() {
-        return parentContext == null;
-    }
-
     public Context parentContext() {
-        if (isRoot()) {
+        if (parentContext == null) {
             throw new ContextException("root context has no parent");
         }
         return parentContext;
     }
 
+    private RootContext getRoot() {
+        Context context = this;
+        while (context.parentContext != null) {
+            context = context.parentContext;
+        }
+        return (RootContext)context;
+    }
+
     public void setFunction(String name, Type type, String className) {
-        functions.put(name, new FunctionSymbol(name, type, className));
+        String newName = getRoot().getRenamedFunction(name);
+        functions.put(name, new FunctionSymbol(newName, type, className));
     }
 
     public int setVariable(String name) {

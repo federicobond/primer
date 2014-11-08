@@ -343,8 +343,9 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
             throw new ScriptException("symbol " + name + " already defined");
         }
         context.setFunction(name, type, MAIN_CLASS);
+        FunctionSymbol sym = context.getFunction(name);
 
-        Method m = new Method(name, type.getDescriptor());
+        Method m = new Method(sym.getName(), type.getDescriptor());
         mv = new GeneratorAdapter(ACC_PUBLIC + ACC_STATIC, m, null, null, cv);
 
         Node body = node.getBody();
