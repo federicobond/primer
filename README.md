@@ -1,7 +1,7 @@
-Primer
+Primer [![Build Status](https://travis-ci.org/federicobond/primer.svg?branch=master)](https://travis-ci.org/federicobond/primer)
 ======
 
-[![Build Status](https://travis-ci.org/federicobond/primer.svg?branch=master)](https://travis-ci.org/federicobond/primer)
+![primer](https://cloud.githubusercontent.com/assets/138426/4963448/6a7c1160-6714-11e4-96d9-dfc2773d2334.jpg)
 
 A programming language.
 
