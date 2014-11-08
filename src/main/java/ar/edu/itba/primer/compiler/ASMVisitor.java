@@ -214,7 +214,7 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
         mv.visitMethodInsn(INVOKESTATIC,
                 sym.getContainer(),
-                node.getName(),
+                sym.getName(),
                 sym.getType().getDescriptor(),
                 false);
 

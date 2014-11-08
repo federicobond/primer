@@ -47,7 +47,7 @@ public class Context {
     }
 
     public void setFunction(String name, Type type, String className) {
-        functions.put(name, new FunctionSymbol(type, className));
+        functions.put(name, new FunctionSymbol(name, type, className));
     }
 
     public int setVariable(String name) {
