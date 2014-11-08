@@ -6,6 +6,9 @@ import org.objectweb.asm.*;
 import org.objectweb.asm.commons.GeneratorAdapter;
 import org.objectweb.asm.commons.Method;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
 
     private static final String MAIN_CLASS = "Main";
@@ -25,9 +28,19 @@ public class ASMVisitor implements NodeVisitor<Void>, Opcodes {
     }
 
     private void initializeSymbols() {
+        List<String> list = Arrays.asList(
+            "toString", "hashCode", "getClass",
+            "wait", "notify", "notifyAll", "equals"
+        );
+
         java.lang.reflect.Method[] methods = Kernel.class.getMethods();
+
         for (java.lang.reflect.Method m : methods) {
-            context.setFunction(m.getName(), Type.getType(m), Type.getInternalName(Kernel.class));
+            if (!list.contains(m.getName())) {
+                context.setFunction(m.getName(),
+                        Type.getType(m),
+                        Type.getInternalName(Kernel.class));
+            }
         }
     }
 
