@@ -1,3 +1,7 @@
+% Primer
+% Kevin Jack Hanna; Fernando Bejarano; Federico Bond
+% November 30, 2014
+
 Primer
 ======
 
@@ -45,6 +49,15 @@ To generate bytecode from the AST returned by the parser, we chose the
 
 We also relied on Google's [Guava][guava] libraries for some helper methods.
 
+## Compilation Pipeline
+
+The compilation process begins by reading the script file. We create a `Script`
+instance that represents a Primer script. From there, we build a Lexer that will
+emit a stream of tokens to be consumed by the Parser. The parser returns an AST
+root node (which is always a `BlockNode`). Also, if available, any optimizations
+are applied by recursively walking through the AST. The final step is to visit
+the AST and write the bytecode for each instruction.
+
 ## Notes on the workflow
 
 We found a very useful workflow for adding the bytecode implementations for
@@ -55,23 +68,27 @@ that we had to be careful for was to keep the JVM from optimizing constant
 expressions. In most cases, assigning the expression components to variables is
 enough to prevent this. So, instead of writing:
 
-    if (true && false) {
-        ...
-    }
+````java
+if (true && false) {
+    ...
+}
+````
 
 We would write:
 
-    boolean a = true;
-    boolean b = false;
-    if (a && b) {
-        ...
-    }
+```java
+boolean a = true;
+boolean b = false;
+if (a && b) {
+    ...
+}
+````
 
-The Java bytecode instruction listings found in Wikipedia also proved very
+The Java bytecoe instruction listings found in Wikipedia also proved very
 useful, since it details the contents of the stack before and after every
 instruction.
 
-# Optimization passes
+## Optimization passes
 
 We designed an optimization pass that traverses the AST and simplifies nodes
 based on compile-time folding of constant expressions. It also handles `if`
@@ -87,43 +104,49 @@ class.
 We compared primer code against equivalent Java and Ruby implementations of
 the fibonacci function. The results are listed in the table below.
 
-### `Fibonacci.java`
+### Java Implementation
 
-    public class Fibonacci {
+````java
+public class Fibonacci {
 
-      private static int fibonacci(int n) {
-          if (n < 2) {
-              return n;
-          }
-          return fibonacci(n - 1) + fibonacci(n - 2);
+  private static int fibonacci(int n) {
+      if (n < 2) {
+          return n;
       }
+      return fibonacci(n - 1) + fibonacci(n - 2);
+  }
 
-      public static void main(String[] args) {
-          System.out.println(fibonacci(30));
-      }
-    }
+  public static void main(String[] args) {
+      System.out.println(fibonacci(30));
+  }
+}
+````
 
-### `fibonacci.ruby`
+### Ruby Implementation
 
-    def fibonacci(n)
-      if n < 2
-        return n
-      end
-      return fibonacci(n - 1) + fibonacci(n - 2)
-    end
+````ruby
+def fibonacci(n)
+  if n < 2
+    return n
+  end
+  return fibonacci(n - 1) + fibonacci(n - 2)
+end
 
-    puts fibonacci(32)
+puts fibonacci(32)
+````
 
-### `fibonacci.primer`
+### Primer Implementation
 
-    def fibonacci(n) {
-      if n < 2 {
-        return n
-      }
-      return fibonacci(n - 1) + fibonacci(n - 2)
-    }
+````scala
+def fibonacci(n) {
+   if n < 2 {
+     return n
+   }
+   return fibonacci(n - 1) + fibonacci(n - 2)
+}
 
-    println(fibonacci(32))
+println(fibonacci(32))
+````
 
 ### Results
 
@@ -153,7 +176,7 @@ demanded too much time and are listed below as future extensions.
 
 ### Lazy boolean operators
 
-Contrary to the behavior of many languages, report does not support lazy
+Contrary to the behavior of many languages, primer does not support lazy
 boolean operators, and has to evaluate both sides of each expression every
 time. To fix it, we need to revise the bytecode generator so that it outputs
 correct jump instructions for these cases.
@@ -163,9 +186,9 @@ Estimated time to implement: one day.
 ### Java interoperability
 
 The main obstacle for achieving Java interoperability was the ability to
-handle and express the full range of types in Java. Projects such as Jython or
-JRuby managed to run Java code from a dynamically typed context, but
-this requires some non-trivial type handling.
+handle and express the full range of types in Java. Projects such as
+[Jython][jython] or [JRuby][jruby] managed to run Java code from a dynamically
+typed context, but this requires some non-trivial type handling.
 
 Estimated time to implement: one week.
 
@@ -203,11 +226,11 @@ Estimated time to implement: 1 day.
 ### Lambda expressions
 
 Being able to manipulate functions as regular objects has proved to be a
-powerful programming technique. Many modern languages have adopted some
-of support for this kind of programming. Implementing such a system is
-anything from trivial, especially in a platform like the JVM. Fortunately
-there is a surge in [documentation][java-lambdas] on this topic because of the inclusion
-of lambdas in Java 8.
+powerful programming technique. Many modern languages have adopted some of
+support for this kind of programming. Implementing such a system is anything
+from trivial, especially in a platform like the JVM. Fortunately there has been
+a surge on [documentation][java-lambdas] on this topic since the inclusion of
+lambdas in Java 8.
 
     var lambda = (n) -> 2 * n
     var list = [1, 2, 3]
@@ -236,4 +259,5 @@ understanding of the Java platform.
 [java-lambdas]: http://cr.openjdk.java.net/~briangoetz/lambda/lambda-translation.html
 [wiki-bytecode]: https://en.wikipedia.org/wiki/Java_bytecode_instruction_listings
 [jruby]: http://jruby.org/
+[jython]: http://www.jython.org/
 
