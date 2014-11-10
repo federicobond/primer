@@ -29,6 +29,23 @@ public class StringLiteralNode extends Node {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        StringLiteralNode that = (StringLiteralNode) o;
+
+        if (!value.equals(that.value)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
+
+    @Override
     public String getNodeName() {
         return MoreObjects.toStringHelper(this)
                 .add("value", value)
