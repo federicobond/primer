@@ -206,6 +206,18 @@ public class IntegrationTest {
         assertThat(output, equalTo("hello\n"));
     }
 
+    @Test
+    public void ifNotEqualsIntegerNil() {
+        String output = run("var foo = 5\n if foo != nil { println(\"hello\") }");
+        assertThat(output, equalTo("hello\n"));
+    }
+
+    @Test
+    public void ifCall() {
+        String output = run("def foo() { return true }\n if foo() { println(\"hello\") }");
+        assertThat(output, equalTo("hello\n"));
+    }
+
     @Test(expected=ScriptException.class)
     public void stringIntegerComparisonFails() {
         run("var result = \"foo\" < 10");
