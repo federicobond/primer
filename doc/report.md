@@ -15,6 +15,8 @@ but does not support object-oriented programming.
 ## Design Considerations
 
 The initial AST class design was heavily inspired by the [JRuby][jruby] project.
+The rest of the class structure grew organically while we were developing the
+project.
 
 ## Grammar description
 
@@ -53,10 +55,10 @@ We also relied on Google's [Guava][guava] libraries for some helper methods.
 
 The compilation process begins by reading the script file. We create a `Script`
 instance that represents a Primer script. From there, we build a Lexer that will
-emit a stream of tokens to be consumed by the Parser. The parser returns an AST
-root node (which is always a `BlockNode`). Also, if available, any optimizations
-are applied by recursively walking through the AST. The final step is to visit
-the AST and write the bytecode for each instruction.
+emit a stream of tokens to be consumed by the Parser. The parser comsumes these
+tokens and returns an AST root node (which is always a `BlockNode`). Also, if
+available, any optimizations are applied by recursively walking through the AST.
+The final step is to visit the AST and write the bytecode for each instruction.
 
 ## Notes on the workflow
 
