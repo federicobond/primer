@@ -17,6 +17,10 @@ To compile a file to a Java class, run:
 
     bin/primer compile script.primer
 
+You can also add a shebang like this to make a file executable:
+
+    #!/path/to/bin/primer run
+
 ### Debugging commands
 
 To visualize the AST of a file, run:
