@@ -64,11 +64,10 @@ alphanumeric    = {letter}|{digit}
 other_id_char   = [_]
 identifier      = {letter}({alphanumeric}|{other_id_char})*
 integer         = {digit}+
-real            = {integer}\.{integer}
-char            = [^\r\n]*
+char            = [^\r\n]
 line_terminator = \r|\n|\r\n
 comment_body    = {char}*\n
-comment         = "#" {comment_body}*
+comment         = "#" {comment_body}
 whitespace      = [ \n\t]
 
 /* TODO: Improve

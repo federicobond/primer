@@ -218,6 +218,12 @@ public class IntegrationTest {
         assertThat(output, equalTo("hello\n"));
     }
 
+    @Test
+    public void comment() {
+        String output = run("# banana banana banana\n println(\"hello\")");
+        assertThat(output, equalTo("hello\n"));
+    }
+
     @Test(expected=ScriptException.class)
     public void stringIntegerComparisonFails() {
         run("var result = \"foo\" < 10");
