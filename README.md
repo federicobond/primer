@@ -7,7 +7,7 @@ A programming language.
 
 To build the project, run:
 
-    mvn install
+    mvn package
 
 To execute a file, run:
 

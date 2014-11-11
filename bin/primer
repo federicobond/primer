@@ -1,3 +1,11 @@
 #!/bin/bash
 
-exec java -jar target/primer-jar-with-dependencies.jar "$@"
+JAR="target/primer-jar-with-dependencies.jar"
+
+if [ ! -f $JAR ]; then
+  echo -n "Compiling project..."
+  mvn package --quiet > /dev/null 2>&1
+  echo "done."
+fi
+
+exec java -jar $JAR "$@"
