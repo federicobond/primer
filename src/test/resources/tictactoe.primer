@@ -93,7 +93,30 @@ def board_win(board, player) {
     return false
 }
 
-var EMPTY = "-"
+def board_invalid_pos(board, x, y) {
+    if x != nil {
+        if x < 0 || x > 2 {
+            x = nil
+            return true
+        }
+    } else {
+        return true
+    }
+    if y != nil {
+        if y < 0 || x > 2 {
+            y = nil
+            return true
+        }
+    } else {
+        return true
+    }
+    if board_get(board, x, y) != "-" {
+        x = nil
+        return true
+    }
+    return false
+}
+
 var PLAYER_1 = "X"
 var PLAYER_2 = "O"
 
@@ -124,23 +147,7 @@ while true {
         x = parse_int(list_get(pos, 0))
         y = parse_int(list_get(pos, 1))
 
-        if x != nil {
-            if x < 0 || x > 2 {
-                x = nil
-                continue
-            }
-        } else {
-            continue
-        }
-        if y != nil {
-            if y < 0 || x > 2 {
-                y = nil
-                continue
-            }
-        } else {
-            continue
-        }
-        if board_get(board, x, y) != EMPTY {
+        if board_invalid_pos(board, x, y) {
             x = nil
             continue
         }
