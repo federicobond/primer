@@ -39,6 +39,7 @@ def board_win(board, player) {
     var i = nil
     var j = nil
 
+    # check horizontal
     i = 0
     while i < 3 {
         j = 0
@@ -54,6 +55,7 @@ def board_win(board, player) {
         i = i + 1
     }
 
+    # check vertical
     i = 0
     while i < 3 {
         j = 0
@@ -69,6 +71,7 @@ def board_win(board, player) {
         i = i + 1
     }
 
+    # check downwards diagonal
     i = 0
     while i < 3 {
         if board_get(board, i, i) != player {
@@ -80,6 +83,7 @@ def board_win(board, player) {
         return true
     }
 
+    # check upwards diagonal
     i = 0
     while i < 3 {
         if board_get(board, 2 - i, 2 - i) != player {
