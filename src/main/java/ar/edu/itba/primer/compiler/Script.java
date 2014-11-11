@@ -109,7 +109,11 @@ public class Script {
                 | IllegalAccessException e) {
 
             if (e instanceof InvocationTargetException) {
-                throw new ScriptException(e.getCause().getMessage().replace("java.lang.", ""));
+                Throwable cause = ((InvocationTargetException) e).getCause();
+                if (cause.getMessage() == null) {
+                    throw new ScriptException(cause.toString());
+                }
+                throw new ScriptException(cause.getMessage().replace("java.lang.", ""));
             } else {
                 throw new ScriptException(e);
             }
