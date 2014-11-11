@@ -163,8 +163,9 @@ MacBook Pro 2.4 GHz (mid 2010)
 
 \*\* Includes compilation time.
 
-We can see from the table above that Primer achieves a performance between
-that of Java and Ruby, but with a conciseness much closer to the last one.
+We can see from the above table that Primer achieves a performance between
+that of Java and Ruby, but with a onciseness (measured in number of tokens)
+much closer to the last one.
 
 Since Primer compiles to JVM bytecode, there is ample room for optimization,
 and a [Sufficiently Smart Compiler](http://c2.com/cgi/wiki?SufficientlySmartCompiler)
