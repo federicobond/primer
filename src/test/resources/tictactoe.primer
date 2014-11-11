@@ -1,0 +1,168 @@
+def board_get(board, x, y) {
+    return list_get(list_get(board, x), y)
+}
+
+def board_set(board, x, y, value) {
+    var row = list_get(board, x)
+    list_set(row, y, value)
+}
+
+
+def board_new() {
+    var board = list()
+    var i = 0
+    while i < 3 {
+        var row = list()
+        list_append(row, "-")
+        list_append(row, "-")
+        list_append(row, "-")
+        list_append(board, row)
+        i = i + 1
+    }
+    return board
+}
+
+def board_print(board) {
+    var i = 0
+    while i < 3 {
+        var j = 0
+        while j < 3 {
+            print(concat(" ", board_get(board, i, j)))
+            j = j + 1
+        }
+        println("")
+        i = i + 1
+    }
+}
+
+def board_win(board, player) {
+    var i = nil
+    var j = nil
+
+    i = 0
+    while i < 3 {
+        j = 0
+        while j < 3 {
+            if board_get(board, i, j) != player {
+                break
+            }
+            j = j + 1
+        }
+        if j == 3 {
+            return true
+        }
+        i = i + 1
+    }
+
+    i = 0
+    while i < 3 {
+        j = 0
+        while j < 3 {
+            if board_get(board, j, i) != player {
+                break
+            }
+            j = j + 1
+        }
+        if j == 3 {
+            return true
+        }
+        i = i + 1
+    }
+
+    i = 0
+    while i < 3 {
+        if board_get(board, i, i) != player {
+            break
+        }
+        i = i + 1
+    }
+    if i == 3 {
+        return true
+    }
+
+    i = 0
+    while i < 3 {
+        if board_get(board, 2 - i, 2 - i) != player {
+            break
+        }
+        i = i + 1
+    }
+    if i == 3 {
+        return true
+    }
+    return false
+}
+
+var EMPTY = "-"
+var PLAYER_1 = "X"
+var PLAYER_2 = "O"
+
+var board = board_new()
+
+var player = PLAYER_1
+
+println("help: coordinates are given in x,y form")
+board_print(board)
+
+while true {
+    var x = nil
+    var y = nil
+
+    while x == nil || y == nil {
+        if player == PLAYER_1 {
+            print("Player X: ")
+        } else {
+            print("Player O: ")
+        }
+
+        var pos = split(readln(), ",")
+
+        if list_size(pos) != 2 {
+            continue
+        }
+
+        x = parse_int(list_get(pos, 0))
+        y = parse_int(list_get(pos, 1))
+
+        if x != nil {
+            if x < 0 || x > 2 {
+                x = nil
+                continue
+            }
+        } else {
+            continue
+        }
+        if y != nil {
+            if y < 0 || x > 2 {
+                y = nil
+                continue
+            }
+        } else {
+            continue
+        }
+        if board_get(board, x, y) != EMPTY {
+            x = nil
+            continue
+        }
+    }
+
+    board_set(board, x, y, player)
+
+    board_print(board)
+
+    if board_win(board, PLAYER_1) {
+        println("Player X wins!")
+        break
+    } else {
+        if board_win(board, PLAYER_2) {
+            println("Player O wins!")
+            break
+        }
+    }
+
+    if player == PLAYER_1 {
+        player = PLAYER_2
+    } else {
+        player = PLAYER_1
+    }
+}
