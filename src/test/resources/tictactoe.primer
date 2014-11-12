@@ -17,7 +17,7 @@ def board_new() {
         list_append(row, "-")
         list_append(row, "-")
         list_append(board, row)
-        i = i + 1
+        i += 1
     }
     return board
 }
@@ -28,10 +28,10 @@ def board_print(board) {
         var j = 0
         while j < 3 {
             print(concat(" ", board_get(board, i, j)))
-            j = j + 1
+            j += 1
         }
         println("")
-        i = i + 1
+        i += 1
     }
 }
 
@@ -47,12 +47,12 @@ def board_win(board, player) {
             if board_get(board, i, j) != player {
                 break
             }
-            j = j + 1
+            j += 1
         }
         if j == 3 {
             return true
         }
-        i = i + 1
+        i += 1
     }
 
     # check vertical
@@ -63,12 +63,12 @@ def board_win(board, player) {
             if board_get(board, j, i) != player {
                 break
             }
-            j = j + 1
+            j += 1
         }
         if j == 3 {
             return true
         }
-        i = i + 1
+        i += 1
     }
 
     # check downwards diagonal
@@ -77,7 +77,7 @@ def board_win(board, player) {
         if board_get(board, i, i) != player {
             break
         }
-        i = i + 1
+        i += 1
     }
     if i == 3 {
         return true
@@ -89,7 +89,7 @@ def board_win(board, player) {
         if board_get(board, 2 - i, 2 - i) != player {
             break
         }
-        i = i + 1
+        i += 1
     }
     if i == 3 {
         return true

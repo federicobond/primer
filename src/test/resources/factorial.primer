@@ -4,8 +4,8 @@ if list_size(ARGV) == 1 {
     var r = 1
 
     while (n > 1) {
-      r = r * n
-      n = n - 1
+      r *= n
+      n -= 1
     }
 
     print("Factorial: ")

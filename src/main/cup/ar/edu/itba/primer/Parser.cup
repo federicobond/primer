@@ -26,6 +26,10 @@ terminal NIL;
 terminal BREAK, CONTINUE;
 terminal VAR;
 terminal ASSIGN;
+terminal Node ASSIGN_PLUS;
+terminal Node ASSIGN_MINUS;
+terminal Node ASSIGN_TIMES;
+terminal Node ASSIGN_DIVIDE;
 
 terminal T;
 terminal Integer INT;
@@ -45,6 +49,10 @@ non terminal Node If;
 non terminal Node While;
 non terminal Node Return;
 non terminal Node Assignment;
+non terminal Node AssignmentAdd;
+non terminal Node AssignmentSubtract;
+non terminal Node AssignmentMultiply;
+non terminal Node AssignmentDivide;
 non terminal Node Declaration;
 non terminal Node Variable;
 
@@ -71,6 +79,10 @@ Statement     ::= If:i                                  {: RESULT = i; :}
                 | BREAK                                 {: RESULT = BreakNode.INSTANCE; :}
                 | Declaration:d                         {: RESULT = d; :}
                 | Assignment:a                          {: RESULT = a; :}
+                | AssignmentAdd:a                       {: RESULT = a; :}
+                | AssignmentSubtract:a                  {: RESULT = a; :}
+                | AssignmentMultiply:a                  {: RESULT = a; :}
+                | AssignmentDivide:a                    {: RESULT = a; :}
                 ;
 
 Expression    ::= Expression:e1 PLUS  Expression:e2     {: RESULT = new AddNode(e1, e2); :}
@@ -130,7 +142,15 @@ FunctionArgs ::= IDENTIFIER:i COMMA FunctionArgs:l      {: RESULT = l; l.shift((
 Return       ::= RETURN Expression:e                    {: RESULT = new ReturnNode(e); :}
                ;
 
-Assignment   ::= IDENTIFIER:i ASSIGN Expression:e       {: RESULT = new AssignmentNode(i, e); :};
+Assignment   ::= IDENTIFIER:i ASSIGN Expression:e           {: RESULT = new AssignmentNode(i, e); :};
+
+AssignmentAdd        ::= IDENTIFIER:i ASSIGN_PLUS Expression:e    {: RESULT = new AssignmentNode(i, new AddNode(new VariableNode(i), e)); :};
+
+AssignmentSubtract   ::= IDENTIFIER:i ASSIGN_MINUS Expression:e   {: RESULT = new AssignmentNode(i, new SubtractNode(new VariableNode(i), e)); :};
+
+AssignmentMultiply   ::= IDENTIFIER:i ASSIGN_TIMES Expression:e   {: RESULT = new AssignmentNode(i, new MultiplyNode(new VariableNode(i), e)); :};
+
+AssignmentDivide     ::= IDENTIFIER:i ASSIGN_DIVIDE Expression:e  {: RESULT = new AssignmentNode(i, new DivideNode(new VariableNode(i), e)); :};
 
 Declaration  ::= VAR IDENTIFIER:i ASSIGN Expression:e   {: RESULT = new DeclarationNode(i, e); :};
 

@@ -34,30 +34,30 @@ while wins != 3 && loses != 3 {
 
     if user == "paper" {
         if computer == "rock" {
-            wins = wins + 1
+            wins += 1
             println("You win!")
         } else {
-            loses = loses + 1
+            loses += 1
             println("Computer wins!")
         }
         continue
     }
     if user == "rock" {
         if computer == "scissor" {
-            wins = wins + 1
+            wins += 1
             println("You win!")
         } else {
-            loses = loses + 1
+            loses += loses
             println("Computer wins!")
         }
         continue
     }
     if user == "scissor" {
         if computer == "paper" {
-            wins = wins + 1
+            wins += 1
             println("You win!")
         } else {
-            loses = loses + 1
+            loses += 1
             println("Computer wins!")
         }
         continue

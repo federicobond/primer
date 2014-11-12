@@ -22,14 +22,14 @@ while command != "exit" {
         }
 
         if command == "deposit" {
-            balance = balance + amount
+            balance += amount
         }
         if command == "extract" {
             if (balance - amount) < 0 {
                 println("error: not enough funds")
                 continue
             }
-            balance = balance - amount
+            balance -= amount
         }
     } else {
         if command == "balance" {

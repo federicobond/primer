@@ -114,4 +114,8 @@ string          = "\"" [^\"]* "\""
 "!="                { return symbol("!=", NOT_EQUAL); }
 "var"               { return symbol("var", VAR); }
 "="                 { return symbol("=", ASSIGN); }
+"+="                { return symbol("+=", ASSIGN_PLUS); }
+"-="                { return symbol("+=", ASSIGN_MINUS); }
+"*="                { return symbol("+=", ASSIGN_TIMES); }
+"/="                { return symbol("+=", ASSIGN_DIVIDE); }
 {identifier}        { return symbol(yytext(), IDENTIFIER, yytext()); }
