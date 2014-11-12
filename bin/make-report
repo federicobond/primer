@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd "$(dirname "$0")/../doc"
+pandoc --template=template.tex -o report.pdf report.md metadata.yaml

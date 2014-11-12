@@ -1,3 +1,13 @@
 ---
-subtitle: A simple language for the JVM
+subtitle: A simple imperative language for the JVM
+toc: true
+numbersections: true
+listings: true
+university: ITBA
+major-heading: Automata, Theory of Languages and Compilers
+minor-heading: Special Course Project
+supervisor:
+  - Juan Miguel Santos
+  - Ana María Arias Roig
+  - Rodrigo Ramele
 ...

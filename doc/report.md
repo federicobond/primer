@@ -2,26 +2,23 @@
 % Kevin Jack Hanna; Fernando Bejarano; Federico Bond
 % November 30, 2014
 
-Primer
-======
-
-## Introduction
+# Introduction
 
 This document describes the design of the Primer language. Primer is an imperative
 language for the [Java Virtual Machine][jvm] (from now on, the JVM). It has a
 clean syntax inspired by languages like [Scala][scala] and [Kotlin][kotlin],
 but does not support object-oriented programming.
 
-## Design Considerations
+# Design Considerations
 
 The initial AST class design was heavily inspired by the [JRuby][jruby] project.
 The rest of the class structure grew organically while we were developing the
 project.
 
-## Grammar description
+# Grammar description
 
 
-## Difficulties encountered
+# Difficulties encountered
 
 One of the first difficulties we found was configuring everything correctly. The
 [JFlex][jflex] and [Java CUP][java_cup] projects are quite old and while they
@@ -33,7 +30,7 @@ language features. Writing integration tests early on made it possible to work
 on the codebase with confidence that we would not break any previous
 functionality.
 
-## Preliminary research
+# Preliminary research
 
 After some research we found out that the [Jasmin][jasmin] library suggested in
 class was not the best choice for implementing the language, since it was no
@@ -50,6 +47,8 @@ To generate bytecode from the AST returned by the parser, we chose the
 [ASM][asm] library.
 
 We also relied on Google's [Guava][guava] libraries for some helper methods.
+
+# Development
 
 ## Compilation Pipeline
 
@@ -101,12 +100,12 @@ Thus, the compiled code will not contain any unnecessary jumps.
 The code for this optimization can be found in the `ConstantFoldingVisitor`
 class.
 
-## Benchmarking
+# Benchmarking
 
-We compared primer code against equivalent Java and Ruby implementations of
+We compared Primer code against equivalent Java and Ruby implementations of
 the fibonacci function. The results are listed in the table below.
 
-### Java Implementation
+## Java Implementation
 
 ````java
 public class Fibonacci {
@@ -124,7 +123,7 @@ public class Fibonacci {
 }
 ````
 
-### Ruby Implementation
+## Ruby Implementation
 
 ````ruby
 def fibonacci(n)
@@ -137,7 +136,7 @@ end
 puts fibonacci(32)
 ````
 
-### Primer Implementation
+## Primer Implementation
 
 ````scala
 def fibonacci(n) {
@@ -150,7 +149,7 @@ def fibonacci(n) {
 println(fibonacci(32))
 ````
 
-### Results
+## Results
 
   Language     Average run time\*  Tokens
   ---------- -------------------- -------
@@ -171,13 +170,13 @@ Since Primer compiles to JVM bytecode, there is ample room for optimization,
 and a [Sufficiently Smart Compiler](http://c2.com/cgi/wiki?SufficientlySmartCompiler)
 could generate code that runs as fast as equivalent code written in Java.
 
-## Future extensions
+# Future extensions
 
 Thorough the project we kept a `TODO.md` file with ideas for things we could
 add to the language. Some of them landed on the final release, but others
 demanded too much time and are listed below as future extensions.
 
-### Lazy boolean operators
+## Lazy boolean operators
 
 Contrary to the behavior of many languages, primer does not support lazy
 boolean operators, and has to evaluate both sides of each expression every
@@ -186,7 +185,7 @@ correct jump instructions for these cases.
 
 Estimated time to implement: one day.
 
-### Java interoperability
+## Java interoperability
 
 The main obstacle for achieving Java interoperability was the ability to
 handle and express the full range of types in Java. Projects such as
@@ -195,7 +194,7 @@ typed context, but this requires some non-trivial type handling.
 
 Estimated time to implement: one week.
 
-### Literals for commonly used objects
+## Literals for commonly used objects
 
 While calling constructors such as `list()` is an acceptable solution, most
 modern languages include some syntax for describing lists, maps, ranges and
@@ -208,7 +207,7 @@ regexes. Example notation could be:
 
 Estimated time to implement: 3 days.
 
-### List and map indexing syntax
+## List and map indexing syntax
 
 Currently, we use the `list_get` and `hash_get` functions for accessing
 list and map elements. A more elegant solution involves the use of `[]`
@@ -226,7 +225,7 @@ syntax for performing this task.
 
 Estimated time to implement: 1 day.
 
-### Lambda expressions
+## Lambda expressions
 
 Being able to manipulate functions as regular objects has proved to be a
 powerful programming technique. Many modern languages have adopted some of
@@ -242,7 +241,7 @@ lambdas in Java 8.
 
 Estimated time to implement: one month.
 
-## Conclusion
+# Conclusion
 
 We found out that implementing a programming language on top of the JVM is both approachable and fun.
 The supporting libraries are mature and provide useful abstractions for simplifying the work.
