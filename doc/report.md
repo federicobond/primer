@@ -185,7 +185,7 @@ correct jump instructions for these cases.
 
 Estimated time to implement: one day.
 
-## Java interoperability
+## Java interoperability
 
 The main obstacle for achieving Java interoperability was the ability to
 handle and express the full range of types in Java. Projects such as
