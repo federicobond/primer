@@ -192,7 +192,7 @@ handle and express the full range of types in Java. Projects such as
 [Jython][jython] or [JRuby][jruby] managed to run Java code from a dynamically
 typed context, but this requires some non-trivial type handling.
 
-Estimated time to implement: one week.
+Estimated time to implement: two weeks.
 
 ## Literals for commonly used objects
 
@@ -239,7 +239,7 @@ lambdas in Java 8.
     list_map(list, lambda)
     # => [4, 5, 6]
 
-Estimated time to implement: one month.
+Estimated time to implement: three weeks.
 
 # Conclusion
 
