@@ -25,6 +25,10 @@ while command != "exit" {
             balance = balance + amount
         }
         if command == "extract" {
+            if (balance - amount) < 0 {
+                println("error: not enough funds")
+                continue
+            }
             balance = balance - amount
         }
     } else {
