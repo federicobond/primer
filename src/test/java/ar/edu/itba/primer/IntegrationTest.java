@@ -230,18 +230,6 @@ public class IntegrationTest {
     }
 
     @Test
-    public void factorial() {
-        String output = runFile("factorial.primer", "5");
-        assertThat(output, equalTo("Factorial: 120\n"));
-    }
-
-    @Test
-    public void fibonacci() {
-        String output = runFile("fibonacci.primer", "8");
-        assertThat(output, equalTo("Result: 21\n"));
-    }
-
-    @Test
     public void nesting() {
         String output = runFile("nesting.primer");
         assertThat(output, equalTo("foobar\n"));
