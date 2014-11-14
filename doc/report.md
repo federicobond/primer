@@ -2,6 +2,8 @@
 % Kevin Jack Hanna; Fernando Bejarano; Federico Bond
 % November 30, 2014
 
+
+\pagebreak
 # Introduction
 
 This document describes the design of the Primer language. Primer is an imperative
