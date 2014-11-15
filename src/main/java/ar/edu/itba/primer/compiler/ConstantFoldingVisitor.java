@@ -117,70 +117,50 @@ public class ConstantFoldingVisitor extends NodeVisitorAdapter {
 
     @Override
     public Node visitAddNode(AddNode node) {
-        Node first = node.getFirstNode().accept(this);
-        Node second = node.getSecondNode().accept(this);
-
-        if (first instanceof IntegerLiteralNode &&
-            second instanceof IntegerLiteralNode) {
-
-            int left = ((IntegerLiteralNode)first).getValue();
-            int right = ((IntegerLiteralNode)second).getValue();
-
-            return new IntegerLiteralNode(left + right);
+        int[] nums = visitIntegerOperators(node);
+        if (nums != null) {
+            return new IntegerLiteralNode(nums[0] + nums[1]);
         }
-        return new AddNode(first, second);
+        return new AddNode(node.getFirstNode(), node.getSecondNode());
     }
 
     @Override
     public Node visitSubtractNode(SubtractNode node) {
-        Node first = node.getFirstNode().accept(this);
-        Node second = node.getSecondNode().accept(this);
-
-        if (first instanceof IntegerLiteralNode &&
-                second instanceof IntegerLiteralNode) {
-
-            int left = ((IntegerLiteralNode)first).getValue();
-            int right = ((IntegerLiteralNode)second).getValue();
-
-            return new IntegerLiteralNode(left - right);
+        int[] nums = visitIntegerOperators(node);
+        if (nums != null) {
+            return new IntegerLiteralNode(nums[0] - nums[1]);
         }
-        return new SubtractNode(first, second);
+        return new SubtractNode(node.getFirstNode(), node.getSecondNode());
     }
 
     @Override
     public Node visitMultiplyNode(MultiplyNode node) {
-        Node first = node.getFirstNode().accept(this);
-        Node second = node.getSecondNode().accept(this);
-
-        if (first instanceof IntegerLiteralNode &&
-                second instanceof IntegerLiteralNode) {
-
-            int left = ((IntegerLiteralNode)first).getValue();
-            int right = ((IntegerLiteralNode)second).getValue();
-
-            return new IntegerLiteralNode(left * right);
+        int[] nums = visitIntegerOperators(node);
+        if (nums != null) {
+            return new IntegerLiteralNode(nums[0] * nums[1]);
         }
-        return new MultiplyNode(first, second);
+        return new MultiplyNode(node.getFirstNode(), node.getSecondNode());
     }
 
     @Override
     public Node visitDivideNode(DivideNode node) {
-        Node first = node.getFirstNode().accept(this);
-        Node second = node.getSecondNode().accept(this);
-
-        if (first instanceof IntegerLiteralNode &&
-                second instanceof IntegerLiteralNode) {
-
-            int left = ((IntegerLiteralNode)first).getValue();
-            int right = ((IntegerLiteralNode)second).getValue();
-
-            return new IntegerLiteralNode(left / right);
+        int[] nums = visitIntegerOperators(node);
+        if (nums != null) {
+            return new IntegerLiteralNode(nums[0] / nums[1]);
         }
-        return new DivideNode(first, second);
+        return new DivideNode(node.getFirstNode(), node.getSecondNode());
     }
 
     @Override
     public Node visitModulusNode(ModulusNode node) {
+        int[] nums = visitIntegerOperators(node);
+        if (nums != null) {
+            return new IntegerLiteralNode(nums[0] % nums[1]);
+        }
+        return new ModulusNode(node.getFirstNode(), node.getSecondNode());
+    }
+
+    private int[] visitIntegerOperators(BinaryOperationNode node) {
         Node first = node.getFirstNode().accept(this);
         Node second = node.getSecondNode().accept(this);
 
@@ -190,8 +170,8 @@ public class ConstantFoldingVisitor extends NodeVisitorAdapter {
             int left = ((IntegerLiteralNode)first).getValue();
             int right = ((IntegerLiteralNode)second).getValue();
 
-            return new IntegerLiteralNode(left % right);
+            return new int[] {left, right};
         }
-        return new ModulusNode(first, second);
+        return null;
     }
 }
