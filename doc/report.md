@@ -1,9 +1,11 @@
 % Primer
-% Kevin Jack Hanna; Fernando Bejarano; Federico Bond
-% November 30, 2014
-
-
+% * Kevin Jack Hanna(legajo:52034) 
+  * Fernando Bejarano(legajo: 52043) 
+  * Federico Bond(legajo: 52247)
+% November 30, 2014 \pagebreak
 \pagebreak
+
+
 # Introduction
 
 This document describes the design of the Primer language. Primer is an imperative
@@ -17,7 +19,89 @@ The initial AST class design was heavily inspired by the [JRuby][jruby] project.
 The rest of the class structure grew organically while we were developing the
 project.
 
-# Grammar description
+# Grammar in BNF (Backus Naur Form)
+
+
+Statement     ::= If                                  
+                | While                               
+                | Call                               
+                | Function                            
+                | Return                             
+                | CONTINUE                              
+                | BREAK                                 
+                | Declaration                         
+                | Assignment                          
+                | AssignmentAdd                       
+                | AssignmentSubtract                  
+                | AssignmentMultiply                  
+                | AssignmentDivide
+                ;
+
+Expression    ::= Expression PLUS  Expression    
+                | Expression MINUS Expression    
+                | Expression TIMES Expression     
+                | Expression DIVIDE Expression    
+                | Expression AND Expression
+                | Expression OR Expression        
+                | Expression LESS_THAN Expression  
+                | Expression LESS_EQUAL_THAN Expression 
+                | Expression1 GREATER_THAN Expression
+                | Expression GREATER_EQUAL_THAN Expression  
+                | Expression EQUAL Expression     
+                | Expression NOT_EQUAL Expression 
+                | MINUS Expression                    
+                  %prec UMINUS
+                | LEFT_PAREN Expression RIGHT_PAREN   
+                | Call                                
+                | Variable                            
+                | Literal                             
+                | Expression MODULUS Expression   
+                ;
+
+If ::= IF Expression OPEN_BRACKET StatementList CLOSE_BRACKET
+                | IF Expression OPEN_BRACKET StatementList CLOSE_BRACKET
+                  ELSE OPEN_BRACKET StatementList CLOSE_BRACKET
+                ;
+
+While         ::= WHILE Expression OPEN_BRACKET StatementList CLOSE_BRACKET
+
+Call          ::= IDENTIFIER LEFT_PAREN Args RIGHT_PAREN
+
+Args          ::= Expression COMMA Args          
+                | Expression                         
+                |                                       
+                ;
+
+Literal       ::= INT                            
+                | STRING                              
+                | TRUE                                  
+                | FALSE                                 
+                | NIL                                   
+                ;
+
+Function     ::= DEF IDENTIFIER LEFT_PAREN FunctionArgs RIGHT_PAREN OPEN_BRACKET StatementList CLOSE_BRACKET
+
+FunctionArgs ::= IDENTIFIER COMMA FunctionArgs   
+               | IDENTIFIER                           
+               |                                        
+               ;
+
+Return       ::= RETURN Expression                    
+               ;
+
+Assignment   ::= IDENTIFIER ASSIGN Expression   
+
+AssignmentAdd        ::= IDENTIFIER ASSIGN_PLUS Expression
+
+AssignmentSubtract   ::= IDENTIFIER ASSIGN_MINUS Expression
+
+AssignmentMultiply   ::= IDENTIFIER ASSIGN_TIMES Expression
+
+AssignmentDivide     ::= IDENTIFIER ASSIGN_DIVIDE Expression
+
+Declaration  ::= VAR IDENTIFIER ASSIGN Expression   
+
+Variable     ::= IDENTIFIER                         
 
 
 # Difficulties encountered

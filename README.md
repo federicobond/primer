@@ -45,7 +45,7 @@ execute a compiled class)
 
 ### Report
 
-    The report of this project can be found in /doc/report.md.
+    The report of this project can be found in the directory /doc/report.pdf
 
 ### Examples
 
