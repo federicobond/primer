@@ -17,6 +17,58 @@ project.
 
 # Grammar description
 
+    StatementList       ::= Statement StatementList
+    Statement           ::= If | While | Call | Function | Return
+                          | Declaration | Assignment
+                          | AssignmentAdd | AssignmentSubtract
+                          | AssignmentMultiply | AssignmentDivide
+                          | AssignmentModulus
+                          | "continue" | "break"
+    Expression          ::= Expression "+"  Expression
+                          | Expression "-"  Expression
+                          | Expression "*"  Expression
+                          | Expression "/"  Expression
+                          | Expression "%"  Expression
+                          | Expression "&&" Expression
+                          | Expression "||" Expression
+                          | Expression "<"  Expression
+                          | Expression "<=" Expression
+                          | Expression ">"  Expression
+                          | Expression ">=" Expression
+                          | Expression "="  Expression
+                          | Expression "!=" Expression
+                          | "-" Expression
+                          | "(" Expression ")"
+                          | Call
+                          | Literal
+                          | Variable
+    If                  ::= "if" Expression "{" StatementList "}"
+                          | "if" Expression "{" StatementList "}"
+                            "else" "{" StatementList "}"
+    While               ::= "while" Expression "{" StatementList "}"
+    Call                ::= Identifier "(" Args ")"
+    Args                ::= Expression "," Args | Expression | λ
+    Literal             ::= Integer | String | "true" | "false" | "nil"
+    Function            ::= "def" Identifier "(" FunctionArgs ")" "{" StatementList "}"
+    FunctionArgs        ::= Identifier "," FunctionArgs | Identifier | λ
+    Return              ::= "return" Expression
+    Assignment          ::= Identifier "="  Expression
+    AssignmentAdd       ::= Identifier "+=" Expression
+    AssignmentSubtract  ::= Identifier "-=" Expression
+    AssignmentMultiply  ::= Identifier "*=" Expression
+    AssignmentDivide    ::= Identifier "/=" Expression
+    AssignmentModulus   ::= Identifier "%=" Expression
+    Declaration         ::= "var" Identifier "=" Expression
+    Variable            ::= Identifier
+    Integer             ::= {digit}+
+    String              ::= "\"" [^\"]* "\""
+    Identifier          ::= {letter}({alphanumeric}|{other_id_char})*
+
+    letter              ::= [A-Za-z]
+    digit               ::= [0-9]
+    alphanumeric        ::= {letter}|{digit}
+    other_id_char       ::= [_]
+
 
 # Difficulties encountered
 
