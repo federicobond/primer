@@ -13,29 +13,16 @@ parser code {:
   }
 :};
 
+terminal TRUE, FALSE, AND, OR;
+terminal ASSIGN, EQUAL, NOT_EQUAL;
+terminal IF, ELSE, WHILE, COMMA, NIL;
+terminal BREAK, CONTINUE, RETURN, DEF, VAR;
+terminal ASSIGN_PLUS, ASSIGN_MINUS, ASSIGN_TIMES, ASSIGN_DIVIDE, ASSIGN_MODULUS;
+terminal OPEN_BRACKET, CLOSE_BRACKET, LEFT_PAREN, RIGHT_PAREN;
+terminal LESS_THAN, LESS_EQUAL_THAN, GREATER_THAN, GREATER_EQUAL_THAN;
 terminal PLUS, TIMES, MINUS, UMINUS, DIVIDE, MODULUS;
-terminal LEFT_PAREN, RIGHT_PAREN;
-terminal IF, ELSE, WHILE, OPEN_BRACKET, CLOSE_BRACKET;
-terminal LESS_THAN, LESS_EQUAL_THAN, EQUAL, NOT_EQUAL, GREATER_THAN, GREATER_EQUAL_THAN;
-terminal COMMA;
-terminal TRUE, FALSE;
-terminal AND, OR;
-terminal DEF;
-terminal RETURN;
-terminal NIL;
-terminal BREAK, CONTINUE;
-terminal VAR;
-terminal ASSIGN;
-terminal Node ASSIGN_PLUS;
-terminal Node ASSIGN_MINUS;
-terminal Node ASSIGN_TIMES;
-terminal Node ASSIGN_DIVIDE;
-
-terminal T;
 terminal Integer INT;
-terminal String STRING;
-terminal String IDENTIFIER;
-
+terminal String STRING, IDENTIFIER;
 
 non terminal ListNode StatementList;
 non terminal Node Statement;
@@ -151,6 +138,8 @@ AssignmentSubtract   ::= IDENTIFIER:i ASSIGN_MINUS Expression:e   {: RESULT = ne
 AssignmentMultiply   ::= IDENTIFIER:i ASSIGN_TIMES Expression:e   {: RESULT = new AssignmentNode(i, new MultiplyNode(new VariableNode(i), e)); :};
 
 AssignmentDivide     ::= IDENTIFIER:i ASSIGN_DIVIDE Expression:e  {: RESULT = new AssignmentNode(i, new DivideNode(new VariableNode(i), e)); :};
+
+AssignmentModulus    ::= IDENTIFIER:i ASSIGN_MODULUS Expression:e {: RESULT = new AssignmentNode(i, new ModulusNode(new VariableNode(i), e)); :};
 
 Declaration  ::= VAR IDENTIFIER:i ASSIGN Expression:e   {: RESULT = new DeclarationNode(i, e); :};
 

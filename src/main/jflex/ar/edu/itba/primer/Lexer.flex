@@ -44,15 +44,6 @@ public Symbol symbol(String name, int code, Object lexem) {
     Location right = new Location(filename, yyline+1, yycolumn+yylength());
     return symbolFactory.newSymbol(name, code, left, right, lexem);
 }
-
-protected void emitWarning(String message) {
-    // ErrorManager.getManager().emit_warning("Scanner at " + (yyline+1) + "(" + (yycolumn+1) + "): " + message);
-}
-
-protected void emitError(String message) {
-    // ErrorManager.getManager().emit_error("Scanner at " + (yyline+1) + "(" + (yycolumn+1) +  "): " + message);
-}
-
 %}
 
 /*-*
@@ -88,7 +79,7 @@ string          = "\"" [^\"]* "\""
 {integer}           { return symbol(Integer.valueOf(yytext()).toString(), INT, Integer.valueOf(yytext())); }
 {comment}           { /* Ignore comment. */ }
 {whitespace}        { /* Ignore whitespace. */ }
-{line_terminator}   { return symbol("t", T); }
+{line_terminator}   { /* Ignore newlines */ }
 {string}            { String s = yytext();
                       return symbol("string", STRING, s.substring(1, s.length() - 1)); }
 "def"               { return symbol("def", DEF); }
@@ -118,4 +109,5 @@ string          = "\"" [^\"]* "\""
 "-="                { return symbol("+=", ASSIGN_MINUS); }
 "*="                { return symbol("+=", ASSIGN_TIMES); }
 "/="                { return symbol("+=", ASSIGN_DIVIDE); }
+"%="                { return symbol("%=", ASSIGN_MODULUS); }
 {identifier}        { return symbol(yytext(), IDENTIFIER, yytext()); }
