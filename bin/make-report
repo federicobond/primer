@@ -1,4 +1,4 @@
 #!/bin/bash
 
 cd "$(dirname "$0")/../doc"
-pandoc --template=template.tex -o report.pdf report.md metadata.yaml
+pandoc --latex-engine=xelatex --template=template.tex -o report.pdf report.md metadata.yaml
