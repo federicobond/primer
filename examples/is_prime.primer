@@ -17,12 +17,14 @@ def is_prime(n) {
     }
 }
 
-var i = 1
-while i <= 10 {
-    if is_prime(i) {
-        println(concat(i, " is prime."))
+ println("Type the number to be tested  to see if it is prime.")
+var num = nil
+num = parse_int(readln())
+
+
+if ( is_prime(num)){
+    println("The number you entered is prime")
+
     } else {
-        println(concat(i, " is not prime."))
+    println("The number you entered is not prime")
     }
-    i += 1
-}
