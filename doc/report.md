@@ -86,9 +86,9 @@ functionality.
 
 After some research we found out that the [Jasmin][jasmin] library suggested in
 class was not the best choice for implementing the language, since it was no
-longer maintained and lacked useful abstraction for generating the required
+longer maintained and lacked useful abstractions for generating the required
 bytecode from the Abstract Syntax Tree. We decided to use the widely known
-[ASM][asm] library, which proved to be a valuable inclusion in the project.
+[ASM][asm] library, which proved to be a valuable addition to the project.
 
 ## Supporting libraries
 
@@ -106,7 +106,7 @@ We also relied on Google's [Guava][guava] libraries for some helper methods.
 
 The compilation process begins by reading the script file. We create a `Script`
 instance that represents a Primer script. From there, we build a Lexer that will
-emit a stream of tokens to be consumed by the Parser. The parser comsumes these
+emit a stream of tokens to be consumed by the Parser. The parser consumes these
 tokens and returns an AST root node (which is always a `BlockNode`). Also, if
 available, any optimizations are applied by recursively walking through the AST.
 The final step is to visit the AST and write the bytecode for each instruction.
@@ -137,7 +137,7 @@ if (a && b) {
 }
 ````
 
-The Java bytecoe instruction listings found in Wikipedia also proved very
+The Java [bytecode instruction listings][wiki-bytecode] found in Wikipedia also proved very
 useful, since it details the contents of the stack before and after every
 instruction.
 
@@ -215,7 +215,7 @@ MacBook Pro 2.4 GHz (mid 2010)
 \*\* Includes compilation time.
 
 We can see from the above table that Primer achieves a performance between
-that of Java and Ruby, but with a onciseness (measured in number of tokens)
+that of Java and Ruby, but with a conciseness (measured in number of tokens)
 much closer to the last one.
 
 Since Primer compiles to JVM bytecode, there is ample room for optimization,
@@ -283,7 +283,7 @@ Being able to manipulate functions as regular objects has proved to be a
 powerful programming technique. Many modern languages have adopted some of
 support for this kind of programming. Implementing such a system is anything
 from trivial, especially in a platform like the JVM. Fortunately there has been
-a surge on [documentation][java-lambdas] on this topic since the inclusion of
+a surge of [documentation][java-lambdas] on this topic since the inclusion of
 lambdas in Java 8.
 
     var lambda = (n) -> 2 * n
@@ -298,7 +298,7 @@ Estimated time to implement: three weeks.
 We found out that implementing a programming language on top of the JVM is both approachable and fun.
 The supporting libraries are mature and provide useful abstractions for simplifying the work.
 
-We learned about JVM internals that are rarely exposed most Java programmer and gained a better
+We learned about JVM internals that are rarely exposed to most Java programmers and gained a better
 understanding of the Java platform.
 
 
