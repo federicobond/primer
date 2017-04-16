@@ -104,7 +104,7 @@ def board_invalid_pos(board, x, y) {
     if x < 0 || x > 2 {
         return true
     }
-    if y < 0 || x > 2 {
+    if y < 0 || y > 2 {
         return true
     }
     if board_get(board, x, y) != "-" {
