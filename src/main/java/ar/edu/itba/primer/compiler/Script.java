@@ -1,12 +1,12 @@
 package ar.edu.itba.primer.compiler;
 
-import ar.edu.itba.primer.Lexer;
-import ar.edu.itba.primer.Parser;
-import ar.edu.itba.primer.Symbols;
+import ar.edu.itba.primer.PrimerLexer;
+import ar.edu.itba.primer.PrimerParser;
 import ar.edu.itba.primer.ast.Node;
-import java_cup.runtime.ComplexSymbolFactory;
-import java_cup.runtime.Scanner;
-import java_cup.runtime.ScannerBuffer;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Token;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.util.Textifier;
 import org.objectweb.asm.util.TraceClassVisitor;
@@ -16,10 +16,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Script {
 
@@ -44,21 +46,17 @@ public class Script {
     }
 
     public List<String> tokenList() {
-        List<String> list = new ArrayList<>();
+        CharStream cs = CharStreams.fromString(new String(code, StandardCharsets.UTF_8), fileName);
 
-        Lexer lexer = getLexer(new ComplexSymbolFactory());
+        PrimerLexer lexer = new PrimerLexer(cs);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
 
-        try {
-            String token;
-            do {
-                token = Symbols.terminalNames[lexer.next_token().sym];
-                list.add(token);
-            } while (!token.equals("EOF"));
-        } catch (IOException e) {
-            throw new ScriptException(e.getMessage());
-        }
+        tokens.fill();
 
-        return list;
+        return tokens.getTokens()
+                .stream()
+                .map(Token::getText)
+                .collect(Collectors.toList());
     }
 
     public static class ByteClassLoader extends URLClassLoader {
@@ -76,7 +74,13 @@ public class Script {
     }
 
     public Node parse() {
-        Node root = getRootNode(getParser());
+        CharStream cs = CharStreams.fromString(new String(code, StandardCharsets.UTF_8), fileName);
+
+        PrimerLexer lexer = new PrimerLexer(cs);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        PrimerParser parser = new PrimerParser(tokens);
+
+        Node root = ASTTransformer.transform(parser.statementList());
 
         if (enableOptimizations) {
             root = root.accept(new ConstantFoldingVisitor());
@@ -138,36 +142,5 @@ public class Script {
         }
 
         return klass;
-    }
-
-    private Parser getParser() {
-        ComplexSymbolFactory csf = new ComplexSymbolFactory();
-        Lexer lexer = getLexer(csf);
-        Scanner scanner = new ScannerBuffer(lexer);
-        return new Parser(scanner, csf);
-    }
-
-    private Lexer getLexer(ComplexSymbolFactory csf) {
-        Lexer lexer = null;
-        try {
-            Reader reader = new InputStreamReader(
-                    new ByteArrayInputStream(code), "UTF-8");
-            lexer = new Lexer(reader, csf);
-        } catch (UnsupportedEncodingException ignore) { }
-
-        if (fileName != null) {
-            lexer.setFilename(fileName);
-        }
-        return lexer;
-    }
-
-    private Node getRootNode(Parser parser) {
-        Node root;
-        try {
-            root = (Node)parser.parse().value;
-        } catch (Throwable e) {
-            throw new ScriptException(e.getMessage());
-        }
-        return root;
     }
 }
